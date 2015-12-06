@@ -1,5 +1,5 @@
-appCtrllers.controller('loginCtrl', ['$scope', '$state', '$cookieStore','FinApp',
-function ($scope, $state, $cookieStore, FinApp) {
+appCtrllers.controller('loginCtrl', ['$scope', '$state', '$cookies','FinApp',
+function ($scope, $state, $cookies, FinApp) {
 
     $scope.fbLogin = function () {
         FB.login(function (response) {
@@ -8,7 +8,7 @@ function ($scope, $state, $cookieStore, FinApp) {
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
-        }, {scope: 'email,user_photos,user_videos,age_range'});
+        }, {scope: 'email'});
 
         function getUserInfo() {
             // get basic info
@@ -20,7 +20,7 @@ function ($scope, $state, $cookieStore, FinApp) {
                 FB.api('/me/picture?type=normal', function (picResponse) {
                     console.log('Facebook Login RESPONSE: ' + picResponse.data.url);
                     response.imageUrl = picResponse.data.url;
-                    // store data to DB - Call to API
+                    FinApp.login(response.email,response.id);
                     // Todo
                     // After posting user data to server successfully store user data locally
                     var user = {};
@@ -32,7 +32,7 @@ function ($scope, $state, $cookieStore, FinApp) {
                         user.gender = '';
                     }
                     user.profilePic = picResponse.data.url;
-                    $cookieStore.put('userInfo', user);
+                    $cookies.putObject('userInfo', user);
                     $state.go('profile');
 
                 });
@@ -73,7 +73,7 @@ function ($scope, $state, $cookieStore, FinApp) {
                         user.gender = '';
                     }
                     user.profilePic = resp.image.url;
-                    $cookieStore.put('userInfo', user);
+                    $cookies.putObject('userInfo', user);
                     $state.go('profile');
                 });
             }

@@ -1,11 +1,11 @@
+//var appServices = angular.module('app.services', []);
 var appCtrllers = angular.module('app.controllers', []);
-var appServices = angular.module('app.services', []);
-var app = angular.module('app', ['ngCookies', 'ionic', 'app.controllers','app.services']);
+var app = angular.module('app', ['ngCookies', 'ionic', 'app.controllers']);
 
-app.run(function ($rootScope, $cookieStore, $state) {
+app.run(function ($rootScope, $cookies, $state) {
     // Check login session
     $rootScope.$on('$stateChangeStart', function (event, next, current) {
-        var userInfo = $cookieStore.get('userInfo');
+        var userInfo = $cookies.get('userInfo');
         if (!userInfo) {
             // user not logged in | redirect to login
             if (next.name !== "login") {

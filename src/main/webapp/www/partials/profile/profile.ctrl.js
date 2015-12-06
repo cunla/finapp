@@ -1,10 +1,9 @@
-appCtrllers.controller('profileCtrl', function ($scope, $window, $state, $cookieStore) {
-    // Set user details
-    $scope.user = $cookieStore.get('userInfo');
+appCtrllers.controller('profileCtrl', function ($scope, $window, $state, $cookies, FinApp) {
+    $scope.user = $cookies.getObject('userInfo');
 
-    // Logout user
     $scope.logout = function () {
-        $cookieStore.remove("userInfo");
+        $cookies.remove("userInfo");
+        FinApp.logout();
         $state.go('login');
         $window.location.reload();
     };
