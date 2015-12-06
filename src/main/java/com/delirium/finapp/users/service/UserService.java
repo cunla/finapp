@@ -13,7 +13,7 @@ public interface UserService {
 
     User findUser(Long id);
 
-    User findUserByLogin(String login);
+    User findUserByLogin(String email);
 
     User createUser(User user, Long accountId);
 
@@ -23,4 +23,5 @@ public interface UserService {
 
     String getAdminLogin();
 
+    User createFacebookUser(User user, Long accountId);
 }

@@ -12,76 +12,50 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
-@Entity
-@Table(name = "T_USER")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Entity @Table(name = "T_USER") @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
 
-    @NotNull
-    @Size(min = 0, max = 50)
-    @Column(length = 50)
-    private String login;
+    @JsonIgnore @Size(min = 0, max = 100) @Column(length = 100) private String password;
 
-    @JsonIgnore
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String password;
+    @Size(min = 0, max = 50) @Column(name = "name", length = 50) private String name;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "first_name", length = 50)
-    private String firstName;
+    @Email @Size(min = 0, max = 100) @Column(length = 100) private String email;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "last_name", length = 50)
-    private String lastName;
+    @JsonIgnore private boolean activated = false;
 
-    @Email
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String email;
-
-    @JsonIgnore
-    private boolean activated = false;
-
-    @JsonIgnore
-    @Size(min = 2, max = 5)
-    @Column(name = "lang_key", length = 5)
+    @JsonIgnore @Size(min = 2, max = 5) @Column(name = "lang_key", length = 5)
     private String langKey;
 
-    @JsonIgnore
-    @Size(min = 0, max = 20)
-    @Column(name = "activation_key", length = 20)
+    @JsonIgnore @Size(min = 0, max = 20) @Column(name = "activation_key", length = 20)
     private String activationKey;
 
-    @JsonIgnore
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String permission;
+    @JsonIgnore @Size(min = 0, max = 100) @Column(length = 100) private String permission;
+
+    @JsonIgnore @Column(length = 100) private String country;
+    @JsonIgnore @Column(length = 100) private String phone;
+    @JsonIgnore @Column(length = 100) private Date birthday;
+    @JsonIgnore @Column(length = 100) private Boolean male;
 
     // @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Group group;
+    @ManyToOne(fetch = FetchType.EAGER) private Group group;
 
-    public String getLogin() {
-        return login;
-    }
+    //    public String getLogin() {
+    //        return login;
+    //    }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+    //    public void setLogin(String login) {
+    //        this.login = login;
+    //    }
 
-    @JsonIgnore
-    public String getPassword() {
+    @JsonIgnore public String getPassword() {
         return password;
     }
 
-    @JsonProperty
-    public void setPassword(String password) {
+    @JsonProperty public void setPassword(String password) {
         this.password = password;
     }
 
@@ -93,20 +67,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -165,8 +131,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.group = group;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -176,21 +141,61 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
         User user = (User) o;
 
-        return login.equals(user.login);
+        return email.equals(user.email);
 
     }
 
-    @Override
-    public int hashCode() {
-        return login.hashCode();
+    public String getCountry() {
+        return country;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "login='" + login + '\'' + ", password='" + password
-            + '\'' + ", firstName='" + firstName + '\'' + ", lastName='"
-            + lastName + '\'' + ", email='" + email + '\''
-            + ", activated='" + activated + '\'' + ", langKey='" + langKey
-            + '\'' + ", activationKey='" + activationKey + '\'' + "}";
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Boolean getMale() {
+        return male;
+    }
+
+    public void setMale(Boolean male) {
+        this.male = male;
+    }
+
+    @Override public int hashCode() {
+        return email.hashCode();
+    }
+
+    @Override public String toString() {
+        return "User{" +
+            "id=" + id +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", activated=" + activated +
+            ", langKey='" + langKey + '\'' +
+            ", activationKey='" + activationKey + '\'' +
+            ", permission='" + permission + '\'' +
+            ", country='" + country + '\'' +
+            ", phone='" + phone + '\'' +
+            ", birthday=" + birthday +
+            ", male=" + male +
+            ", group=" + group +
+            '}';
     }
 }

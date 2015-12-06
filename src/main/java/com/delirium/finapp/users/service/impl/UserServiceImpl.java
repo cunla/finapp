@@ -20,61 +20,49 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Service
-public class UserServiceImpl implements UserService {
+@Service public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
+    @Autowired private AccountRepository accountRepository;
 
-    @PersistenceContext(unitName = "finapp")
-    @Qualifier("entityManagerFactory")
+    @PersistenceContext(unitName = "finapp") @Qualifier("entityManagerFactory")
     private EntityManager entityManager;
 
-    @Value("${finapp.admin.login}")
-    private String adminLogin;
+    @Value("${finapp.admin.login}") private String adminLogin;
 
-    @Value("${finapp.admin.password}")
-    private String adminPaswword;
+    @Value("${finapp.admin.password}") private String adminPaswword;
 
-    @PostConstruct
-    public void init() {
-        User existingAdmin = userRepository.findOneByLogin(adminLogin);
+    @PostConstruct public void init() {
+        User existingAdmin = userRepository.findOneByEmail(adminLogin);
         if (existingAdmin == null) {
             User newAdmin = new User();
-            newAdmin.setLogin(adminLogin);
+            newAdmin.setEmail(adminLogin);
             newAdmin.setEncodedPassword(adminPaswword);
             newAdmin.setPermission("ADMIN");
-            newAdmin.setFirstName("admin");
-            newAdmin.setLastName("admin");
+            newAdmin.setName("admin");
             updateAuditFields(newAdmin);
             userRepository.save(newAdmin);
         }
     }
 
-    @Override
-    public List<User> findUsers() {
+    @Override public List<User> findUsers() {
         List<User> users = userRepository.findAll();
         return users;
     }
 
-    @Override
-    public AbstractCurrentUser findCurrentUser() {
+    @Override public AbstractCurrentUser findCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         AbstractCurrentUser currentUser = (AbstractCurrentUser) auth.getPrincipal();
         return currentUser;
     }
 
-    @Override
-    public User findUser(Long id) {
+    @Override public User findUser(Long id) {
         User user = userRepository.findOne(id);
         return user;
     }
 
-    @Override
-    @Transactional
+    @Override @Transactional("transactionManager")
     public User createUser(User user, Long accountId) {
         updateAuditFields(user);
         user.setEncodedPassword(user.getPassword());
@@ -99,44 +87,50 @@ public class UserServiceImpl implements UserService {
 		return createdUser;
 	}*/
 
-    @Override
-    public User updateUser(User user) {
+    @Override public User updateUser(User user) {
         User existingUser = userRepository.findOne(user.getId());
         if (existingUser == null) {
             return null;
         }
-        if (user.getLogin() != null) {
-            existingUser.setLogin(user.getLogin());
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
         }
         if (user.getPassword() != null) {
             existingUser.setEncodedPassword(user.getPassword());
         }
-        if (user.getFirstName() != null) {
-            existingUser.setFirstName(user.getFirstName());
-        }
-        if (user.getLastName() != null) {
-            existingUser.setLastName(user.getLastName());
-        }
-        if (user.getEmail() != null) {
-            existingUser.setEmail(user.getEmail());
+        if (user.getName() != null) {
+            existingUser.setName(user.getName());
         }
         User updatedUser = userRepository.save(existingUser);
         return updatedUser;
     }
 
-    @Override
-    public void deleteUser(Long id) {
+    @Override public void deleteUser(Long id) {
         userRepository.delete(id);
     }
 
-    @Override
-    public User findUserByLogin(String login) {
-        User user = userRepository.findOneByLogin(login);
+    @Override public User findUserByLogin(String email) {
+        User user = userRepository.findOneByEmail(email);
         return user;
     }
 
     public String getAdminLogin() {
         return adminLogin;
+    }
+
+    @Override @Transactional("transactionManager")
+    public User createFacebookUser(User user, Long accountId) {
+        updateAuditFields(user);
+        user.setEncodedPassword(accountId.toString());
+        user.setPermission("USER");
+
+        entityManager.persist(user);
+        entityManager.flush();
+        Group group = accountRepository.findOne(accountId);
+        user.setGroup(group);
+        User createdUser = entityManager.merge(user);
+        entityManager.flush();
+        return createdUser;
     }
 
     public void setAdminLogin(String adminLogin) {
@@ -152,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     void updateAuditFields(User user) {
-        user.setCreatedBy("Anonimous");
+        user.setCreatedBy("Register");
         user.setCreatedDate(new DateTime());
     }
 

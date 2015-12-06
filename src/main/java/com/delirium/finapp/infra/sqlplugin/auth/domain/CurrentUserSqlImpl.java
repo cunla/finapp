@@ -10,7 +10,7 @@ public class CurrentUserSqlImpl extends AbstractCurrentUser {
     private User user;
 
     public CurrentUserSqlImpl(User user) {
-        super(user.getLogin(), user.getPassword(),
+        super(user.getEmail(), user.getPassword(),
             AuthorityUtils.createAuthorityList(user.getPermission()));
         this.user = user;
 

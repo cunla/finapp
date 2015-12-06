@@ -31,7 +31,7 @@ public class CurrentUserDetailsServiceSqlImpl implements CurrentUserDetailsServi
                 .findByName(getAccountName(userName));
             if (group != null) {
                 user.setGroup(group);
-                user.setLogin(userName);
+                user.setEmail(userName);
             } else {
                 user = null;
             }

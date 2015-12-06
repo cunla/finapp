@@ -59,7 +59,7 @@ public class AuditAspect {
     @Transactional(value = "auditTransactionManager")
     private void writeAuditToDb(Date date, ProceedingJoinPoint joinPoint, Object result) {
         CurrentUser user = userService.findCurrentUser();
-        String username = user.getUser().getLogin();
+        String username = user.getUser().getEmail();
         auditTypesHandler.writeAuditData(date, username, joinPoint, result);
     }
 

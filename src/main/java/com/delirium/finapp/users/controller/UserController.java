@@ -16,26 +16,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-public class UserController {
+@Controller public class UserController {
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @Autowired
-    private AccountService accountService;
+    @Autowired private AccountService accountService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<List<User>> findUsers() {
+    @ResponseBody public ResponseEntity<List<User>> findUsers() {
         List<User> users = userService.findUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users", params = {
-        "accountId"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADMIN')") @RequestMapping(value = "/users", params = {
+        "accountId" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<User>> findAccountUsers(@RequestParam("accountId") Long accountId) {
         Group group = accountService.findById(accountId);
@@ -47,26 +42,28 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/current-user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> findCurrentUser() {
+    @ResponseBody public ResponseEntity<User> findCurrentUser() {
         AbstractCurrentUser currentUser = userService.findCurrentUser();
         return new ResponseEntity<>(currentUser.getUser(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
+    @ResponseBody public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
         User user = userService.findUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users", params = {
-        "accountId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+        "accountId" }, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createUser(@RequestBody User user,
-                                           @RequestParam("accountId") Long accountId) {
-        User sameLoginUser = userService.findUserByLogin(user.getLogin());
+        @RequestParam("accountId") Long accountId) {
+        User findUser = userService.findUser(accountId);
+        if (null != findUser) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        User sameLoginUser = userService.findUserByLogin(user.getEmail());
         if (sameLoginUser != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -76,15 +73,25 @@ public class UserController {
         return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/facebookuser", params = {
+        "accountId" }, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> facebookUser(@RequestBody User user,
+        @RequestParam("accountId") Long accountId) {
+        User findUser = userService.findUser(accountId);
+        User createdUser = userService.createFacebookUser(user, accountId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
+        return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    @ResponseBody public ResponseEntity<User> updateUser(@RequestBody User user) {
         User existingUser = userService.findUser(user.getId());
         if (existingUser == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        User sameLoginUser = userService.findUserByLogin(user.getLogin());
+        User sameLoginUser = userService.findUserByLogin(user.getEmail());
         if (sameLoginUser != null && sameLoginUser.getId() != existingUser.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -93,8 +100,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE) @ResponseBody
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         User user = userService.findUser(id);
         if (user == null) {
@@ -105,8 +111,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users/login/{login}", method = RequestMethod.DELETE)
-    @ResponseBody
+    @RequestMapping(value = "/users/login/{login}", method = RequestMethod.DELETE) @ResponseBody
     public ResponseEntity<HttpStatus> deleteUserByLogin(@PathVariable("login") String login) {
         User user = userService.findUserByLogin(login);
         if (user == null) {
