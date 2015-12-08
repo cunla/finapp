@@ -1,21 +1,23 @@
 package com.delirium.finapp.users.service;
 
-import com.delirium.finapp.infra.common.auth.domain.AbstractCurrentUser;
 import com.delirium.finapp.users.domain.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     List<User> findUsers();
 
-    AbstractCurrentUser findCurrentUser();
+    List<User> findUsers(String query);
+
+    User findCurrentUser();
 
     User findUser(Long id);
 
-    User findUserByLogin(String email);
+    User findUserByEmail(String email);
 
-    User createUser(User user, Long accountId);
+    User createUser(User user);
 
     User updateUser(User user);
 

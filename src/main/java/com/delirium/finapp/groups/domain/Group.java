@@ -31,7 +31,7 @@ public class Group implements Serializable {
     private User admin;
 
     @Column
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<User> users;
 
 

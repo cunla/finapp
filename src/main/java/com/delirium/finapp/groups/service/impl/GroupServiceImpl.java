@@ -1,8 +1,10 @@
 package com.delirium.finapp.groups.service.impl;
 
 import com.delirium.finapp.groups.domain.Group;
-import com.delirium.finapp.groups.repository.AccountRepository;
-import com.delirium.finapp.groups.service.AccountService;
+import com.delirium.finapp.groups.repository.GroupRepository;
+import com.delirium.finapp.groups.service.GroupService;
+import com.delirium.finapp.users.domain.User;
+import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,13 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class GroupServiceImpl implements GroupService {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     @PersistenceContext(unitName = "finapp")
@@ -25,25 +30,34 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Group> findAll() {
-        List<Group> groups = accountRepository.findAll();
+        List<Group> groups = groupRepository.findAll();
+        return groups;
+    }
+
+    @Override
+    public List<Group> findAllForUser(User user) {
+        List<Group> groups = groupRepository.findAllForUser(user);
         return groups;
     }
 
     @Override
     public Group findById(Long id) {
-        Group group = accountRepository.findOne(id);
+        Group group = groupRepository.findOne(id);
         return group;
     }
 
     @Override
     public Group findByName(String name) {
-        Group group = accountRepository.findOneByName(name);
+        Group group = groupRepository.findOneByName(name);
         return group;
     }
 
     @Override
     @Transactional
-    public Group create(Group group, Long systemId) {
+    public Group create(Group group) {
+        User user = userService.findCurrentUser();
+        group.setAdmin(user);
+        group.addUser(user);
         entityManager.persist(group);
         entityManager.flush();
         Group newGroup = entityManager.merge(group);
@@ -53,16 +67,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Group update(Group group) {
-        Group existingGroup = accountRepository.findOne(group.getId());
+        Group existingGroup = groupRepository.findOne(group.getId());
         existingGroup.setName(group.getName());
         existingGroup.setLabel(group.getLabel());
-        Group updatedGroup = accountRepository.save(existingGroup);
+        existingGroup.setAdmin(group.getAdmin());
+        Group updatedGroup = groupRepository.save(existingGroup);
         return updatedGroup;
     }
 
     @Override
     public void delete(Long id) {
-        accountRepository.delete(id);
+        groupRepository.delete(id);
 
     }
 

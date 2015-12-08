@@ -4,6 +4,7 @@ import com.delirium.finapp.users.domain.User;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -24,5 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findOneByEmail(String email);
 
-//    User findOneByLogin(String login);
+    @Query("select u from User u where u.name like %:q% or u.email like %:q%")
+    List<User> findAllContaining(@Param("q") String query);
+
 }

@@ -1,8 +1,7 @@
 package com.delirium.finapp.users.controller;
 
 import com.delirium.finapp.groups.domain.Group;
-import com.delirium.finapp.groups.service.AccountService;
-import com.delirium.finapp.infra.common.auth.domain.AbstractCurrentUser;
+import com.delirium.finapp.groups.service.GroupService;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,29 +10,39 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller public class UserController {
+@Controller
+public class UserController {
 
-    @Autowired private UserService userService;
+    @Autowired
+    private UserService userService;
 
-    @Autowired private AccountService accountService;
+    @Autowired
+    private GroupService groupService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody public ResponseEntity<List<User>> findUsers() {
-        List<User> users = userService.findUsers();
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/users", params = {
+        "query"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<User>> findUsers(@RequestParam("query") String query) {
+        List<User> users = userService.findUsers(query);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')") @RequestMapping(value = "/users", params = {
-        "accountId" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/users", params = {
+        "groupId"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<User>> findAccountUsers(@RequestParam("accountId") Long accountId) {
-        Group group = accountService.findById(accountId);
+    public ResponseEntity<List<User>> findGroupUsers(@RequestParam("groupId") Long groupId) {
+        Group group = groupService.findById(groupId);
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -42,42 +51,49 @@ import java.util.List;
     }
 
     @RequestMapping(value = "/users/current-user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody public ResponseEntity<User> findCurrentUser() {
-        AbstractCurrentUser currentUser = userService.findCurrentUser();
-        return new ResponseEntity<>(currentUser.getUser(), HttpStatus.OK);
+    @ResponseBody
+    public ResponseEntity<User> findCurrentUser() {
+        User currentUser = userService.findCurrentUser();
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
+    @ResponseBody
+    public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
         User user = userService.findUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users", params = {
-        "accountId" }, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createUser(@RequestBody User user,
-        @RequestParam("accountId") Long accountId) {
-        User findUser = userService.findUser(accountId);
+    @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User findUser = userService.findUserByEmail(user.getEmail());
         if (null != findUser) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        User sameLoginUser = userService.findUserByLogin(user.getEmail());
-        if (sameLoginUser != null) {
+        User sameLoginUser = null;
+        try {
+            sameLoginUser = userService.findUserByEmail(user.getEmail());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (UsernameNotFoundException e) {
+            User createdUser = userService.createUser(user);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
+            return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
         }
-        User createdUser = userService.createUser(user, accountId);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
-        return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/facebookuser", params = {
-        "accountId" }, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+        "accountId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> facebookUser(@RequestBody User user,
-        @RequestParam("accountId") Long accountId) {
-        User findUser = userService.findUser(accountId);
+                                             @RequestParam("accountId") Long accountId) {
+        User findUser = userService.findUserByEmail(user.getEmail());
+        if (null != findUser) {
+            Authentication auth = new UsernamePasswordAuthenticationToken(findUser.getEmail(), findUser.getPassword(), findUser.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return new ResponseEntity<>(findUser, new HttpHeaders(), HttpStatus.OK);
+        }
         User createdUser = userService.createFacebookUser(user, accountId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
@@ -86,12 +102,13 @@ import java.util.List;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody public ResponseEntity<User> updateUser(@RequestBody User user) {
+    @ResponseBody
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         User existingUser = userService.findUser(user.getId());
         if (existingUser == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        User sameLoginUser = userService.findUserByLogin(user.getEmail());
+        User sameLoginUser = userService.findUserByEmail(user.getEmail());
         if (sameLoginUser != null && sameLoginUser.getId() != existingUser.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -100,7 +117,8 @@ import java.util.List;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE) @ResponseBody
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         User user = userService.findUser(id);
         if (user == null) {
@@ -111,9 +129,10 @@ import java.util.List;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/users/login/{login}", method = RequestMethod.DELETE) @ResponseBody
+    @RequestMapping(value = "/users/login/{login}", method = RequestMethod.DELETE)
+    @ResponseBody
     public ResponseEntity<HttpStatus> deleteUserByLogin(@PathVariable("login") String login) {
-        User user = userService.findUserByLogin(login);
+        User user = userService.findUserByEmail(login);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

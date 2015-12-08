@@ -1,7 +1,6 @@
 package com.delirium.finapp.auditing;
 
 import com.delirium.finapp.auditing.handler.AuditTypesHandler;
-import com.delirium.finapp.infra.common.auth.domain.CurrentUser;
 import com.delirium.finapp.users.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -9,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -58,8 +58,8 @@ public class AuditAspect {
 
     @Transactional(value = "auditTransactionManager")
     private void writeAuditToDb(Date date, ProceedingJoinPoint joinPoint, Object result) {
-        CurrentUser user = userService.findCurrentUser();
-        String username = user.getUser().getEmail();
+        UserDetails user = userService.findCurrentUser();
+        String username = user.getUsername();
         auditTypesHandler.writeAuditData(date, username, joinPoint, result);
     }
 
