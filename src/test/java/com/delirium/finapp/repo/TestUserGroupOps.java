@@ -1,7 +1,10 @@
 package com.delirium.finapp.repo;
 
 import com.delirium.finapp.Application;
+import com.delirium.finapp.client.FinappClientFactory;
+import com.delirium.finapp.client.FinappService;
 import com.delirium.finapp.config.Constants;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -19,6 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @WebAppConfiguration
 @IntegrationTest
 @Transactional
-public class TestClusterRepository {
+public class TestUserGroupOps {
 
+    private FinappService client = FinappClientFactory.createClient();
+
+    @Test
+    public void adminLoginLogout() {
+        client.login("admin@system", "123");
+        client.logout();
+    }
 }
