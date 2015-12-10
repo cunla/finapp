@@ -44,6 +44,15 @@ app.factory('FinApp',['$http','$q',function($http,$q){
         },
         logout:function(){
             return $http.post(basicUrl+'/logout-action');
+        },
+        createGroup:function(group){
+            return $http.post(basicUrl+'/groups',group);
+        },
+        getGroups:function(){
+            return $http.get(basicUrl+'/groups');
+        },
+        currentUser:function(){
+            return $http.get(basicUrl+'users/current-user');
         }
     };
 }]);

@@ -1,7 +1,9 @@
 package com.delirium.finapp.users.domain;
 
 import com.delirium.finapp.groups.domain.Group;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -18,84 +20,46 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "T_USER")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Entity @Table(name = "T_USER") @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable, UserDetails {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
 
-    @JsonIgnore
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String password;
+    @JsonIgnore @Size(min = 0, max = 100) @Column(length = 100) private String password;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "name", length = 50)
-    private String name;
+    @Size(min = 0, max = 50) @Column(name = "name", length = 50) private String name;
 
-    @Email
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String email;
+    @Email @Size(min = 0, max = 100) @Column(length = 100) private String email;
 
-    @JsonIgnore
     private boolean activated = false;
 
-    @JsonIgnore
-    @Size(min = 2, max = 5)
-    @Column(name = "lang_key", length = 5)
-    private String langKey;
+    @Size(min = 2, max = 5) @Column(name = "lang_key", length = 5) private String langKey;
 
-    @JsonIgnore
-    @Size(min = 0, max = 20)
-    @Column(name = "activation_key", length = 20)
+    @JsonIgnore @Size(min = 0, max = 20) @Column(name = "activation_key", length = 20)
     private String activationKey;
 
-    @JsonIgnore
-    @Size(min = 0, max = 100)
-    @Column(length = 100)
-    private String permission;
+    @Size(min = 0, max = 100) @Column(length = 100) private String permission;
 
-    @JsonIgnore
-    @Column(length = 100)
-    private String country;
-    @JsonIgnore
-    @Column(length = 100)
-    private String phone;
-    @JsonIgnore
-    @Column(length = 100)
-    private Date birthday;
-    @JsonIgnore
-    @Column(length = 100)
-    private Boolean male;
+    @Column(length = 100) private String country;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Column(length = 100) private String phone;
+
+    @Column(length = 100) private Date birthday;
+
+    @Column(length = 100) private Boolean male;
+
+    @JsonManagedReference @JsonIgnore @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Group> groups;
 
-    //    public String getLogin() {
-    //        return login;
-    //    }
-
-    //    public void setLogin(String login) {
-    //        this.login = login;
-    //    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList(this.getPermission());
     }
 
-    @JsonIgnore
-    public String getPassword() {
+    @JsonIgnore public String getPassword() {
         return password;
     }
 
-    @JsonProperty
-    public void setPassword(String password) {
+    @JsonProperty public void setPassword(String password) {
         this.password = password;
     }
 
@@ -163,16 +127,15 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.permission = permission;
     }
 
-    public List<Group> getGroup() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> group) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -218,38 +181,31 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.male = male;
     }
 
-    @Override
-    public String getUsername() {
+    @Override public String getUsername() {
         return this.email;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
+    @Override public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
+    @Override public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
+    @Override public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
-    public boolean isEnabled() {
+    @Override public boolean isEnabled() {
         return true;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return email.hashCode();
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "User{" +
             "id=" + id +
             ", password='" + password + '\'' +

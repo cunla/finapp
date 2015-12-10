@@ -1,6 +1,8 @@
 package com.delirium.finapp.groups.domain;
 
 import com.delirium.finapp.users.domain.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,11 +29,14 @@ public class Group implements Serializable {
     @Column(name = "label", length = 100)
     private String label;
 
-    @Column
+    @ManyToOne
+    @JoinColumn
     private User admin;
 
     @Column
+    @JoinTable(name="T_USER_GROUP")
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<User> users;
 
 

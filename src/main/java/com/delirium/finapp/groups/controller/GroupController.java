@@ -58,8 +58,7 @@ public class GroupController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/groups", params = {
-        "systemId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/groups", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Group> createAccount(@RequestBody Group group) {
         Group sameGroup = groupService.findByName(group.getName());
         if (sameGroup != null) {

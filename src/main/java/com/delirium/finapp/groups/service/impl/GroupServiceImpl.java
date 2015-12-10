@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -36,8 +37,15 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> findAllForUser(User user) {
-        List<Group> groups = groupRepository.findAllForUser(user);
-        return groups;
+        List<Group> groups = groupRepository.findAll();
+        List<Group> res = new LinkedList<>();
+        for(Group g:groups){
+            List<User> users = g.getUsers();
+            if(null!=users && users.contains(user)){
+                res.add(g);
+            }
+        }
+        return res;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Transactional
+    @Transactional("transactionManager")
     public Group create(Group group) {
         User user = userService.findCurrentUser();
         group.setAdmin(user);

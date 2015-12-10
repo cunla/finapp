@@ -14,6 +14,6 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     Group findOneByName(String name);
 
-    @Query("SELECT g FROM Group g WHERE :user IN g.users")
-    List<Group> findAllForUser(@Param("user") User user);
+//    @Query("SELECT g FROM Group g WHERE :user IN (g.users)")
+//    List<Group> findAllForUser(@Param("user") User user);
 }

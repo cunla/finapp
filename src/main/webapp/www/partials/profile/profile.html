@@ -1,6 +1,6 @@
 <ion-view>
     <ion-header-bar class="bar-header bar-positive">
-        <div class="title uppercase">Welcome</div>
+        <div class="title uppercase">Profile</div>
         <button class="button button-clear" ng-click="logout()">Logout</button>
     </ion-header-bar>
     <ion-content>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="profile-background" ng-style="{'background-image': 'url(' + user.profilePic + ')'}"></div>
             </div>
-            <div class="list">
+            <div class="list list-inset">
                 <label class="item item-input field-disabled">
                     <span class="input-label">Email</span>
                     <input ng-model="user.email" type="text" placeholder="user@gmail.com">
@@ -50,8 +50,25 @@
                         isMale = false" ng-checked="user.gender === 'F'">Female
                     </ion-checkbox>
                 </label>
-
             </div>
+            <ion-list show-delete="false" can-swipe="true">
+                <div class="item item-positive item-button-right" ng-hide="newGroupForm">
+                    Groups
+                    <button class="button button-small button-icon icon ion-plus" ng-click="newGroupForm=true"></button>
+                </div>
+                <div class="item item-input-inset" ng-show="newGroupForm">
+                    <label class="item-input-wrapper">
+                        <input type="text" placeholder="Group name" ng-model="gname">
+                    </label>
+                    <button ng-click="createGroup(gname)" class="button button-small button-icon icon ion-arrow-right-c">
+
+                    </button>
+                </div>
+                <ion-item class="item item-button-right" ng-repeat="group in groups">
+                    {{group.name}}
+                    <ion-option-button class="button-assertive icon ion-trash-a"></ion-option-button>
+                </ion-item>
+            </ion-list>
         </div>
     </ion-content>
 </ion-view>

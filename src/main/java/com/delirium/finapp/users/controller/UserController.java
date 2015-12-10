@@ -56,6 +56,9 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<User> findCurrentUser() {
         User currentUser = userService.findCurrentUser();
+        if(null==currentUser){
+            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 
@@ -90,16 +93,17 @@ public class UserController {
         "accountId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> facebookUser(@RequestBody User user,
                                              @RequestParam("accountId") Long accountId) {
-        User findUser = userService.findUserByEmail(user.getEmail());
-        if (null != findUser) {
+        try{
+            User findUser = userService.findUserByEmail(user.getEmail());
             Authentication auth = new UsernamePasswordAuthenticationToken(findUser.getEmail(), findUser.getPassword(), findUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
             return new ResponseEntity<>(findUser, new HttpHeaders(), HttpStatus.OK);
+        }catch (UsernameNotFoundException e) {
+            User createdUser = userService.createFacebookUser(user, accountId);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
+            return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
         }
-        User createdUser = userService.createFacebookUser(user, accountId);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
-        return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
