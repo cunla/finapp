@@ -33,7 +33,29 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: "/profile",
             templateUrl: "partials/profile/profile.html",
             controller: "profileCtrl"
-        });
+        })
+        .state('account', {
+            url: "/account/:account",
+            templateUrl: "partials/account/account.html",
+            controller: "accountCtrl"
+        })
+        .state('home',{
+            url:'/v2/home',
+            templateUrl:'partials/home/home.html',
+            controller: 'homeCtrl',
+            data:{
+                authenticate:true
+            }
+        })
+        .state('transaction',{
+            url:'/transaction/:transactionId',
+            templateUrl: 'partials/transaction/transaction.html',
+            controller: 'transactionCtrl',
+            data: {
+                authenticate: true
+            }
+        })
+    ;
     // default route
     $urlRouterProvider.otherwise("/login");
 

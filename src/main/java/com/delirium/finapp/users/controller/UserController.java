@@ -40,23 +40,22 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/users/{groupId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<User>> findGroupUsers(@PathVariable("groupId") Long groupId) {
+    public ResponseEntity<Group> findGroup(@PathVariable("groupId") Long groupId) {
         Group group = groupService.findById(groupId);
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<User> users = group.getUsers();
-        if (!users.contains(userService.findCurrentUser())) {
-            return new ResponseEntity<List<User>>(HttpStatus.UNAUTHORIZED);
+        if (!group.hasUser(userService.findCurrentUser())) {
+            return new ResponseEntity<Group>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/current-user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> findCurrentUser() {
         User currentUser = userService.findCurrentUser();
-        if(null==currentUser){
+        if (null == currentUser) {
             return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
@@ -93,13 +92,13 @@ public class UserController {
         "accountId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> facebookUser(@RequestBody User user,
                                              @RequestParam("accountId") Long accountId) {
-        try{
+        try {
             User findUser = userService.findUserByEmail(user.getEmail());
-            Authentication auth = new UsernamePasswordAuthenticationToken(findUser.getEmail(), findUser.getPassword(), findUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            userService.setCurrentUser(findUser);
             return new ResponseEntity<>(findUser, new HttpHeaders(), HttpStatus.OK);
-        }catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException e) {
             User createdUser = userService.createFacebookUser(user, accountId);
+            userService.setCurrentUser(user);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
             return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);

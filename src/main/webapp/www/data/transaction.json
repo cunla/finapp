@@ -1,0 +1,14 @@
+{
+  "id":1,
+  "title":"lunch",
+  "target":"cordelia",
+  "type":"external",
+  "amount":-200,
+  "date": "2015-08-11T21:00:00.000Z",
+  "category":"together",
+  "categoryColor":"yellow",
+  "comment":"no comments!",
+  "location":"xxxx",
+  "accountName":"Leumi",
+  "accountId":1
+}

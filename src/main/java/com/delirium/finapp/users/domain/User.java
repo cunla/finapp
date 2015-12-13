@@ -48,7 +48,7 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
     @Column(length = 100) private Boolean male;
 
-    @JsonManagedReference @JsonIgnore @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonManagedReference @JsonIgnore @ManyToMany(mappedBy = "members", fetch = FetchType.LAZY)
     private List<Group> groups;
 
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {

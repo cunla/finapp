@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
+    void setCurrentUser(User user);
     List<User> findUsers();
 
     List<User> findUsers(String query);

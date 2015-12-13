@@ -4,6 +4,12 @@
         <button class="button button-clear" ng-click="logout()">Logout</button>
     </ion-header-bar>
     <ion-content>
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="refresh()"
+            refreshing-text="Refreshing!"
+            refreshing-icon="ion-loading-c">
+        </ion-refresher>
         <div class="list">
             <div class="profile-container">
                 <!--<div id="em-profile" class="item">-->
@@ -56,18 +62,56 @@
                     Groups
                     <button class="button button-small button-icon icon ion-plus" ng-click="newGroupForm=true"></button>
                 </div>
-                <div class="item item-input-inset" ng-show="newGroupForm">
-                    <label class="item-input-wrapper">
-                        <input type="text" placeholder="Group name" ng-model="gname">
-                    </label>
-                    <button ng-click="createGroup(gname)" class="button button-small button-icon icon ion-arrow-right-c">
+                <form>
+                    <div class="item item-input-inset" ng-show="newGroupForm">
+                        <label class="item-input-wrapper">
+                            <input type="text" placeholder="Group name" ng-model="gname">
+                        </label>
+                        <button ng-click="createGroup(gname)"
+                                class="button button-small button-icon icon ion-arrow-right-c">
 
-                    </button>
-                </div>
-                <ion-item class="item item-button-right" ng-repeat="group in groups">
-                    {{group.name}}
-                    <ion-option-button class="button-assertive icon ion-trash-a"></ion-option-button>
-                </ion-item>
+                        </button>
+                    </div>
+                </form>
+                <ion-list class="list">
+                    <div ng-repeat='item in groups | filter: query'>
+                        <ion-item item="item" class="item item-thumbnail-left"
+                                  ng-click="item.selected = !item.selected">
+                            <img src="{{item.avatar}}"/>
+                            <h2>{{item.name}}</h2>
+                            <p>{{item.currency}} Total balance:<b> {{item.currencySymbol}} {{item.balance}} </b></p>
+                            <p>Members: {{item.members.join(", ")}}</p>
+                            <ion-option-button class="button button-assertive icon ion-log-out"
+                                               ng-show="item.isAdmin"
+                                               ng-click="leaveGroup(item)">
+                                Leave
+                            </ion-option-button>
+                        </ion-item>
+                        <div class="card" ng-show="item.selected">
+                            <ion-item class="item item-divider item-button-right">
+
+                                {{item.accounts.length}} Accounts
+                                <!--<span class="badge badge-calm"></span>-->
+                                <button class="button button-clear ion-plus-circled button-positive"></button>
+
+                            </ion-item>
+                            <ion-item item="member" class="item-accordion item-avatar-left"
+                                      ng-repeat="member in item.members">
+                                <img src="{{account.avatar}}" title="{{account.name}}">
+
+                                <h2>{{account.name}}</h2>
+
+                                <p>Balance: {{account.balance}} {{account.currency}}</p>
+
+                                <p>Last updated on {{account.lastUpdated}}</p>
+                                <ion-option-button class="button button-dark icon ion-edit"
+                                                   ng-click="editAccount(account)">
+                                    Edit
+                                </ion-option-button>
+                            </ion-item>
+                        </div>
+                    </div>
+                </ion-list>
             </ion-list>
         </div>
     </ion-content>

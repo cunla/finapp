@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -51,6 +52,12 @@ public class UserServiceImpl implements UserService {
             updateAuditFields(newAdmin);
             userRepository.save(newAdmin);
         }
+    }
+
+    @Override
+    public void setCurrentUser(User user) {
+        Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Override

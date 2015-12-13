@@ -40,8 +40,7 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groups = groupRepository.findAll();
         List<Group> res = new LinkedList<>();
         for(Group g:groups){
-            List<User> users = g.getUsers();
-            if(null!=users && users.contains(user)){
+            if(g.hasUser(user)){
                 res.add(g);
             }
         }

@@ -48,10 +48,10 @@ public class GroupController {
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (group.getUsers() == null) {
+        if (!group.hasMembers()) {
             throw new FinappException("Data broken -- group with no users!");
         }
-        if (!group.getUsers().contains(userService.findCurrentUser())) {
+        if (!group.hasUser(userService.findCurrentUser())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(group, HttpStatus.OK);

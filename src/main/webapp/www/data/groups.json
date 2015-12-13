@@ -1,0 +1,98 @@
+[
+    {
+        "name": "Moran Family",
+        "balance": "178",
+        "currency": "USD",
+        "currencySymbol": "$",
+        "avatar": "https://placehold.it/100x100",
+        "admin": {
+            "id": 2,
+            "name": "Daniel Moran",
+            "email": "style.daniel@gmail.com",
+            "activated": false,
+            "langKey": null,
+            "permission": "USER",
+            "country": null,
+            "phone": null,
+            "birthday": null,
+            "male": null,
+            "enabled": true,
+            "username": "style.daniel@gmail.com",
+            "authorities": [
+                {
+                    "authority": "USER"
+                }
+            ],
+            "accountNonLocked": true,
+            "credentialsNonExpired": true,
+            "accountNonExpired": true
+        },
+        "members": [
+            "Daniel Moran",
+            "Natalia G"
+        ],
+        "accounts": [
+            {
+                "id": 1,
+                "name": "Leumi account",
+                "balance": "1777",
+                "currency": "ils",
+                "currencySymbol": "?",
+                "avatar": "https://placeimg.com/100/100/any",
+                "lastUpdated": "2014-07-08 12:30"
+            },
+            {
+                "id": 2,
+                "name": "VISA CAL - Daniel",
+                "balance": "1777",
+                "currency": "ils",
+                "currencySymbol": "?",
+                "avatar": "https://placeimg.com/100/100/any",
+                "lastUpdated": "2014-07-08 12:30"
+            },
+            {
+                "id": 3,
+                "name": "VISA CAL - Natalia",
+                "balance": "1777",
+                "currency": "ils",
+                "currencySymbol": "?",
+                "avatar": "https://placehold.it/100x100",
+                "lastUpdated": "2014-07-08 12:30"
+            }
+        ]
+    },
+    {
+        "name": "Binyamin Family",
+        "balance": "222",
+        "currency": "ils",
+        "currencySymbol": "?",
+        "admin": {
+            "id": 2,
+            "name": "Daniel Moran",
+            "email": "style.daniel@gmail.com",
+            "activated": false,
+            "langKey": null,
+            "permission": "USER",
+            "country": null,
+            "phone": null,
+            "birthday": null,
+            "male": null,
+            "enabled": true,
+            "username": "style.daniel@gmail.com",
+            "authorities": [
+                {
+                    "authority": "USER"
+                }
+            ],
+            "accountNonLocked": true,
+            "credentialsNonExpired": true,
+            "accountNonExpired": true
+        },
+        "avatar": "https://placeimg.com/100/100/any",
+        "members": [
+            "Meni B",
+            "Anna B",
+            "Daniel Moran"
+        ]
+    }
+]
