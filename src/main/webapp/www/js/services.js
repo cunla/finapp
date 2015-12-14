@@ -43,7 +43,7 @@ app
                                     } else {
                                         user.gender = '';
                                     }
-                                    user.profilePic = picResponse.data.url;
+                                    user.avatar = picResponse.data.url;
                                     $http.post(basicUrl + '/facebookuser?accountId=' + response.id, user, {headers: {"Content-Type": "application/json"}})
                                         .then(function (data) {
                                             resolve(user);
@@ -60,7 +60,7 @@ app
                 return $http.post(basicUrl + '/groups', group);
             },
             getGroups: function () {
-                return $http.get('data/groups.json');
+                return $http.get(basicUrl + '/groups');
             },
             currentUser: function () {
                 return $http.get(basicUrl + '/users/current-user');

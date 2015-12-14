@@ -1,7 +1,6 @@
 package com.delirium.finapp.users.domain;
 
 import com.delirium.finapp.groups.domain.Group;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,6 +74,9 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     @JsonIgnore
     @ManyToMany(mappedBy = "members", fetch = FetchType.LAZY)
     private List<Group> groups;
+
+    @Column(length = 255)
+    private String avatar;
 
     @JsonIgnore
     @Override
@@ -259,5 +261,13 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

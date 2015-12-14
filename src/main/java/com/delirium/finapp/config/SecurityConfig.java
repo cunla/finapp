@@ -21,8 +21,8 @@ class SecurityConfig
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+//    @Autowired
+//    private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
 
     // @Override
     // protected void configure(HttpSecurity http) throws Exception {
@@ -50,7 +50,10 @@ class SecurityConfig
             .failureUrl("/www/login/login.html").loginProcessingUrl("/login-action")
             .failureHandler((request, response, authentication) -> {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            }).successHandler(authenticationSuccessHandler)
+            })
+            .successHandler((request, response, authentication) -> {
+                response.setStatus(HttpStatus.OK.value());
+            })
             .permitAll().and().httpBasic();
 
         http.logout().logoutUrl("/logout-action").logoutSuccessUrl("/www/login/login.html")

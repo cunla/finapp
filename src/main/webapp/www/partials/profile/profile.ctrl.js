@@ -20,6 +20,9 @@ appCtrllers.controller('profileCtrl', function ($rootScope, $scope, $window, $st
             $scope.refresh();
         });
     };
+    $scope.showNewGroup = function () {
+        $scope.newGroupForm = true;
+    }
 
     $scope.updateUser = function (user) {
         FinApp.updateUser(user).then(function () {

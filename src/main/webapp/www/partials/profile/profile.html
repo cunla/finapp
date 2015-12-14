@@ -14,9 +14,9 @@
             <div class="profile-container">
                 <!--<div id="em-profile" class="item">-->
                 <!-- <img src="img/logo.png"> -->
-                <div ng-if="user.profilePic" class="profile-pic"
-                     ng-style="{'background-image': 'url(' + user.profilePic + ')'}"></div>
-                <div ng-if="!user.profilePic" class="profile-pic"
+                <div ng-if="user.avatar" class="profile-pic"
+                     ng-style="{'background-image': 'url(' + user.avatar + ')'}"></div>
+                <div ng-if="!user.avatar" class="profile-pic"
                      style="background-image: url(img/profile-pic-default.png)"></div>
                 <!--</div>-->
                 <div id="myDiv">
@@ -29,39 +29,48 @@
             <div class="list list-inset">
                 <label class="item item-input field-disabled">
                     <span class="input-label">Email</span>
-                    <input ng-model="user.email" type="text" placeholder="user@gmail.com">
+                    <input ng-model="user.email" type="text"
+                           ng-change="profileChanged=true" placeholder="user@gmail.com">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Display Name</span>
-                    <input ng-model="user.name" type="text" placeholder="Israel Israeli">
+                    <input ng-model="user.name" type="text"
+                           ng-change="profileChanged=true" placeholder="Israel Israeli">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Country</span>
-                    <input ng-model="user.country" type="text" placeholder="Israel">
+                    <input ng-model="user.country" type="text"
+                           ng-change="profileChanged=true" placeholder="Israel">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
-                    <input ng-model="user.phone" type="text" placeholder="05x-xxxxxxx">
+                    <input ng-model="user.phone" type="text"
+                           ng-change="profileChanged=true" placeholder="05x-xxxxxxx">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Birthday</span>
-                    <input date-parser="MM/DD/YYYY" ng-model="user.birthday" type="date" placeholder="">
+                    <input date-parser="MM/DD/YYYY" ng-model="user.birthday"
+                           ng-change="profileChanged=true" type="date" placeholder="">
                 </label>
                 <label class="item item-input em-gender">
                     <span class="input-label">Gender</span>
-                    <ion-checkbox class="em-gender-cb" ng-model="isMale" ng-change="isMale ? user.gender='M' : user.gender = 'F';
-                        isFemale = false" ng-checked="user.gender === 'M'">Male
+                    <ion-checkbox class="em-gender-cb" ng-model="isMale"
+                                  ng-change="profileChanged=true"
+                                  ng-checked="user.gender === 'M'">Male
                     </ion-checkbox>
-                    <ion-checkbox class="em-gender-cb" ng-model="isFemale" ng-change="isFemale ? user.gender='F' : user.gender = 'M';
-                        isMale = false" ng-checked="user.gender === 'F'">Female
+                    <ion-checkbox class="em-gender-cb" ng-model="isFemale"
+                                  ng-change="profileChanged=true" ng-checked="user.gender === 'F'">Female
                     </ion-checkbox>
                 </label>
-                <button class="button" ng-click="updateUser(user)">Save changes</button>
+                <button class="button button-block button-dark"
+                        ng-show="profileChanged"
+                        ng-click="updateUser(user)">Save changes
+                </button>
             </div>
             <ion-list show-delete="false" can-swipe="true">
                 <div class="item item-positive item-button-right" ng-hide="newGroupForm">
                     Groups
-                    <button class="button button-small button-icon icon ion-plus" ng-click="newGroupForm=true"></button>
+                    <button class="button button-small button-icon icon ion-plus" ng-click="showNewGroup()"></button>
                 </div>
                 <form>
                     <div class="item item-input-inset" ng-show="newGroupForm">
@@ -74,39 +83,45 @@
                     </div>
                 </form>
                 <ion-list class="list">
-                    <div ng-repeat='item in groups | filter: query'>
-                        <ion-item item="item" class="item item-thumbnail-left"
+                    <div collection-repeat='item in groups | filter: query'>
+                        <ion-item item="item" class="item item-thumbnail-left {{item.selected? 'item-selected':''}}"
                                   ng-click="item.selected = !item.selected">
                             <img src="{{item.avatar}}"/>
                             <h2>{{item.name}}</h2>
                             <p>{{item.currency}} Total balance:<b> {{item.currencySymbol}} {{item.balance}} </b></p>
-                            <p>Members: {{item.members.join(", ")}}</p>
+                            <!--<p>Members: {{item.members.join(", ")}}</p>-->
                             <ion-option-button class="button button-assertive icon ion-log-out"
-                                               ng-show="item.isAdmin"
-                                               ng-click="leaveGroup(item)">
+                                               ng-hide="item.isAdmin"
+                                               ng-click="removeUser(item,user)">
                                 Leave
                             </ion-option-button>
                         </ion-item>
                         <div class="card" ng-show="item.selected">
                             <ion-item class="item item-divider item-button-right">
 
-                                {{item.accounts.length}} Accounts
+                                {{item.members.length}} Members
                                 <!--<span class="badge badge-calm"></span>-->
                                 <button class="button button-clear ion-plus-circled button-positive"></button>
 
                             </ion-item>
                             <ion-item item="member" class="item-accordion item-avatar-left"
-                                      ng-repeat="member in item.members">
-                                <img src="{{account.avatar}}" title="{{account.name}}">
+                                      collection-repeat="member in item.members">
+                                <img src="{{member.avatar}}" title="{{member.name}}">
 
-                                <h2>{{account.name}}</h2>
+                                <h2>{{member.name}}</h2>
 
-                                <p>Balance: {{account.balance}} {{account.currency}}</p>
+                                <p>email: {{member.email}}</p>
 
-                                <p>Last updated on {{account.lastUpdated}}</p>
-                                <ion-option-button class="button button-dark icon ion-edit"
-                                                   ng-click="editAccount(account)">
-                                    Edit
+                                <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged in'}}</p>
+                                <ion-option-button class="button button-assertive icon ion-log-out"
+                                                   ng-click="removeUser(item,member)">
+                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                                    Remove
+                                </ion-option-button>
+                                <ion-option-button class="button button-dark icon ion-trophy"
+                                                   ng-click="makeAdmin(item,member)">
+                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                                    Admin
                                 </ion-option-button>
                             </ion-item>
                         </div>

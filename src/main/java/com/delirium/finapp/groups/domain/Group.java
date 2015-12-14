@@ -1,7 +1,6 @@
 package com.delirium.finapp.groups.domain;
 
 import com.delirium.finapp.users.domain.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
@@ -31,7 +30,7 @@ public class Group implements Serializable {
     private String label;
 
     @Column
-    private String avatar="https://placehold.it/100x100";
+    private String avatar = "https://placehold.it/100x100";
 
     @ManyToOne
     @JoinColumn
@@ -73,13 +72,28 @@ public class Group implements Serializable {
         this.label = label;
     }
 
-    @JsonProperty("membersNames")
-    public List<String> getMemberNames() {
-        List<String> names = new LinkedList<>();
-        for(User user:members){
-            names.add(user.getName());
+    @JsonProperty("members")
+    public List<Member> getMemberNames() {
+        List<Member> members = new LinkedList<>();
+        for (User user : this.members) {
+            members.add(new Member(user));
         }
-        return names;
+        return members;
+    }
+
+    @JsonProperty("balance")
+    public Double getBalance() {
+        return 18.3131;
+    }
+
+    @JsonProperty("currency")
+    public String getDefaultCurrency() {
+        return "USD";
+    }
+
+    @JsonProperty("currencySymbol")
+    public String getCurrencySymbol() {
+        return "$";
     }
 
     public void setUsers(List<User> users) {
@@ -123,5 +137,46 @@ public class Group implements Serializable {
     @JsonIgnore
     public List<User> getMembers() {
         return this.members;
+    }
+
+    private class Member {
+        public Long id;
+        public String name;
+        public String email;
+        public String avatar;
+        public boolean isAdmin;
+
+
+        public Member(User user) {
+            this.name = user.getName();
+            this.id = user.getId();
+            this.email = user.getEmail();
+            this.avatar = user.getAvatar();
+            this.isAdmin = (admin.getId() == this.id);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
     }
 }
