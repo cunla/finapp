@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/users/{groupId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/groups/{groupId}/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Group> findGroup(@PathVariable("groupId") Long groupId) {
         Group group = groupService.findById(groupId);
@@ -105,17 +105,25 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User existingUser = userService.findUser(user.getId());
-        if (existingUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        if (user.getId() != null) {
+            if (!user.getId().equals(id)) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+            User existingUser = userService.findUser(user.getId());
+            if (existingUser == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
         }
-        User sameLoginUser = userService.findUserByEmail(user.getEmail());
-        if (sameLoginUser != null && sameLoginUser.getId() != existingUser.getId()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        User loggedUser = userService.findCurrentUser();
+        if (!loggedUser.getId().equals(user.getId())
+            && !loggedUser.getAuthorities().contains("ADMIN")
+            ) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         User updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);

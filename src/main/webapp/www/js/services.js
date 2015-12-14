@@ -30,7 +30,6 @@ app
                         FB.api('/me',
                             {fields: "id,about,age_range,picture,bio,birthday,context,email,first_name,gender,hometown,link,location,middle_name,name,timezone,website,work"},
                             function (response) {
-//                             console.log('Facebook Login RESPONSE: ' + angular.toJson(response));
                                 // get profile picture
                                 FB.api('/me/picture?type=normal', function (picResponse) {
                                     console.log('Facebook Login RESPONSE: ' + picResponse.data.url);
@@ -47,7 +46,6 @@ app
                                     user.profilePic = picResponse.data.url;
                                     $http.post(basicUrl + '/facebookuser?accountId=' + response.id, user, {headers: {"Content-Type": "application/json"}})
                                         .then(function (data) {
-//                                         console.log('FinApp fbLogin response: ' + angular.toJson(data));
                                             resolve(user);
                                         })
                                 });
@@ -66,6 +64,9 @@ app
             },
             currentUser: function () {
                 return $http.get(basicUrl + '/users/current-user');
+            },
+            updateUser: function (user) {
+                return $http.post(basicUrl + '/users/' + user.id, user);
             }
         };
     }]);
