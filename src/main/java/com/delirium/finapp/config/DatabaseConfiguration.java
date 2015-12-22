@@ -45,10 +45,10 @@ import java.util.Map;
 public class DatabaseConfiguration
     implements EnvironmentAware {
 
+    private static final String DB_URL = "DB_URL";
+    private static final String DB_USER = "DB_USER";
+    private static final String DB_PASSWORD = "DB_PASSWORD";
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
-    private final String DB_URL = "DB_URL";
-    private final String DB_USER = "DB_USER";
-    private final String DB_PASSWORD = "DB_PASSWORD";
     private RelaxedPropertyResolver propertyResolver;
     private Environment env;
     @Autowired(required = false)
@@ -148,7 +148,9 @@ public class DatabaseConfiguration
             "spring.jpa.properties.");
         Map<String, Object> vendorProperties = relaxedPropertyResolver.getSubProperties(null);
         return factoryBuilder.dataSource(dataSource)
-            .packages("com.delirium.finapp.groups.domain", "com.delirium.finapp.users.domain")
+            .packages("com.delirium.finapp.groups.domain",
+                "com.delirium.finapp.users.domain",
+                "com.delirium.finapp.images")
             .persistenceUnit("finapp")
             .properties(vendorProperties).build();
     }

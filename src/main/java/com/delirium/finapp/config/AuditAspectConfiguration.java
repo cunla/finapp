@@ -34,13 +34,11 @@ import java.util.Arrays;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.delirium.finapp.auditing",
-    entityManagerFactoryRef = "auditEmFactory", transactionManagerRef = "auditTransactionManager")
+    entityManagerFactoryRef = "auditEmFactory",
+    transactionManagerRef = "auditTransactionManager")
 @EnableAspectJAutoProxy
 public class AuditAspectConfiguration implements EnvironmentAware {
     private final Logger log = LoggerFactory.getLogger(AuditAspectConfiguration.class);
-    private final String DB_URL = "AUDIT_DB_URL";
-    private final String DB_USER = "AUDIT_DB_USER";
-    private final String DB_PASSWORD = "AUDIT_DB_PASSWORD";
     private RelaxedPropertyResolver propertyResolver;
     private Environment env;
 
