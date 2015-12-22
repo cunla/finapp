@@ -3,7 +3,7 @@ package com.delirium.finapp.web.rest;
 //import com.codahale.metrics.annotation.Timed;
 
 import com.delirium.finapp.users.domain.User;
-import com.delirium.finapp.users.repository.UserRepository;
+import com.delirium.finapp.users.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

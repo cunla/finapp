@@ -1,5 +1,6 @@
 package com.delirium.finapp.users.domain;
 
+import com.delirium.finapp.auditing.AbstractAuditingEntity;
 import com.delirium.finapp.groups.domain.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

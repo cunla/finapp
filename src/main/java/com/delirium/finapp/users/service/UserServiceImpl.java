@@ -1,9 +1,8 @@
-package com.delirium.finapp.users.service.impl;
+package com.delirium.finapp.users.service;
 
-import com.delirium.finapp.groups.repository.GroupRepository;
+import com.delirium.finapp.groups.domain.GroupRepository;
 import com.delirium.finapp.users.domain.User;
-import com.delirium.finapp.users.repository.UserRepository;
-import com.delirium.finapp.users.service.UserService;
+import com.delirium.finapp.users.domain.UserRepository;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -75,7 +74,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String principal = (String) auth.getPrincipal();
+        Object principalObj = auth.getPrincipal();
+        if (principalObj instanceof User) {
+            return (User) principalObj;
+        }
+        String principal = principalObj.toString();
         User currentUser = userRepository.findOneByEmail(principal);
         return (User) currentUser;
     }
@@ -127,16 +130,16 @@ public class UserServiceImpl implements UserService {
         if (user.getName() != null) {
             existingUser.setName(user.getName());
         }
-        if(user.getCountry() != null){
+        if (user.getCountry() != null) {
             existingUser.setCountry(user.getCountry());
         }
-        if(user.getBirthday() != null){
+        if (user.getBirthday() != null) {
             existingUser.setBirthday(user.getBirthday());
         }
-        if(user.getPhone() != null){
+        if (user.getPhone() != null) {
             existingUser.setPhone(user.getPhone());
         }
-        if(user.getGender() != null){
+        if (user.getGender() != null) {
             existingUser.setGender(user.getGender());
         }
         User updatedUser = userRepository.save(existingUser);

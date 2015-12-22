@@ -6,7 +6,6 @@ import com.delirium.finapp.auditing.handler.AuditTypesHandlerImpl;
 import com.delirium.finapp.exceptions.FinappLoadingException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -77,30 +75,7 @@ public class AuditAspectConfiguration implements EnvironmentAware {
             throw new ApplicationContextException(
                 "Database connection pool is not configured correctly");
         }
-        HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-
-        if (StringUtils.isNoneEmpty(env.getProperty(DB_URL))) {
-            config.addDataSourceProperty("url", env.getProperty(DB_URL));
-            if (org.apache.commons.lang3.StringUtils.isNoneEmpty(env.getProperty(DB_USER))) {
-                config.addDataSourceProperty("user", env.getProperty(DB_USER));
-            }
-            if (StringUtils.isNoneEmpty(env.getProperty(DB_PASSWORD))) {
-                config.addDataSourceProperty("password", env.getProperty(DB_PASSWORD));
-            }
-        } else {
-            if (propertyResolver.getProperty("url") == null || ""
-                .equals(propertyResolver.getProperty("url"))) {
-                config.addDataSourceProperty("databaseName",
-                    propertyResolver.getProperty("databaseName"));
-                config.addDataSourceProperty("serverName",
-                    propertyResolver.getProperty("serverName"));
-            } else {
-                config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
-            }
-            config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
-            config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
-        }
+        HikariConfig config = DatabaseConfiguration.createHikariConfig(propertyResolver, env);
         try {
             return new HikariDataSource(config);
         } catch (Exception e) {
@@ -111,16 +86,7 @@ public class AuditAspectConfiguration implements EnvironmentAware {
 
     @Bean(name = "emfb2")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder1() {
-        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        JpaProperties jpaProps = jpaProperties();
-        adapter.setShowSql(jpaProps.isShowSql());
-        adapter.setDatabase(jpaProps.getDatabase());
-        adapter.setDatabasePlatform(jpaProps.getDatabasePlatform());
-        adapter.setGenerateDdl(jpaProps.isGenerateDdl());
-
-        EntityManagerFactoryBuilder builder = new EntityManagerFactoryBuilder(adapter,
-            jpaProps.getProperties(), this.persistenceUnitManager);
-        return builder;
+        return DatabaseConfiguration.createEntityManagerFacultyBuilder(this.persistenceUnitManager, jpaProperties());
     }
 
     @Bean(name = "auditEmFactory")

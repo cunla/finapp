@@ -14,6 +14,23 @@ app
     }])
     .factory('FinApp', ['$http', '$q', function ($http, $q) {
         return {
+            login: function (email, password) {
+                var data = 'username=' + email + '&password=' + password;
+                return $http({
+                    method: "post",
+                    url: basicUrl + '/login-action',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    data: data
+                });
+            },
+            register: function (email, password) {
+                return $http({
+                    method: "post",
+                    url: basicUrl + '/users',
+                    headers: {'Content-Type': 'application/json'},
+                    data: {email: email, password: password}
+                });
+            },
             fbLogin: function () {
                 return $q(function (resolve, reject) {
                     FB.login(function (response) {

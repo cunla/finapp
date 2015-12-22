@@ -83,7 +83,7 @@
                     </div>
                 </form>
                 <ion-list class="list">
-                    <div collection-repeat='item in groups | filter: query'>
+                    <div ng-repeat='item in groups | filter: query'>
                         <ion-item item="item" class="item item-thumbnail-left {{item.selected? 'item-selected':''}}"
                                   ng-click="item.selected = !item.selected">
                             <img src="{{item.avatar}}"/>
@@ -95,36 +95,38 @@
                                                ng-click="removeUser(item,user)">
                                 Leave
                             </ion-option-button>
+                            <div class="card" ng-show="item.selected">
+                                <ion-item class="item item-divider item-button-right">
+
+                                    {{item.members.length}} Members
+                                    <!--<span class="badge badge-calm"></span>-->
+                                    <button class="button button-clear ion-plus-circled button-positive"></button>
+
+                                </ion-item>
+                                <ion-item item="member" class="item-accordion item-avatar-left"
+                                          ng-repeat="member in item.members">
+                                    <img src="{{member.avatar}}" title="{{member.name}}">
+
+                                    <h2>{{member.name}}</h2>
+
+                                    <p>email: {{member.email}}</p>
+
+                                    <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged
+                                        in'}}</p>
+                                    <ion-option-button class="button button-assertive icon ion-log-out"
+                                                       ng-click="removeUser(item,member)">
+                                        <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                                        Remove
+                                    </ion-option-button>
+                                    <ion-option-button class="button button-dark icon ion-trophy"
+                                                       ng-click="makeAdmin(item,member)">
+                                        <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                                        Admin
+                                    </ion-option-button>
+                                </ion-item>
+                            </div>
                         </ion-item>
-                        <div class="card" ng-show="item.selected">
-                            <ion-item class="item item-divider item-button-right">
 
-                                {{item.members.length}} Members
-                                <!--<span class="badge badge-calm"></span>-->
-                                <button class="button button-clear ion-plus-circled button-positive"></button>
-
-                            </ion-item>
-                            <ion-item item="member" class="item-accordion item-avatar-left"
-                                      collection-repeat="member in item.members">
-                                <img src="{{member.avatar}}" title="{{member.name}}">
-
-                                <h2>{{member.name}}</h2>
-
-                                <p>email: {{member.email}}</p>
-
-                                <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged in'}}</p>
-                                <ion-option-button class="button button-assertive icon ion-log-out"
-                                                   ng-click="removeUser(item,member)">
-                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-                                    Remove
-                                </ion-option-button>
-                                <ion-option-button class="button button-dark icon ion-trophy"
-                                                   ng-click="makeAdmin(item,member)">
-                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-                                    Admin
-                                </ion-option-button>
-                            </ion-item>
-                        </div>
                     </div>
                 </ion-list>
             </ion-list>

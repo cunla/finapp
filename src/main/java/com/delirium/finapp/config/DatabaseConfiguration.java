@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -34,8 +35,11 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
+@EnableJpaAuditing
 @EnableJpaRepositories(
-    basePackages = {"com.delirium.finapp.groups.repository", "com.delirium.finapp.users.repository"},
+    basePackages = {"com.delirium.finapp.groups.domain",
+        "com.delirium.finapp.users.domain",
+        "com.delirium.finapp.images"},
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager")
 public class DatabaseConfiguration
@@ -49,6 +53,51 @@ public class DatabaseConfiguration
     private Environment env;
     @Autowired(required = false)
     private PersistenceUnitManager persistenceUnitManager;
+
+    public static HikariConfig createHikariConfig(RelaxedPropertyResolver propertyResolver, Environment env) {
+        HikariConfig config = new HikariConfig();
+        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
+
+        if (StringUtils.isNoneEmpty(env.getProperty(DB_URL))) {
+            config.addDataSourceProperty("url", env.getProperty(DB_URL));
+            if (org.apache.commons.lang3.StringUtils.isNoneEmpty(env.getProperty(DB_USER))) {
+                config.addDataSourceProperty("user", env.getProperty(DB_USER));
+            }
+            if (StringUtils.isNoneEmpty(env.getProperty(DB_PASSWORD))) {
+                config.addDataSourceProperty("password", env.getProperty(DB_PASSWORD));
+            }
+        } else {
+            if (propertyResolver.getProperty("url") == null || ""
+                .equals(propertyResolver.getProperty("url"))) {
+                config.addDataSourceProperty("databaseName",
+                    propertyResolver.getProperty("databaseName"));
+                config.addDataSourceProperty("serverName",
+                    propertyResolver.getProperty("serverName"));
+            } else {
+                config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
+            }
+            config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
+            config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
+        }
+        return config;
+    }
+
+    public static EntityManagerFactoryBuilder createEntityManagerFacultyBuilder(
+        PersistenceUnitManager persistenceUnitManager,
+        JpaProperties jpaProperties
+    ) {
+        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+        JpaProperties jpaProps = jpaProperties;
+        adapter.setShowSql(jpaProps.isShowSql());
+        adapter.setDatabase(jpaProps.getDatabase());
+        adapter.setDatabasePlatform(jpaProps.getDatabasePlatform());
+        adapter.setGenerateDdl(jpaProps.isGenerateDdl());
+
+        EntityManagerFactoryBuilder builder = new EntityManagerFactoryBuilder(adapter,
+            jpaProps.getProperties(), persistenceUnitManager);
+        //builder.setCallback(getVendorCallback());
+        return builder;
+    }
 
     @Bean
     @ConfigurationProperties("spring.jpa")
@@ -75,30 +124,8 @@ public class DatabaseConfiguration
             throw new ApplicationContextException(
                 "Database connection pool is not configured correctly");
         }
-        HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
+        HikariConfig config = createHikariConfig(propertyResolver, env);
 
-        if (StringUtils.isNoneEmpty(env.getProperty(DB_URL))) {
-            config.addDataSourceProperty("url", env.getProperty(DB_URL));
-            if (org.apache.commons.lang3.StringUtils.isNoneEmpty(env.getProperty(DB_USER))) {
-                config.addDataSourceProperty("user", env.getProperty(DB_USER));
-            }
-            if (StringUtils.isNoneEmpty(env.getProperty(DB_PASSWORD))) {
-                config.addDataSourceProperty("password", env.getProperty(DB_PASSWORD));
-            }
-        } else {
-            if (propertyResolver.getProperty("url") == null || ""
-                .equals(propertyResolver.getProperty("url"))) {
-                config.addDataSourceProperty("databaseName",
-                    propertyResolver.getProperty("databaseName"));
-                config.addDataSourceProperty("serverName",
-                    propertyResolver.getProperty("serverName"));
-            } else {
-                config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
-            }
-            config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
-            config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
-        }
         try {
             return new HikariDataSource(config);
         } catch (Exception e) {
@@ -109,17 +136,7 @@ public class DatabaseConfiguration
 
     @Bean(name = "emfb1")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder1() {
-        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        JpaProperties jpaProps = jpaProperties();
-        adapter.setShowSql(jpaProps.isShowSql());
-        adapter.setDatabase(jpaProps.getDatabase());
-        adapter.setDatabasePlatform(jpaProps.getDatabasePlatform());
-        adapter.setGenerateDdl(jpaProps.isGenerateDdl());
-
-        EntityManagerFactoryBuilder builder = new EntityManagerFactoryBuilder(adapter,
-            jpaProps.getProperties(), this.persistenceUnitManager);
-        //builder.setCallback(getVendorCallback());
-        return builder;
+        return createEntityManagerFacultyBuilder(this.persistenceUnitManager, jpaProperties());
     }
 
     @Bean(name = "entityManagerFactory")

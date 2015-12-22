@@ -1,8 +1,7 @@
-package com.delirium.finapp.groups.service.impl;
+package com.delirium.finapp.groups.service;
 
 import com.delirium.finapp.groups.domain.Group;
-import com.delirium.finapp.groups.repository.GroupRepository;
-import com.delirium.finapp.groups.service.GroupService;
+import com.delirium.finapp.groups.domain.GroupRepository;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,16 +2,28 @@
     <ion-content>
         <div class="logo-welcome"></div>
         <div class="login-btns">
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input ng-model="user.email" type="text" placeholder="user@gmail.com">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Password</span>
+                <input ng-model="user.password" type="password">
+            </label>
+            <div>
+                <button id="btn-login" ng-click="login(user)" class="button button-clear button-positive uppercase">
+                    Login
+                </button>
+                <button id="btn-reg" ng-click="register(user)" class="button button-clear button-positive uppercase">
+                    Register
+                </button>
+            </div>
+            <hr id="login-divider"/>
             <div id="social-links">
                 <ul>
                     <li ng-click="fbLogin()"><span class="ifacebook"><img src="img/social-icons/facebook.png"></span><a
                         href="#" class="afacebook">sign in with facebook</a></li>
                 </ul>
-            </div>
-            <hr id="login-divider"/>
-            <div>
-                <button id="btn-login" class="button button-clear button-positive uppercase">Login</button>
-                <button id="btn-reg" class="button button-clear button-positive uppercase">Register</button>
             </div>
         </div>
     </ion-content>

@@ -1,6 +1,5 @@
-package com.delirium.finapp.users.repository;
+package com.delirium.finapp.users.domain;
 
-import com.delirium.finapp.users.domain.User;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
