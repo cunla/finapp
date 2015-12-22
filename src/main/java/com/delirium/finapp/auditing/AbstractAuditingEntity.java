@@ -48,6 +48,14 @@ public abstract class AbstractAuditingEntity {
     @Column(name = "last_modified_date")
     private DateTime lastModifiedDate = DateTime.now();
 
+    public AbstractAuditingEntity() {
+        this("");
+    }
+
+    public AbstractAuditingEntity(String user) {
+        this.createdBy = "";
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }

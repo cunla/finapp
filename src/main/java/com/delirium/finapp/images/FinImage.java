@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -21,19 +22,22 @@ public class FinImage extends AbstractAuditingEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "IMAGE_DATA")
+    @Lob
+    @Column(name = "IMAGE_DATA", columnDefinition = "blob")
     private byte[] data;
 
     public FinImage() {
-
+        super();
     }
 
     public FinImage(byte[] data) {
+        this();
         this.data = data;
     }
 
-    public static FinImage createFromUrl(URL url) throws FinappUrlException {
+    public static FinImage createFromUrl(String sUrl) throws FinappUrlException {
         try {
+            URL url = new URL(sUrl);
             InputStream in = new BufferedInputStream(url.openStream());
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];
@@ -45,8 +49,10 @@ public class FinImage extends AbstractAuditingEntity {
             in.close();
             byte[] response = out.toByteArray();
             return new FinImage(response);
+        } catch (MalformedURLException e) {
+            throw new FinappUrlException("Url is malformed", sUrl, e);
         } catch (IOException e) {
-            throw new FinappUrlException("Couldn't get URL", url, e);
+            throw new FinappUrlException("Couldn't get URL", sUrl, e);
         }
     }
 

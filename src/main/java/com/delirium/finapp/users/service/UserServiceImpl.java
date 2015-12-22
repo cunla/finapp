@@ -43,12 +43,12 @@ public class UserServiceImpl implements UserService {
         User existingAdmin = userRepository.findOneByEmail(adminLogin);
         if (existingAdmin == null) {
             User newAdmin = new User();
-            newAdmin.setCreatedBy("system");
             newAdmin.setEmail(adminLogin);
             newAdmin.setEncodedPassword(adminPaswword);
             newAdmin.setPermission("ADMIN");
             newAdmin.setName("admin");
-            updateAuditFields(newAdmin);
+            newAdmin.setCreatedDate(new DateTime());
+            newAdmin.setCreatedBy("system");
             userRepository.save(newAdmin);
         }
     }

@@ -1,13 +1,17 @@
 package com.delirium.finapp.users.domain;
 
 import com.delirium.finapp.auditing.AbstractAuditingEntity;
+import com.delirium.finapp.exceptions.FinappUrlException;
 import com.delirium.finapp.groups.domain.Group;
+import com.delirium.finapp.images.FinImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +28,7 @@ import java.util.List;
 @Table(name = "T_USER")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable, UserDetails {
+    private static final Logger log = LoggerFactory.getLogger(User.class);
 
     @Id
     @GeneratedValue
@@ -67,9 +72,12 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     @Column(length = 100)
     private Date birthday;
 
-    //    @Column(length = 100) private Boolean male;
     @Column(length = 2)
     private String gender;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn
+    private FinImage image;
 
     @JsonManagedReference
     @JsonIgnore
@@ -78,6 +86,10 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
     @Column(length = 255)
     private String avatar;
+
+    public User() {
+        super();
+    }
 
     @JsonIgnore
     @Override
@@ -270,5 +282,10 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+        try {
+            this.image = FinImage.createFromUrl(avatar);
+        } catch (FinappUrlException e) {
+            log.warn("Couldn't parse URL {}", avatar);
+        }
     }
 }
