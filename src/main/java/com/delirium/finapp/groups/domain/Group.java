@@ -30,7 +30,7 @@ public class Group implements Serializable {
     private String label;
 
     @Column
-    private String avatar = "https://placehold.it/100x100";
+    private String avatar = "/100x100.png";
 
     @ManyToOne
     @JoinColumn
@@ -177,6 +177,22 @@ public class Group implements Serializable {
 
         public void setEmail(String email) {
             this.email = email;
+        }
+
+        public String getAvatar() {
+            return (null == avatar) ? "100x100.png" : avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public boolean isAdmin() {
+            return isAdmin;
+        }
+
+        public void setAdmin(boolean admin) {
+            isAdmin = admin;
         }
     }
 }

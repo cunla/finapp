@@ -8,7 +8,7 @@ app.run(function ($rootScope, $cookies, $state, FinApp) {
         var userInfo = $cookies.get('userInfo');
         FinApp.currentUser().then(function (res) {
             $rootScope.user = res.data;
-            $rootScope.user.birthday=new Date($rootScope.user.birthday);
+            $rootScope.user.birthday = new Date($rootScope.user.birthday);
             $cookies.putObject('userInfo', $rootScope.user);
             if (!$rootScope.user) {
                 // user not logged in | redirect to login
@@ -20,7 +20,7 @@ app.run(function ($rootScope, $cookies, $state, FinApp) {
                 event.preventDefault();
                 $state.go('profile');
             }
-        },function(err){
+        }, function (err) {
             $cookies.remove('userInfo');
             event.preventDefault();
             $state.go('login');
@@ -47,21 +47,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/account/account.html",
             controller: "accountCtrl"
         })
-        .state('home',{
-            url:'/v2/home',
-            templateUrl:'partials/home/home.html',
-            controller: 'homeCtrl',
-            data:{
-                authenticate:true
-            }
+        .state('home', {
+            url: '/home/:groupId',
+            templateUrl: 'partials/home/home.html',
+            controller: 'homeCtrl'
         })
-        .state('transaction',{
-            url:'/transaction/:transactionId',
+        .state('transaction', {
+            url: '/transaction/:transactionId',
             templateUrl: 'partials/transaction/transaction.html',
-            controller: 'transactionCtrl',
-            data: {
-                authenticate: true
-            }
+            controller: 'transactionCtrl'
         })
     ;
     // default route

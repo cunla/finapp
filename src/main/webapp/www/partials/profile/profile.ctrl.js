@@ -41,5 +41,9 @@ appCtrllers.controller('profileCtrl', function ($rootScope, $scope, $window, $st
         $window.location.reload();
     };
 
+    $scope.goToGroup = function (group) {
+        $state.go('/home/' + group.id);
+    }
+
     $scope.refresh();
 });
