@@ -7,15 +7,20 @@ import retrofit.http.*;
 import java.util.List;
 
 public interface FinappService {
-    @FormUrlEncoded
+
     @POST("/login-action")
-    public Response login(@Field("username") String user, @Field("password") String password);
+    @FormUrlEncoded
+    public Response login(@Field(encodeValue = false, value = "username") String user,
+                          @Field(encodeValue = false, value = "password") String password);
 
     @POST("/logout-action")
-    public Response logout();
+    @FormUrlEncoded
+    public Response logout(@Field(encodeValue = false, value = "username") String user);
 
-    @POST("/users")
-    public User createUser(@Body User user);
+    @POST("/register")
+    @FormUrlEncoded
+    public User register(@Field(encodeValue = false, value = "username") String user,
+                         @Field(encodeValue = false, value = "password") String password);
 
     @GET("/users/current-user")
     public User currentUser();

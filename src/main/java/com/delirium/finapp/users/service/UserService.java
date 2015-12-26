@@ -1,5 +1,6 @@
 package com.delirium.finapp.users.service;
 
+import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.users.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -18,9 +19,9 @@ public interface UserService extends UserDetailsService {
 
     User findUserByEmail(String email);
 
-    User createUser(User user);
+    User createUser(User user) throws UserCreationException;
 
-    User updateUser(User user);
+    User updateUser(User user) throws UserCreationException;
 
     void deleteUser(Long id);
 

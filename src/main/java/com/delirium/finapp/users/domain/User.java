@@ -2,6 +2,7 @@ package com.delirium.finapp.users.domain;
 
 import com.delirium.finapp.auditing.AbstractAuditingEntity;
 import com.delirium.finapp.exceptions.FinappUrlException;
+import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.images.FinImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -91,6 +92,12 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         super();
     }
 
+    public User(String email, String password) {
+        this();
+        this.email = email;
+        this.password = password;
+    }
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -107,7 +114,11 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.password = password;
     }
 
-    public void setEncodedPassword(String password) {
+    public void setEncodedPassword(String password) throws UserCreationException {
+        if (null == password) {
+            log.warn("Password not valid: '{}'", password);
+            throw new UserCreationException("Password not valid");
+        }
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
@@ -220,26 +231,31 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return this.email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }
@@ -287,5 +303,9 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         } catch (FinappUrlException e) {
             log.warn("Couldn't parse URL {}", avatar);
         }
+    }
+
+    public void setEncodedPasswordNoException(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 }

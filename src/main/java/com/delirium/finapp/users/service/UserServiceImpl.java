@@ -1,5 +1,6 @@
 package com.delirium.finapp.users.service;
 
+import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.GroupRepository;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.domain.UserRepository;
@@ -42,14 +43,20 @@ public class UserServiceImpl implements UserService {
     public void init() {
         User existingAdmin = userRepository.findOneByEmail(adminLogin);
         if (existingAdmin == null) {
-            User newAdmin = new User();
-            newAdmin.setEmail(adminLogin);
-            newAdmin.setEncodedPassword(adminPaswword);
-            newAdmin.setPermission("ADMIN");
-            newAdmin.setName("admin");
-            newAdmin.setCreatedDate(new DateTime());
-            newAdmin.setCreatedBy("system");
-            userRepository.save(newAdmin);
+            try {
+                User newAdmin = new User();
+                newAdmin.setEmail(adminLogin);
+
+                newAdmin.setEncodedPassword(adminPaswword);
+
+                newAdmin.setPermission("ADMIN");
+                newAdmin.setName("admin");
+                newAdmin.setCreatedDate(new DateTime());
+                newAdmin.setCreatedBy("system");
+                userRepository.save(newAdmin);
+            } catch (UserCreationException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -91,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional("transactionManager")
-    public User createUser(User user) {
+    public User createUser(User user) throws UserCreationException {
         updateAuditFields(user);
         user.setEncodedPassword(user.getPassword());
         user.setPermission("USER");
@@ -116,7 +123,7 @@ public class UserServiceImpl implements UserService {
 	}*/
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(User user) throws UserCreationException {
         User existingUser = userRepository.findOne(user.getId());
         if (existingUser == null) {
             return null;
@@ -176,7 +183,7 @@ public class UserServiceImpl implements UserService {
     @Transactional("transactionManager")
     public User createFacebookUser(User user, Long accountId) {
         updateAuditFields(user);
-        user.setEncodedPassword(accountId.toString());
+        user.setEncodedPasswordNoException(accountId.toString());
         user.setPermission("USER");
 
         entityManager.persist(user);

@@ -56,7 +56,11 @@ class SecurityConfig
             })
             .permitAll().and().httpBasic();
 
-        http.logout().logoutUrl("/logout-action").logoutSuccessUrl("/www/login/login.html")
+        http.logout().logoutUrl("/logout-action")
+            .logoutSuccessHandler((request, response, authentication) -> {
+                response.setStatus(HttpStatus.OK.value());
+            })
+//            .logoutSuccessUrl("/www/login/login.html")
             .permitAll();
 
     }

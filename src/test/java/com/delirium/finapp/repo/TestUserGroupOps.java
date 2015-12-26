@@ -24,10 +24,19 @@ public class TestUserGroupOps {
 
     @Test
     public void adminLoginLogout() throws IOException {
-        client.login("admin@system", "123");
+        String admin = "admin@system";
+        String password = "123";
+        client.login(admin, password);
         User user = client.currentUser();
-        assertEquals("admin@system", user.getUsername());
-        client.logout();
+        assertEquals(admin, user.getUsername());
+        client.logout(admin);
     }
 
+    @Test
+    public void registerLoginLogout() {
+        String email = "style@cs.technion.ac.il";
+        String password = "1111";
+        User user = client.register(email, password);
+        assertEquals(email, user.getEmail());
+    }
 }

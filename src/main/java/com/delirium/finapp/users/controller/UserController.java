@@ -1,18 +1,18 @@
 package com.delirium.finapp.users.controller;
 
+import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -71,21 +72,27 @@ public class UserController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User findUser = userService.findUserByEmail(user.getEmail());
-        if (null != findUser) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        User sameLoginUser = null;
+    public ResponseEntity<User> register(@RequestBody User user) {
         try {
-            sameLoginUser = userService.findUserByEmail(user.getEmail());
+            User findUser = userService.findUserByEmail(user.getEmail());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (UsernameNotFoundException e) {
-            User createdUser = userService.createUser(user);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
-            return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
+            User createdUser = null;
+            try {
+                createdUser = userService.createUser(user);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
+                return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
+            } catch (UserCreationException e1) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<User> register(@ModelAttribute("username") String email, @ModelAttribute("password") String password) {
+        User user = new User(email, password);
+        return register(user);
     }
 
     @RequestMapping(value = "/facebookuser", params = {
@@ -125,8 +132,14 @@ public class UserController {
             ) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        User updatedUser = userService.updateUser(user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        User updatedUser = null;
+        try {
+            updatedUser = userService.updateUser(user);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (UserCreationException e) {
+            log.warn("Couldn't create user, probably password issues");
+            return new ResponseEntity<>(updatedUser, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
