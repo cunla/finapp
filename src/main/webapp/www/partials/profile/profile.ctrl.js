@@ -1,4 +1,5 @@
-appCtrllers.controller('profileCtrl', function ($rootScope, $scope, $window, $state, $cookies, FinApp) {
+appCtrllers.controller('profileCtrl',
+    function ($rootScope, $scope, $window, $state, $location, $cookies, FinApp) {
     //$scope.user = $cookies.getObject('userInfo');
 
     $scope.refresh = function () {
@@ -40,10 +41,6 @@ appCtrllers.controller('profileCtrl', function ($rootScope, $scope, $window, $st
         $state.go('login');
         $window.location.reload();
     };
-
-    $scope.goToGroup = function (group) {
-        $state.go('/home/' + group.id);
-    }
 
     $scope.refresh();
 });

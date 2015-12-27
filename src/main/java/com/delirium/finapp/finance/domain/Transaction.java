@@ -33,7 +33,8 @@ public class Transaction {
     @Column
     private Date date;
 
-    @Column
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn
     private Category category;
 
     @Column

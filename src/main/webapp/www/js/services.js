@@ -85,6 +85,9 @@ app
             updateUser: function (user) {
                 return $http.post(basicUrl + '/users/' + user.id, user);
             },
+            getTransactions:function(group){
+                return $http.get(basicUrl + '/groups/'+group+'/transactions');
+            },
             newTransaction: function (amount) {
                 return $q(function (resolve, reject) {
                     var transaction = {};

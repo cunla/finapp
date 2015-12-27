@@ -3,7 +3,8 @@ appCtrllers
         function ($scope, FinApp, $state, $stateParams, $rootScope, $ionicPopup) {
             $scope.t = {};
             $scope.doRefresh = function () {
-                FinApp.getTransactions().then(function (results) {
+                var groupId = $stateParams.groupId;
+                FinApp.getTransactions(groupId).then(function (results) {
                     $scope.transactions = results;
                     $scope.sumAll = 0;
                     $scope.transactions.forEach(function (t) {

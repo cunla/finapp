@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "F_CATEGORY")
 public class Category {
     @Id
-    @Column(name = "TRANSACTION_ID")
+    @Column(name = "CATEGORY_ID")
     @GeneratedValue
     private Long id;
 

@@ -86,7 +86,7 @@
                     <div ng-repeat='item in groups | filter: query'>
                         <ion-item item="item"
                                   class="item item-thumbnail-left item-icon-right {{item.editMode? 'item-selected':''}}"
-                                  ng-click="goToGroup(item)"
+                                  href="#/home/{{item.id}}"
                         >
                             <img src="{{item.avatar}}"/>
                             <h2>{{item.name}}</h2>

@@ -39,7 +39,8 @@ import java.util.Map;
 @EnableJpaRepositories(
     basePackages = {"com.delirium.finapp.groups.domain",
         "com.delirium.finapp.users.domain",
-        "com.delirium.finapp.images"},
+        "com.delirium.finapp.images",
+        "com.delirium.finapp.finance.domain"},
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager")
 public class DatabaseConfiguration
@@ -150,7 +151,8 @@ public class DatabaseConfiguration
         return factoryBuilder.dataSource(dataSource)
             .packages("com.delirium.finapp.groups.domain",
                 "com.delirium.finapp.users.domain",
-                "com.delirium.finapp.images")
+                "com.delirium.finapp.images",
+                "com.delirium.finapp.finance.domain")
             .persistenceUnit("finapp")
             .properties(vendorProperties).build();
     }
