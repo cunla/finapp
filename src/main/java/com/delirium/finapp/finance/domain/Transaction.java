@@ -12,54 +12,50 @@ import java.util.Date;
 @Entity
 @Table(name = "F_TRANSACTIONS")
 public class Transaction {
+
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue
     private Long id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn
     private Group group;
-
     @Column
     private String title;
-
     @Column
     private String target;
-
     @Column
     private Double amount;
-
     @Column
     private Date date;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
     private Category category;
-
     @Column
     private String comment;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Location location;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
     private Account account;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private FinImage image;
 
     public Transaction() {
     }
 
-    public Transaction(Double amount, Double longitude, Double latitude, Date date) {
+    public Transaction(Group group, Double amount, Double longitude, Double latitude, Date date) {
+        this.group = group;
         this.amount = amount;
         this.date = date;
         this.title = "TBD";
         this.location = new Location("TBD", longitude, latitude);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getGroup() {
@@ -67,7 +63,9 @@ public class Transaction {
     }
 
     public void setGroup(Group group) {
-        this.group = group;
+        if (null == this.group || !this.group.equals(group)) {
+            this.group = group;
+        }
     }
 
     public String getTitle() {
@@ -127,7 +125,7 @@ public class Transaction {
     }
 
     public Long getAccount() {
-        return account.getId();
+        return (null == account) ? null : account.getId();
     }
 
     public void setAccount(Long account) {
@@ -139,6 +137,8 @@ public class Transaction {
     }
 
     public void setImage(FinImage image) {
-        this.image = image;
+        if (null == this.image || !this.image.equals(image)) {
+            this.image = image;
+        }
     }
 }

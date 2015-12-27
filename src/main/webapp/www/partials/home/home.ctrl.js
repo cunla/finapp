@@ -1,23 +1,26 @@
 appCtrllers
     .controller('homeCtrl', ['$scope', 'FinApp', '$state', '$stateParams', '$rootScope', '$ionicPopup',
         function ($scope, FinApp, $state, $stateParams, $rootScope, $ionicPopup) {
+            var groupId = $stateParams.groupId;
             $scope.t = {};
             $scope.doRefresh = function () {
-                var groupId = $stateParams.groupId;
                 FinApp.getTransactions(groupId).then(function (results) {
-                    $scope.transactions = results;
+                    $scope.transactions = results.data.content;
                     $scope.sumAll = 0;
-                    $scope.transactions.forEach(function (t) {
-                        $scope.sumAll += t.amount;
-                    })
+                    if ($scope.transactions) {
+                        $scope.transactions.forEach(function (t) {
+                            $scope.sumAll += t.amount;
+                        })
+                    } else {
+                        $scope.transactions = [];
+                    }
                 }).finally(function () {
                     $scope.$broadcast('scroll.refreshComplete');
                 })
             }
             $scope.doRefresh();
             $scope.createTransaction = function (t) {
-                FinApp.newTransaction((t.plusSign ? t.amount : -t.amount)).then(function (res) {
-                    console.log("Save transaction " + JSON.stringify(res));
+                FinApp.newTransaction(groupId, (t.plusSign ? t.amount : -t.amount)).then(function (res) {                    
                     $scope.transactions.push(res);
                     $scope.doRefresh();
                 })

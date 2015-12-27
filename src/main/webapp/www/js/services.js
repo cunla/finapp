@@ -85,18 +85,19 @@ app
             updateUser: function (user) {
                 return $http.post(basicUrl + '/users/' + user.id, user);
             },
-            getTransactions:function(group){
-                return $http.get(basicUrl + '/groups/'+group+'/transactions');
+            getTransactions: function (group) {
+                return $http.get(basicUrl + '/groups/' + group + '/transactions');
             },
-            newTransaction: function (amount) {
+            newTransaction: function (group, amount) {
                 return $q(function (resolve, reject) {
                     var transaction = {};
+                    transaction.group = group;
                     transaction.amount = amount;
                     transaction.date = new Date();
                     navigator.geolocation.getCurrentPosition(function (pos) {
                         var point = {latitude: pos.coords.latitude, longitude: pos.coords.longitude};
                         transaction.location = point;
-                        $http.post(basicUrl + "/transactions", transaction).then(function (res) {
+                        $http.post(basicUrl + "/groups/" + group + "/transactions", transaction).then(function (res) {
                             resolve(res.data);
                         })
                     }, function (error) {
