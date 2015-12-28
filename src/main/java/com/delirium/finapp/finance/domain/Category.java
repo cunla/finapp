@@ -15,7 +15,19 @@ public class Category {
     @GeneratedValue
     private Long id;
 
+    @Column(length = 15)
+    private String color;
+
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Group group;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

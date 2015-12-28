@@ -1,6 +1,7 @@
 package com.delirium.finapp.users.domain;
 
 import com.delirium.finapp.auditing.AbstractAuditingEntity;
+import com.delirium.finapp.config.JView;
 import com.delirium.finapp.exceptions.FinappUrlException;
 import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.Group;
@@ -8,6 +9,7 @@ import com.delirium.finapp.images.FinImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
@@ -31,6 +33,7 @@ import java.util.List;
 public class User extends AbstractAuditingEntity implements Serializable, UserDetails {
     private static final Logger log = LoggerFactory.getLogger(User.class);
 
+    @JsonView(JView.UserSummary.class)
     @Id
     @GeneratedValue
     private Long id;
@@ -42,17 +45,20 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
 
     @Size(min = 0, max = 50)
     @Column(name = "name", length = 50)
+    @JsonView(JView.UserSummary.class)
     private String name;
 
     @Email
     @Size(min = 0, max = 100)
     @Column(length = 100)
+    @JsonView(JView.UserSummary.class)
     private String email;
 
     private boolean activated = false;
 
     @Size(min = 2, max = 5)
     @Column(name = "lang_key", length = 5)
+    @JsonView(JView.UserSummary.class)
     private String langKey;
 
     @JsonIgnore
@@ -65,19 +71,24 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     private String permission;
 
     @Column(length = 100)
+    @JsonView(JView.UserSummary.class)
     private String country;
 
     @Column(length = 100)
+    @JsonView(JView.UserSummary.class)
     private String phone;
 
     @Column(length = 100)
+    @JsonView(JView.UserSummary.class)
     private Date birthday;
 
     @Column(length = 2)
+    @JsonView(JView.UserSummary.class)
     private String gender;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn
+    @JsonView(JView.UserWithImage.class)
     private FinImage image;
 
     @JsonManagedReference
@@ -86,6 +97,7 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     private List<Group> groups;
 
     @Column(length = 255)
+    @JsonView(JView.UserSummary.class)
     private String avatar;
 
     public User() {
@@ -114,6 +126,7 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.password = password;
     }
 
+    @JsonIgnore
     public void setEncodedPassword(String password) throws UserCreationException {
         if (null == password) {
             log.warn("Password not valid: '{}'", password);
@@ -122,7 +135,7 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public void encodePassword() {
+    private void encodePassword() {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
@@ -182,10 +195,12 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this.permission = permission;
     }
 
+    @JsonView(JView.UserWithGroups.class)
     public List<Group> getGroups() {
         return groups;
     }
 
+    @JsonIgnore
     public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
@@ -305,6 +320,7 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         }
     }
 
+    @JsonIgnore
     public void setEncodedPasswordNoException(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
     }

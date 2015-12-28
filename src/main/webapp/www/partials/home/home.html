@@ -7,10 +7,10 @@
     <ion-content>
 
         <ion-refresher
-                pulling-text="Pull to refresh..."
-                on-refresh="doRefresh()"
-                refreshing-text="Refreshing!"
-                refreshing-icon="ion-loading-c">
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()"
+            refreshing-text="Refreshing!"
+            refreshing-icon="ion-loading-c">
         </ion-refresher>
 
         <ion-list>
@@ -25,41 +25,38 @@
                     </label>
                     <button class="button button-icon ion-arrow-right-c"
                             type="submit"
-                            ></button>
+                    ></button>
 
                 </label>
             </form>
             <ion-item class="item-divider">
                 <h2 class="title {{sumAll >0 ? 'balanced' : 'assertive'}}">{{sumAll}}</h2>
             </ion-item>
-            <div collection-repeat="item in transactions | orderBy: 'actualDate.iso' :reverse">
-                <ion-item item="item" class="item " href="#/transaction/{{item.objectId}}">
-                    <div class="item-icon-left">
+            <ion-item item="item" class="item item-icon-left"
+                      ng-repeat="item in transactions | orderBy: 'actualDate' :reverse"
+                      href="#/transaction/{{item.id}}">
+                <i class="icon {{item.objectId? 'ion-record':'ion-loop'}}"
+                   style="color:{{item.categoryColor}}"></i>
 
-                            <i class="icon {{item.objectId? 'ion-record':'ion-loop'}}"
-                               style="color:{{item.categoryColor}}"></i>
+                <h2>
+                    <b>{{item.title? item.title : 'No info yet'}}</b>
+                </h2>
 
-                            <h2>
-                                <b>{{item.title? item.title : 'No info yet'}}</b>
-                            </h2>
-
-                            <p>{{item.actualDate.iso | date: 'yyyy-MM-dd HH:mm'}} {{item.target? item.target : ''}}</p>
-                        <a class="badge {{item.amount >0 ? 'badge-balanced' : 'badge-assertive'}}">
-                            {{item.amount}}
-                        </a>
-                    </div>
+                <p>{{item.actualDate | date: 'yyyy-MM-dd HH:mm'}} {{item.target? item.target : ''}}</p>
+                <a class="badge {{item.amount >0 ? 'badge-balanced' : 'badge-assertive'}}">
+                    {{item.amount}}
+                </a>
 
 
-                    <!--<ion-option-button class="button button-dark icon ion-map"-->
-                    <!--ng-click="item.showMap=!item.showMap">-->
-                    <!--</ion-option-button>-->
-                    <ion-option-button class="button button-assertive icon ion-trash-b"
-                                       ng-click="deleteTransaction(item)">
-                    </ion-option-button>
-                </ion-item>
+                <!--<ion-option-button class="button button-dark icon ion-map"-->
+                <!--ng-click="item.showMap=!item.showMap">-->
+                <!--</ion-option-button>-->
+                <ion-option-button class="button button-assertive icon ion-trash-b"
+                                   ng-click="deleteTransaction(item)">
+                </ion-option-button>
+            </ion-item>
 
 
-            </div>
         </ion-list>
         <ion-infinite-scroll ng-show="false"
                              on-infinite="loadMore()"

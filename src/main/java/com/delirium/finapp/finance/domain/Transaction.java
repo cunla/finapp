@@ -58,8 +58,12 @@ public class Transaction {
         return id;
     }
 
-    public Long getGroup() {
-        return group.getId();
+    public String getCategoryColor() {
+        return (null == category) ? "black" : category.getColor();
+    }
+
+    public Long getGroupId() {
+        return (null == group) ? null : group.getId();
     }
 
     public void setGroup(Group group) {
@@ -139,6 +143,36 @@ public class Transaction {
     public void setImage(FinImage image) {
         if (null == this.image || !this.image.equals(image)) {
             this.image = image;
+        }
+    }
+
+    public void updateTransation(Transaction t) {
+        if (t.getTitle() != null) {
+            this.setTitle(t.getTitle());
+        }
+        if (t.getTarget() != null) {
+            this.setTarget(t.getTarget());
+        }
+        if (t.getAmount() != null) {
+            this.setAccount(t.getAccount());
+        }
+        if (t.getDate() != null) {
+            this.setDate(t.getDate());
+        }
+        if (t.getCategory() != null) {
+            this.setCategory(t.getCategory());
+        }
+        if (t.getComment() != null) {
+            this.setComment(t.getComment());
+        }
+        if (t.getLocation() != null) {
+            this.setLocation(t.getLocation());
+        }
+        if (t.account != null) {
+            this.account = t.account;
+        }
+        if (t.getImage() != null) {
+            this.setImage(t.getImage());
         }
     }
 }

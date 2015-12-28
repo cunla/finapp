@@ -9,6 +9,7 @@ appCtrllers
                     $scope.sumAll = 0;
                     if ($scope.transactions) {
                         $scope.transactions.forEach(function (t) {
+                            t.actualDate = new Date(t.date);
                             $scope.sumAll += t.amount;
                         })
                     } else {
@@ -20,7 +21,7 @@ appCtrllers
             }
             $scope.doRefresh();
             $scope.createTransaction = function (t) {
-                FinApp.newTransaction(groupId, (t.plusSign ? t.amount : -t.amount)).then(function (res) {                    
+                FinApp.newTransaction(groupId, (t.plusSign ? t.amount : -t.amount)).then(function (res) {
                     $scope.transactions.push(res);
                     $scope.doRefresh();
                 })
@@ -37,7 +38,7 @@ appCtrllers
                 confirmPopup.then(function (res) {
                     if (res) {
                         console.log('Deleting transaction ' + JSON.stringify(t));
-                        FinApp.deleteTransaction(t.objectId).then(function () {
+                        FinApp.deleteTransaction(t.id).then(function () {
                             var i = $scope.transactions.indexOf(t);
                             $scope.transactions.splice(i, 1);
                         });
@@ -46,4 +47,6 @@ appCtrllers
                     }
                 });
             }
-        }]);
+        }])
+
+

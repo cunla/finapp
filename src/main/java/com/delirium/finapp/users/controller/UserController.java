@@ -1,10 +1,12 @@
 package com.delirium.finapp.users.controller;
 
+import com.delirium.finapp.config.JView;
 import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,9 @@ public class UserController {
     @Autowired
     private GroupService groupService;
 
+    @JsonView(JView.UserSummary.class)
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/users", params = {
-        "query"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<User>> findUsers(@RequestParam("query") String query) {
         List<User> users = userService.findUsers(query);
@@ -95,8 +97,10 @@ public class UserController {
         return register(user);
     }
 
-    @RequestMapping(value = "/facebookuser", params = {
-        "accountId"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/facebookuser",
+        params = {"accountId"},
+        method = RequestMethod.POST,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> facebookUser(@RequestBody User user,
                                              @RequestParam("accountId") Long accountId) {
         try {

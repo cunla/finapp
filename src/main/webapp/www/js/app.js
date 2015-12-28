@@ -1,15 +1,13 @@
 //var appServices = angular.module('app.services', []);
-var appCtrllers = angular.module('app.controllers', []);
+var appCtrllers = angular.module('app.controllers', ['ngMap']);
 var app = angular.module('app', ['ngCookies', 'ionic', 'app.controllers']);
 
 app.run(function ($rootScope, $cookies, $state, FinApp) {
     // Check login session
     $rootScope.$on('$stateChangeStart', function (event, next, current) {
-        var userInfo = $cookies.get('userInfo');
         FinApp.currentUser().then(function (res) {
             $rootScope.user = res.data;
             $rootScope.user.birthday = new Date($rootScope.user.birthday);
-            $cookies.putObject('userInfo', $rootScope.user);
             if (!$rootScope.user) {
                 // user not logged in | redirect to login
                 if (next.name !== "login") {
@@ -21,7 +19,6 @@ app.run(function ($rootScope, $cookies, $state, FinApp) {
                 $state.go('profile');
             }
         }, function (err) {
-            $cookies.remove('userInfo');
             event.preventDefault();
             $state.go('login');
         });

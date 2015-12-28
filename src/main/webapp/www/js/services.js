@@ -88,6 +88,15 @@ app
             getTransactions: function (group) {
                 return $http.get(basicUrl + '/groups/' + group + '/transactions');
             },
+            getTransaction: function (tId) {
+                return $http.get(basicUrl + '/transactions/' + tId);
+            },
+            deleteTransaction: function (tId) {
+                return $http.delete(basicUrl + '/transactions/' + tId);
+            },
+            updateTransaction: function (tId, transaction) {
+                return $http.put(basicUrl + '/transactions/' + tId, transaction);
+            },
             newTransaction: function (group, amount) {
                 return $q(function (resolve, reject) {
                     var transaction = {};
