@@ -9,7 +9,7 @@ appCtrllers
                     $scope.sumAll = 0;
                     if ($scope.transactions) {
                         $scope.transactions.forEach(function (t) {
-                            t.actualDate = new Date(t.date);
+                            t.date = new Date(t.date);
                             $scope.sumAll += t.amount;
                         })
                     } else {
@@ -21,9 +21,12 @@ appCtrllers
             }
             $scope.doRefresh();
             $scope.createTransaction = function (t) {
-                FinApp.newTransaction(groupId, (t.plusSign ? t.amount : -t.amount)).then(function (res) {
-                    $scope.transactions.push(res);
-                    $scope.doRefresh();
+                t.date = new Date();
+                t.amount = (t.plusSign ? t.amount : -t.amount);
+                $scope.transactions.push(t);
+                FinApp.newTransaction(groupId, t.amount).then(function (res) {
+                    $scope.transactions[$scope.transactions.length - 1] = res;
+                    //$scope.doRefresh();
                 })
                 $scope.t = {};
             }

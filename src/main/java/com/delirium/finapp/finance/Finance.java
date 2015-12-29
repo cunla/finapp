@@ -57,7 +57,7 @@ public class Finance {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Group group = authorized(groupId);
-        if (null != group) {
+        if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         }
