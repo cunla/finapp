@@ -26,32 +26,45 @@
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Date</span>
-                    <input type="date" ng-model="transaction.actualDate">
+                    <input type="date" ng-model="transaction.date">
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Category</span>
                     <input type="search" placeholder="Click to select">
                 </label>
-            </div>
-            <div class="card">
-                <div class="button-bar">
-                    <button class="button" ng-class="{'active': transaction.type!='internal'}" ng-click="transaction.type='external'">
-                        {{transaction.amount<0 ? 'Beneficiary' : 'Account of'}}
-                    </button>
-                    <button class="button" ng-class="{'active': transaction.type=='internal'}" ng-click="transaction.type='internal'">Transfer</button>
-                </div>
-                <label class="item item-input item-stacked-label" ng-show="transaction.type!='internal'">
-                    <span class="input-label">Beneficiary</span>
-                    <input type="search" placeholder="Beneficiary" ng-model="transaction.target" ng-change="filterTargets()">
-                </label>
-                <label class="item item-input item-select" ng-show="transaction.type=='internal'">
+                <label class="item item-input item-select">
                     <span class="input-label">Account</span>
-                    <select ng-model="transaction.target" ng-options="item.id as item.name for item in accounts">
+                    <select ng-model="transaction.account"
+                            ng-options="item.id as item.name for item in accounts">
                     </select>
                 </label>
             </div>
             <div class="card">
-                <map center="current-location" zoom="17">
+                <div class="button-bar">
+                    <button class="button" ng-class="{'active': transaction.type!='internal'}"
+                            ng-click="transaction.type='external'">
+                        {{transaction.amount<0 ? 'Beneficiary' : 'Account of'}}
+                    </button>
+                    <button class="button" ng-class="{'active': transaction.type=='internal'}"
+                            ng-click="transaction.type='internal'">Transfer
+                    </button>
+                </div>
+                <label class="item item-input item-stacked-label"
+                       ng-show="transaction.type!='internal'">
+                    <span class="input-label">Beneficiary</span>
+                    <input type="search" placeholder="Beneficiary"
+                           ng-model="transaction.target" ng-change="filterTargets()">
+                </label>
+                <label class="item item-input item-select"
+                       ng-show="transaction.type=='internal'">
+                    <span class="input-label">Account</span>
+                    <select ng-model="transaction.target"
+                            ng-options="item.id as item.name for item in accounts">
+                    </select>
+                </label>
+            </div>
+            <div class="card">
+                <map center="{{pos.lat}},{{pos.lng}}" zoom="17">
                     <marker position="{{pos.lat}},{{pos.lng}}"></marker>
                 </map>
             </div>
