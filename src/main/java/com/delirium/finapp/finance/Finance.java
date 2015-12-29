@@ -31,7 +31,11 @@ public class Finance {
     public Group authorized(Long groupId) {
         User user = userService.findCurrentUser();
         Group group = groupService.findById(groupId);
-        return group.hasUser(user) ? group : null;
+        if (group.hasUser(user)) {
+            userService.updateLastGroupId(user, groupId);
+            return group;
+        }
+        return null;
     }
 
     @PreAuthorize("isAuthenticated()")

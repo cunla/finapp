@@ -28,4 +28,6 @@ public interface UserService extends UserDetailsService {
     String getAdminLogin();
 
     User createFacebookUser(User user, Long accountId);
+
+    void updateLastGroupId(User user, Long groupId);
 }

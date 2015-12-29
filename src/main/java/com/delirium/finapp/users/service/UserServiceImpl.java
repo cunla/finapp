@@ -195,6 +195,14 @@ public class UserServiceImpl implements UserService {
         return createdUser;
     }
 
+    @Override
+    public void updateLastGroupId(User user, Long groupId) {
+        if (user.getLastGroupId() != groupId) {
+            user.setLastGroupId(groupId);
+            userRepository.save(user);
+        }
+    }
+
     public String getAdminPaswword() {
         return adminPaswword;
     }

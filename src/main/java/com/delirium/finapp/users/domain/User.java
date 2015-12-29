@@ -95,7 +95,8 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     @JsonIgnore
     @ManyToMany(mappedBy = "members", fetch = FetchType.LAZY)
     private List<Group> groups;
-
+    @Column
+    private Long lastGroupId;
     @Column(length = 255)
     @JsonView(JView.UserSummary.class)
     private String avatar;
@@ -108,6 +109,14 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
         this();
         this.email = email;
         this.password = password;
+    }
+
+    public Long getLastGroupId() {
+        return lastGroupId;
+    }
+
+    public void setLastGroupId(Long lastGroupId) {
+        this.lastGroupId = lastGroupId;
     }
 
     @JsonIgnore
