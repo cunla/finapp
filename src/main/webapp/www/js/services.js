@@ -63,7 +63,7 @@ app
                                     user.avatar = picResponse.data.url;
                                     $http.post(basicUrl + '/facebookuser?accountId=' + response.id, user, {headers: {"Content-Type": "application/json"}})
                                         .then(function (data) {
-                                            resolve(user);
+                                            resolve(data.data);
                                         })
                                 });
                             });

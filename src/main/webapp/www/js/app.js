@@ -16,11 +16,7 @@ app.run(function ($rootScope, $cookies, $state, FinApp) {
                 }
             } else if (next.name === "login") {
                 event.preventDefault();
-                if ($rootScope.user.lastGroupId) {
-                    $state.go('home', {"groupId": $rootScope.user.lastGroupId});
-                } else {
-                    $state.go('profile');
-                }
+                $state.go('profile');
             }
         }, function (err) {
             event.preventDefault();
