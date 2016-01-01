@@ -1,8 +1,10 @@
 //var appServices = angular.module('app.services', []);
 var appCtrllers = angular.module('app.controllers', ['ngMap']);
-var app = angular.module('app', ['ngCookies', 'ionic', 'app.controllers']);
+var app = angular.module('app', [
+    'ionic',
+    'app.controllers']);
 
-app.run(function ($rootScope, $cookies, $state, FinApp) {
+app.run(function ($rootScope, $state, FinApp) {
     // Check login session
     $rootScope.$on('$stateChangeStart', function (event, next, current) {
         FinApp.currentUser().then(function (res) {
@@ -16,7 +18,7 @@ app.run(function ($rootScope, $cookies, $state, FinApp) {
                 }
             } else if (next.name === "login") {
                 event.preventDefault();
-                $state.go('profile');
+                $state.go('menu.profile');
             }
         }, function (err) {
             event.preventDefault();
@@ -34,25 +36,47 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/login/login.html",
             controller: 'loginCtrl'
         })
-        .state('profile', {
+        .state('menu', {
+            url: "/f",
+            abstract: true,
+            templateUrl: "partials/menu/menu.html",
+            controller: "menuCtrl"
+        })
+        .state('menu.profile', {
             url: "/profile",
-            templateUrl: "partials/profile/profile.html",
-            controller: "profileCtrl"
+            views: {
+                'appContent': {
+                    templateUrl: "partials/profile/profile.html",
+                    controller: "profileCtrl"
+                }
+            }
         })
-        .state('account', {
+        .state('menu.account', {
             url: "/account/:account",
-            templateUrl: "partials/account/account.html",
-            controller: "accountCtrl"
+            views: {
+                'appContent': {
+                    templateUrl: "partials/account/account.html",
+                    controller: "accountCtrl"
+                }
+            }
         })
-        .state('home', {
+        .state('menu.home', {
             url: '/home/:groupId',
-            templateUrl: 'partials/home/home.html',
-            controller: 'homeCtrl'
+            views: {
+                'appContent': {
+                    templateUrl: 'partials/home/home.html',
+                    controller: 'homeCtrl'
+                }
+            }
         })
-        .state('transaction', {
+        .state('menu.transaction', {
             url: '/transaction/:transactionId',
-            templateUrl: 'partials/transaction/transaction.html',
-            controller: 'transactionCtrl'
+            views: {
+                'appContent': {
+                    templateUrl: 'partials/transaction/transaction.html',
+                    controller: 'transactionCtrl'
+                }
+            }
         })
     ;
     // default route

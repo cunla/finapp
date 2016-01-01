@@ -1,14 +1,14 @@
-appCtrllers.controller('loginCtrl', ['$scope', '$state', '$cookies', 'FinApp',
-    function ($scope, $state, $cookies, FinApp) {
+appCtrllers.controller('loginCtrl', ['$scope', '$state', 'FinApp',
+    function ($scope, $state, FinApp) {
 
         $scope.user = {};
         $scope.fbLogin = function () {
             FinApp.fbLogin().then(function (user) {
-                    if (user.lastGroupId) {
-                        $state.go('home', {"groupId": user.lastGroupId});
-                    } else {
-                        $state.go('profile');
-                    }
+                if (user.lastGroupId) {
+                    $state.go('home', {"groupId": user.lastGroupId});
+                } else {
+                    $state.go('profile');
+                }
             })
         };
         $scope.login = function (user) {

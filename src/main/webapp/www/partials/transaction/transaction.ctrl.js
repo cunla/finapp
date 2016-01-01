@@ -5,6 +5,7 @@ appCtrllers
 
             FinApp.getTransaction($scope.transactionId).then(function (res) {
                 $scope.transaction = res.data;
+                $scope.transaction.date=new Date($scope.transaction.date);
                 $scope.pos = {
                     'lat': $scope.transaction.location.latitude,
                     'lng': $scope.transaction.location.longitude

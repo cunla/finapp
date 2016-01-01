@@ -1,5 +1,5 @@
 appCtrllers.controller('profileCtrl',
-    function ($rootScope, $scope, $window, $state, $location, $cookies, FinApp) {
+    function ($rootScope, $scope, $window, $state, $location, FinApp) {
     //$scope.user = $cookies.getObject('userInfo');
 
     $scope.refresh = function () {
@@ -36,9 +36,9 @@ appCtrllers.controller('profileCtrl',
     };
 
     $scope.logout = function () {
-        $cookies.remove("userInfo");
+        //$cookies.remove("userInfo");
         FinApp.logout();
-        $state.go('login');
+        $state.go('menu.login');
         $window.location.reload();
     };
 
