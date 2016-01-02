@@ -1,7 +1,6 @@
 package com.delirium.finapp.finance;
 
-import com.delirium.finapp.finance.domain.Transaction;
-import com.delirium.finapp.finance.domain.TransactionRepository;
+import com.delirium.finapp.finance.domain.*;
 import com.delirium.finapp.finance.protocol.TransPojo;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
@@ -27,6 +26,10 @@ public class Finance {
     private UserService userService;
     @Autowired
     private TransactionRepository transactionRepo;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public Group authorized(Long groupId) {
         User user = userService.findCurrentUser();
@@ -76,7 +79,7 @@ public class Finance {
     @RequestMapping(value = "/transactions/{transactionId}", method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Transaction> newTransation(@PathVariable("transactionId") Long tId) {
+    public ResponseEntity<Transaction> getTransation(@PathVariable("transactionId") Long tId) {
         if (null == tId) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -87,6 +90,7 @@ public class Finance {
         if (null == authorized(t.getGroupId())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        t.setRepositories(categoryRepository, accountRepository);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
 
@@ -122,6 +126,41 @@ public class Finance {
         }
         transactionRepo.delete(tId);
         return new ResponseEntity<>(t, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/groups/{group}/categories", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Category> newCategory(@PathVariable("group") Long groupId,
+                                                @RequestBody Category c) {
+        if (null == c || null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+        Category category = new Category(group, c.getColor(), c.getName());
+        categoryRepository.save(category);
+        categoryRepository.flush();
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/groups/{group}/settings", method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<GroupSettings> getGroupSettings(@PathVariable("group") Long groupId) {
+        if (null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+        GroupSettings settings = new GroupSettings(group, accountRepository, categoryRepository);
+        return new ResponseEntity<>(settings, HttpStatus.OK);
     }
 
 }

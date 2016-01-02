@@ -18,10 +18,22 @@ public class Category {
     @Column(length = 15)
     private String color;
 
+    @Column
+    private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Group group;
+
+    public Category() {
+
+    }
+
+    public Category(Group group, String color, String name) {
+        this.group = group;
+        this.color = color;
+        this.name = name;
+    }
 
     public String getColor() {
         return color;
@@ -29,5 +41,30 @@ public class Category {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void updateCategory(Category c) {
+        if (null != c.getColor()) {
+            this.setColor(c.getColor());
+        }
+        if (null != c.getName()) {
+            this.setName(c.getName());
+        }
     }
 }
