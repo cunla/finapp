@@ -2,11 +2,10 @@
   "name": "HelloIonic",
   "private": "true",
   "dependencies": {
-    "ionic": "driftyco/ionic-bower#1.2.1",
+    "ionic": "driftyco/ionic-bower#1.2.0",
     "Ionicons": "ionicons#~2.0.1",
     "ng-map": "*",
     "ion-md-input": "~1.0.4",
-    "robotodraft": "~1.1.0",
-    "ionic-material": "~0.4.2"
+    "robotodraft": "~1.1.0"
   }
 }

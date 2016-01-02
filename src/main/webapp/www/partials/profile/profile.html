@@ -94,24 +94,24 @@
                 class="item item-thumbnail-left item-button-right"
                 ng-repeat='item in groups'
                 item="item" can-swipe="true"
+                href="#/f/home/{{item.id}}"
             >
-                <!--href="#/f/home/{{item.id}}"-->
                 <img src="{{item.avatar}}"/>
                 <h2>{{item.name}}</h2>
                 <p>{{item.currency}} Total balance:<b> {{item.currencySymbol}} {{item.balance}} </b></p>
 
-                <ion-option-button class="button button-assertive icon ion-edit"
+                <ion-option-button class="button button-calm icon ion-edit dark"
                                    ng-click="item.editMode = !item.editMode"
                                    title="Edit Members">
                     Edit
                 </ion-option-button>
 
-                <ion-option-button class="button button-assertive icon ion-log-out"
+                <ion-option-button class="button button-dark icon ion-log-out"
                                    ng-click="removeUser(item,user)">
                     Leave
                 </ion-option-button>
 
-                <ion-option-button class="button button-assertive icon ion-close assertive"
+                <ion-option-button class="button button-assertive icon ion-ios-trash assertive"
                                    ng-click="item.editMode = !item.editMode"
                                    title="Delete Group">
                     Delete
