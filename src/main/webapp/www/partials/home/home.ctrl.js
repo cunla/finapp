@@ -40,13 +40,11 @@ appCtrllers
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        console.log('Deleting transaction ' + JSON.stringify(t));
+                        //console.log('Deleting transaction ' + JSON.stringify(t));
                         FinApp.deleteTransaction(t.id).then(function () {
                             var i = $scope.transactions.indexOf(t);
                             $scope.transactions.splice(i, 1);
                         });
-                    } else {
-                        console.log('You are not sure');
                     }
                 });
             }

@@ -68,72 +68,58 @@
                         ng-click="updateUser(user)">Save changes
                 </button>
             </div>
-            <ion-list show-delete="false" can-swipe="true">
-                <div class="item item-positive item-button-right" ng-hide="newGroupForm">
-                    Groups
-                    <button class="button button-small button-icon icon ion-plus" ng-click="showNewGroup()"></button>
-                </div>
-                <form>
-                    <div class="item item-input-inset" ng-show="newGroupForm">
-                        <label class="item-input-wrapper">
-                            <input type="text" placeholder="Group name" ng-model="gname">
-                        </label>
-                        <button ng-click="createGroup(gname)"
-                                class="button button-small button-icon icon ion-arrow-right-c">
-                        </button>
-                    </div>
-                </form>
-                <ion-list class="list">
-                    <div ng-repeat='item in groups | filter: query'>
-                        <ion-item item="item"
-                                  class="item item-thumbnail-left item-icon-right {{item.editMode? 'item-selected':''}}"
-                                  href="#/f/home/{{item.id}}"
-                        >
-                            <img src="{{item.avatar}}"/>
-                            <h2>{{item.name}}</h2>
-                            <p>{{item.currency}} Total balance:<b> {{item.currencySymbol}} {{item.balance}} </b></p>
-                            <!--<p>Members: {{item.members.join(", ")}}</p>-->
-
-                            <i class="icon ion-edit" ng-click="item.editMode = !item.editMode" title="Edit Members"></i>
-
-                            <ion-option-button class="button button-assertive icon ion-log-out"
-                                               ng-click="removeUser(item,user)">
-                                Leave
-                            </ion-option-button>
-                        </ion-item>
-                        <div class="card" ng-show="item.editMode">
-                            <ion-item class="item item-divider item-button-right">
-
-                                {{item.members.length}} Members
-                                <!--<span class="badge badge-calm"></span>-->
-                                <button class="button button-clear ion-plus-circled button-positive">Invite</button>
-
-                            </ion-item>
-                            <ion-item item="member" class="item-accordion item-avatar-left"
-                                      ng-repeat="member in item.members">
-                                <img src="{{member.avatar}}" title="{{member.name}}">
-
-                                <h2>{{member.name}}</h2>
-
-                                <p>email: {{member.email}}</p>
-
-                                <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged
-                                    in'}}</p>
-                                <ion-option-button class="button button-assertive icon ion-log-out"
-                                                   ng-click="removeUser(item,member)">
-                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-                                    Remove
-                                </ion-option-button>
-                                <ion-option-button class="button button-dark icon ion-trophy"
-                                                   ng-click="makeAdmin(item,member)">
-                                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-                                    Admin
-                                </ion-option-button>
-                            </ion-item>
-                        </div>
-                    </div>
-                </ion-list>
-            </ion-list>
         </div>
+        <div class="item item-calm item-button-right" ng-hide="newGroupForm">
+            Groups
+            <button class="button button-small button-icon icon ion-plus-circled dark"
+                    ng-click="setNewGroupFormStatus(true)"></button>
+        </div>
+        <form>
+            <div class="item item-calm item-input-inset" ng-show="newGroupForm">
+                <button ng-click="setNewGroupFormStatus(false)"
+                        class="button button-small button-icon icon ion-ios-undo">
+
+                </button>
+                <label class="item-input-wrapper">
+                    <input type="text" placeholder="Group name" ng-model="gname">
+                </label>
+                <button ng-click="createGroup(gname)"
+                        class="button button-small button-icon icon ion-arrow-right-c">
+                </button>
+
+            </div>
+        </form>
+        <ion-list class="list" can-swipe="true">
+            <ion-item
+                class="item item-thumbnail-left item-button-right"
+                ng-repeat='item in groups'
+                item="item" can-swipe="true"
+            >
+                <!--href="#/f/home/{{item.id}}"-->
+                <img src="{{item.avatar}}"/>
+                <h2>{{item.name}}</h2>
+                <p>{{item.currency}} Total balance:<b> {{item.currencySymbol}} {{item.balance}} </b></p>
+
+                <ion-option-button class="button button-assertive icon ion-edit"
+                                   ng-click="item.editMode = !item.editMode"
+                                   title="Edit Members">
+                    Edit
+                </ion-option-button>
+
+                <ion-option-button class="button button-assertive icon ion-log-out"
+                                   ng-click="removeUser(item,user)">
+                    Leave
+                </ion-option-button>
+
+                <ion-option-button class="button button-assertive icon ion-close assertive"
+                                   ng-click="item.editMode = !item.editMode"
+                                   title="Delete Group">
+                    Delete
+                </ion-option-button>
+
+            </ion-item>
+
+        </ion-list>
+
     </ion-content>
 </ion-view>
