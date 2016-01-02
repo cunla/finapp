@@ -1,5 +1,5 @@
 //var appServices = angular.module('app.services', []);
-var appCtrllers = angular.module('app.controllers', ['ngMap']);
+var appCtrllers = angular.module('app.controllers', ['ngMap','ionic-material']);
 var app = angular.module('app', [
     'ionic',
     'app.controllers']);
