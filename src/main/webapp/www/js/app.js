@@ -26,7 +26,26 @@ app.run(function ($rootScope, $state, FinApp) {
         });
     });
 });
+app.factory('errorInterceptor', [function () {
+    var responseInterceptor = {
+        request: function (config) {
+            config.requestTimestamp = new Date().getTime();
+            return config;
+        },
+        response: function (response) {
+            response.config.responseTimestamp = new Date().getTime();
+            if (response.status >= 400) {
+                console.log(response.data);
+            }
+            return response;
+        }
+    };
 
+    return responseInterceptor;
+}]);
+app.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push('errorInterceptor');
+}]);
 // Routes
 app.config(function ($stateProvider, $urlRouterProvider) {
     // setup states
