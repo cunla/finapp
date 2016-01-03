@@ -1,5 +1,6 @@
 package com.delirium.finapp.groups.domain;
 
+import com.delirium.finapp.finance.domain.Transaction;
 import com.delirium.finapp.users.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,6 +43,8 @@ public class Group implements Serializable {
     @JsonIgnore
     private List<User> members;
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 
     public Group() {
         super();
@@ -83,17 +86,21 @@ public class Group implements Serializable {
 
     @JsonProperty("balance")
     public Double getBalance() {
-        return 18.3131;
+        Double sum = 0.0;
+        for (Transaction t : transactions) {
+            sum += t.getAmount();
+        }
+        return sum;
     }
 
     @JsonProperty("currency")
     public String getDefaultCurrency() {
-        return "USD";
+        return "ILS";
     }
 
     @JsonProperty("currencySymbol")
     public String getCurrencySymbol() {
-        return "$";
+        return "ILS";
     }
 
     public void setUsers(List<User> users) {
@@ -118,12 +125,6 @@ public class Group implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" + "id='" + id + '\'' + ", name='" + name + '\''
-            + ", label='" + label + "}";
     }
 
     public boolean hasMembers() {
@@ -180,7 +181,7 @@ public class Group implements Serializable {
         }
 
         public String getAvatar() {
-            return (null == avatar) ? "100x100.png" : avatar;
+            return avatar;
         }
 
         public void setAvatar(String avatar) {
