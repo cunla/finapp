@@ -69,7 +69,7 @@ public class Transaction {
         this.amount = amount;
         this.date = date;
         this.title = "TBD";
-        this.location = new Location("TBD", longitude, latitude);
+        this.location = new Location("TBD", latitude, longitude);
     }
 
     public Long getId() {
