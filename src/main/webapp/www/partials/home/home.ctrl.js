@@ -23,6 +23,7 @@ appCtrllers
             $scope.createTransaction = function (t) {
                 t.date = new Date();
                 t.amount = (t.plusSign ? t.amount : -t.amount);
+                $scope.sumAll += t.amount;
                 $scope.transactions.unshift(t);
                 FinApp.newTransaction(groupId, t.amount).then(function (res) {
                     res.date = new Date(res.date);
