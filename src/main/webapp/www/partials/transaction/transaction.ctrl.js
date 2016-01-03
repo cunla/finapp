@@ -1,11 +1,11 @@
 appCtrllers
-    .controller('transactionCtrl', ['$scope', 'FinApp', '$state', '$stateParams', '$rootScope', '$http', '$ionicHistory',
-        function ($scope, FinApp, $state, $stateParams, $rootScope, $http, $ionicHistory) {
+    .controller('transactionCtrl', ['$scope', 'FinApp', '$state', '$stateParams', 'Places',
+        function ($scope, FinApp, $state, $stateParams, Places) {
             $scope.transactionId = $stateParams.transactionId;
 
             FinApp.getTransaction($scope.transactionId).then(function (res) {
                 $scope.transaction = res.data;
-                $scope.transaction.date=new Date($scope.transaction.date);
+                $scope.transaction.date = new Date($scope.transaction.date);
                 $scope.pos = {
                     'lat': $scope.transaction.location.latitude,
                     'lng': $scope.transaction.location.longitude

@@ -1,17 +1,5 @@
 var basicUrl = '/finapp';
 app
-    .factory('Places', ['$http', function ($http) {
-        var baseUrl = "maps.googleapis.com/maps/api/place/nearbysearch/json?"
-            + "radius=50&sensor=true";
-        return {
-            findPlaces: function (lat, lng) {
-                var url = baseUrl;
-                url += "&location=" + lat + "," + lng;
-                url += "&key=AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE";
-                return $http.get(url);
-            }
-        }
-    }])
     .factory('FinApp', ['$http', '$q', function ($http, $q) {
         return {
             login: function (email, password) {

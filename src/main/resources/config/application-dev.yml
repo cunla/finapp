@@ -63,6 +63,8 @@ spring:
 
 
 finapp:
+  places:
+    key: AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE
   admin:
     login: admin@system
     password: 123
