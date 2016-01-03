@@ -48,7 +48,7 @@ appCtrllers.controller('profileCtrl',
         $scope.logout = function () {
             //$cookies.remove("userInfo");
             FinApp.logout();
-            $state.go('menu.login');
+            $state.go('login');
             $window.location.reload();
         };
 
