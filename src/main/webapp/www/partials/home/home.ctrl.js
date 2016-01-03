@@ -23,9 +23,10 @@ appCtrllers
             $scope.createTransaction = function (t) {
                 t.date = new Date();
                 t.amount = (t.plusSign ? t.amount : -t.amount);
-                $scope.transactions.push(t);
+                $scope.transactions.unshift(t);
                 FinApp.newTransaction(groupId, t.amount).then(function (res) {
-                    $scope.transactions[$scope.transactions.length - 1] = res;
+                    res.date = new Date(res.date);
+                    $scope.transactions[0] = res;
                     //$scope.doRefresh();
                 })
                 $scope.t = {};

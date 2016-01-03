@@ -34,10 +34,10 @@
                 <h2 class="title text-center {{sumAll >0 ? 'balanced' : 'assertive'}}">{{sumAll}}</h2>
             </ion-item>
             <ion-item item="item" class="item" can-swipe="true"
-                      ng-repeat="item in transactions | orderBy: 'date' :reverse"
+                      ng-repeat="item in transactions | orderBy: '-date'"
                       href="#/f/transaction/{{item.id}}">
                 <div class="item-icon-left">
-                    <i class="icon {{item.objectId? 'ion-record':'ion-loop'}}"
+                    <i class="icon {{item.id? 'ion-record':'ion-loop'}}"
                        style="color:{{item.categoryColor}}"></i>
 
                     <h2>
