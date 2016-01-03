@@ -66,6 +66,7 @@
             <div class="card">
                 <map center="{{pos.lat}},{{pos.lng}}" zoom="17">
                     <marker position="{{pos.lat}},{{pos.lng}}"></marker>
+                    <marker ng-repeat="item in places" position="{{item.latitude}},{{item.longitude}}"></marker>
                 </map>
             </div>
         </ion-list>

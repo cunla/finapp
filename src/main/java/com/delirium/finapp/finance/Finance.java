@@ -4,6 +4,7 @@ import com.delirium.finapp.finance.domain.*;
 import com.delirium.finapp.finance.protocol.TransPojo;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
+import com.delirium.finapp.tools.PlacesService;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by morand3 on 12/23/2015.
@@ -28,6 +31,8 @@ public class Finance {
     private TransactionRepository transactionRepo;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private PlacesService placesService;
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -70,6 +75,7 @@ public class Finance {
         }
         Transaction transaction = new Transaction(group, t.getAmount(), t.getLocation().longitude,
             t.getLocation().latitude, t.getDate());
+        placesService.saveNearByLocations(t.getLocation().latitude, t.getLocation().longitude);
         transactionRepo.save(transaction);
         transactionRepo.flush();
         return new ResponseEntity<>(transaction, HttpStatus.OK);
@@ -90,7 +96,7 @@ public class Finance {
         if (null == authorized(t.getGroupId())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        t.setRepositories(categoryRepository, accountRepository);
+        t.setServices(categoryRepository, accountRepository, null);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
 

@@ -2,9 +2,11 @@ package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.images.FinImage;
+import com.delirium.finapp.tools.PlacesService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import se.walkercrou.places.Place;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,50 +18,58 @@ import java.util.List;
 @Entity
 @Table(name = "F_TRANSACTIONS")
 public class Transaction {
+
     @Transient
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
+    @Transient
+    private CategoryRepository categoryRepository;
+    @Transient
+    private PlacesService placesService;
+
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue
-    @JsonView(TrasactionView.class)
     private Long id;
+
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn
     @JsonIgnore
     private Group group;
+
     @Column
-    @JsonView(TrasactionView.class)
     private String title;
+
     @Column
-    @JsonView(TrasactionView.class)
     private String target;
+
     @Column
-    @JsonView(TrasactionView.class)
     private Double amount;
+
     @Column
-    @JsonView(TrasactionView.class)
     private Date date;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
-    @JsonView(TrasactionView.class)
+    @JsonIgnore
     private Category category;
+
     @Column
-    @JsonView(TrasactionView.class)
     private String comment;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    @JsonView(TrasactionView.class)
     private Location location;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
-    @JsonView(TrasactionView.class)
+    @JsonIgnore
     private Account account;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    @JsonView(TrasactionView.class)
+    @JsonIgnore
     private FinImage image;
-    @Transient
-    private CategoryRepository categoryRepository;
+
 
     public Transaction() {
     }
@@ -80,7 +90,18 @@ public class Transaction {
         return (null == category) ? "black" : category.getColor();
     }
 
-    @JsonView(TrasactionView.class)
+    public Long getCategoryId() {
+        return (null == category) ? null : category.getId();
+    }
+
+    public String getCategoryName() {
+        return (null == category) ? null : category.getName();
+    }
+
+    public Long getAccountId() {
+        return (null == account) ? null : account.getId();
+    }
+
     public Long getGroupId() {
         return (null == group) ? null : group.getId();
     }
@@ -91,9 +112,12 @@ public class Transaction {
         }
     }
 
-    public void setRepositories(CategoryRepository categoryRepository, AccountRepository accountRepository) {
+    public void setServices(CategoryRepository categoryRepository,
+                            AccountRepository accountRepository,
+                            PlacesService placesService) {
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
+        this.placesService = placesService;
     }
 
     @JsonProperty("groupCategories")
@@ -104,6 +128,12 @@ public class Transaction {
     @JsonProperty("groupAccounts")
     public List<Account> getAccounts() {
         return (null == accountRepository) ? null : accountRepository.accountsForGroup(this.group);
+    }
+
+    @JsonProperty("places")
+    public List<Location> getNearByPlaces() {
+        return (null == placesService) ? null :
+            placesService.getNearbyPlaces(location.getLatitude(), location.getLongitude());
     }
 
     public String getTitle() {
@@ -210,9 +240,4 @@ public class Transaction {
         }
     }
 
-    public interface TrasactionView {
-    }
-
-    public interface TransactionWithExtraDetails extends TrasactionView {
-    }
 }

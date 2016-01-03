@@ -1,6 +1,10 @@
 package com.delirium.finapp.finance.domain;
 
+import org.apache.commons.lang3.StringUtils;
+import se.walkercrou.places.Place;
+
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by morand3 on 12/23/2015.
@@ -8,17 +12,24 @@ import javax.persistence.*;
 @Entity
 @Table(name = "F_LOCATION")
 public class Location {
+
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue
     private Long id;
-
     @Column
     private String name;
+
     @Column
     private double longitude;
     @Column
     private double latitude;
+
+    @Column(unique = true)
+    private String googleId;
+
+    @Column(length = 255)
+    private String types;
 
     public Location(String name, double latitude, double longitude) {
         this.name = name;
@@ -27,6 +38,14 @@ public class Location {
     }
 
     public Location() {
+    }
+
+    public Location(Place place) {
+        this.name = place.getName();
+        this.longitude = place.getLongitude();
+        this.latitude = place.getLatitude();
+        this.googleId = place.getPlaceId();
+        this.types = StringUtils.join(place.getTypes(), ",");
     }
 
     public Long getId() {
@@ -55,6 +74,10 @@ public class Location {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getTypes() {
+        return types;
     }
 
     public double distanceTo(Location that) {

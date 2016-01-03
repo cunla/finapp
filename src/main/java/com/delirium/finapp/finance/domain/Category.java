@@ -1,6 +1,7 @@
 package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -23,6 +24,7 @@ public class Category {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
+    @JsonIgnore
     private Group group;
 
     public Category() {
@@ -66,5 +68,9 @@ public class Category {
         if (null != c.getName()) {
             this.setName(c.getName());
         }
+    }
+
+    public Long getId() {
+        return id;
     }
 }
