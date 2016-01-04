@@ -6,19 +6,15 @@ appCtrllers
             FinApp.getTransaction($scope.transactionId).then(function (res) {
                 $scope.transaction = res.data;
                 $scope.transaction.date = new Date($scope.transaction.date);
-                $scope.pos = {
+                var pos = {
                     'lat': $scope.transaction.location.latitude,
-                    'lng': $scope.transaction.location.longitude,
-                    'name': $scope.transaction.location.name
-                };
-                $scope.transaction.actualDate = new Date($scope.transaction.date);
+                    'lng': $scope.transaction.location.longitude
+                };               
                 $scope.$on('mapInitialized', function (event, map) {
                     $scope.map = map;
-                    $scope.map.setCenter($scope.pos);
-                });
-                if ($scope.pos.name=="TBD") {
-                    $scope.places = $scope.transaction.places;
-                }
+                    $scope.map.setCenter(pos);
+                });                
+                $scope.places = $scope.transaction.places;                
             });
             //FinApp.getGroups().then(function (data) {
             //    $scope.accounts = data[0].accounts;

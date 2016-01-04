@@ -5,8 +5,6 @@ import com.delirium.finapp.images.FinImage;
 import com.delirium.finapp.tools.PlacesService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
-import se.walkercrou.places.Place;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -90,16 +88,28 @@ public class Transaction {
         return (null == category) ? "black" : category.getColor();
     }
 
+    public void setCategoryColor(String color) {
+    }
+
     public Long getCategoryId() {
         return (null == category) ? null : category.getId();
+    }
+
+    public void setCategoryId(Long id) {
     }
 
     public String getCategoryName() {
         return (null == category) ? null : category.getName();
     }
 
+    public void setCategoryName(String name) {
+    }
+
     public Long getAccountId() {
         return (null == account) ? null : account.getId();
+    }
+
+    public void setAccountId(Long id) {
     }
 
     public Long getGroupId() {
@@ -121,13 +131,19 @@ public class Transaction {
     }
 
     @JsonProperty("groupCategories")
-    public List<Category> getCategories() {
+    public List<Category> getGroupCategories() {
         return (null == categoryRepository) ? null : categoryRepository.categoryForGroup(this.group);
     }
 
+    public void setGroupCategories(List<Category> categories) {
+    }
+
     @JsonProperty("groupAccounts")
-    public List<Account> getAccounts() {
+    public List<Account> getGroupAccounts() {
         return (null == accountRepository) ? null : accountRepository.accountsForGroup(this.group);
+    }
+
+    public void setGroupAccounts(List<Account> accounts) {
     }
 
     @JsonProperty("places")
@@ -218,7 +234,7 @@ public class Transaction {
             this.setTarget(t.getTarget());
         }
         if (t.getAmount() != null) {
-            this.setAccount(t.getAccount());
+            this.setAmount(t.getAmount());
         }
         if (t.getDate() != null) {
             this.setDate(t.getDate());

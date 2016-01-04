@@ -75,7 +75,7 @@ public class Finance {
         }
         Transaction transaction = new Transaction(group, t.getAmount(), t.getLocation().longitude,
             t.getLocation().latitude, t.getDate());
-        placesService.saveNearByLocations(t.getLocation().latitude, t.getLocation().longitude);
+//        placesService.saveNearByLocations(t.getLocation().latitude, t.getLocation().longitude);
         transactionRepo.save(transaction);
         transactionRepo.flush();
         return new ResponseEntity<>(transaction, HttpStatus.OK);
@@ -115,7 +115,7 @@ public class Finance {
         }
         exisitingTransaction.updateTransation(t);
         transactionRepo.save(exisitingTransaction);
-        return new ResponseEntity<>(t, HttpStatus.OK);
+        return new ResponseEntity<>(exisitingTransaction, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")

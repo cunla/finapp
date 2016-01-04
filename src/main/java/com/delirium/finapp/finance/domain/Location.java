@@ -48,6 +48,10 @@ public class Location {
         this.types = StringUtils.join(place.getTypes(), ",");
     }
 
+    public String getGoogleId() {
+        return googleId;
+    }
+
     public Long getId() {
         return id;
     }

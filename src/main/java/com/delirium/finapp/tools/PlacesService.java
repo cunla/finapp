@@ -19,44 +19,50 @@ import java.util.List;
 @Service
 public class PlacesService {
 
+    private static final double RADIUS = 50;
     @Autowired
     private LocationRepository locationRepository;
-
-    private static final double RADIUS = 50;
     @Value("${finapp.places.key}")
     private String key;
 
-    private GooglePlaces client;
+//    private GooglePlaces client;
 
     public PlacesService() {
     }
 
-    public PlacesService(String key) {
-        this.key = key;
-        init();
-    }
+//    public PlacesService(String key) {
+//        this.key = key;
+//        init();
+//    }
 
-    @PostConstruct
-    public void init() {
-        client = new GooglePlaces(key);
-    }
+//    @PostConstruct
+//    public void init() {
+//        client = new GooglePlaces(key);
+//    }
 
     public List<Location> getNearbyPlaces(double lat, double lng) {
-        List<Place> places = client.getNearbyPlaces(lat, lng, RADIUS, GooglePlacesInterface.MAXIMUM_PAGE_RESULTS);
-        List<Location> locations = new LinkedList<>();
-        for (Place place : places) {
-            Location location = new Location(place);
-            locations.add(location);
-        }
-        return locations;
+        return locationRepository.findNearBy(lat,lng);
+//        List<Place> places = client.getNearbyPlaces(lat, lng, RADIUS, GooglePlacesInterface.MAXIMUM_PAGE_RESULTS);
+//        List<Location> locations = new LinkedList<>();
+//        for (Place place : places) {
+//            Location location = new Location(place);
+//            locations.add(location);
+//        }
+//        return locations;
     }
 
-    public List<Place> getPlacesByQuery(String q) {
-        return client.getPlacesByQuery(q, GooglePlacesInterface.MAXIMUM_PAGE_RESULTS);
+    public List<Location> getPlacesByQuery(String q) {
+        return locationRepository.queryLocations(q);
+//        return client.getPlacesByQuery(q, GooglePlacesInterface.MAXIMUM_PAGE_RESULTS);
     }
 
     public void saveNearByLocations(Double latitude, Double longitude) {
-        List<Location> locations=getNearbyPlaces(latitude,longitude);
-        locationRepository.save(locations);
+        List<Location> locations = getNearbyPlaces(latitude, longitude);
+        for (Location location : locations) {
+            if (null == locationRepository.findByGoogleId(location.getGoogleId())) {
+                locationRepository.save(location);
+            }
+        }
+        locationRepository.flush();
     }
 }
