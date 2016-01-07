@@ -15,5 +15,5 @@ RUN ["mvn", "dependency:resolve"]
 RUN ["mvn", "verify"]
 RUN ["mvn", "package"]
 
-EXPOSE 4567
+EXPOSE 9999
 CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-Xms512m", "-Xmx1g", "-jar", "target/finapp.war"]

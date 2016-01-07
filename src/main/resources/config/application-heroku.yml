@@ -1,0 +1,40 @@
+#postgres://ubmmewvxaeoaot:fA3t26XAjNwD0bKpyGIgjZBtXp@ec2-54-243-187-196.compute-1.amazonaws.com:5432/d23lvrbkoufjf6
+server:
+    port: 9999
+    contextPath: /finapp
+
+spring:
+    profiles:
+        active: heroku
+
+    datasource:
+        dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        heroku-url: ${DATABASE_URL}
+
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+        database: POSTGRESQL
+        openInView: false
+        show_sql: true
+        generate-ddl: true
+        hibernate:
+            ddl-auto: update
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+             hibernate.cache.use_second_level_cache: false
+             hibernate.cache.use_query_cache: false
+             hibernate.generate_statistics: false
+             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+             hibernate.enable_lazy_load_no_trans: true
+
+    mail:
+        baseUrl: http://localhost:8080
+
+finapp:
+  admin:
+    login: admin@system
+    password: 123
