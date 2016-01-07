@@ -32,7 +32,7 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
         this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
     }
 
-    @Bean
+    @Bean(name = "datasource")
     public DataSource dataSource() {
         log.debug("Configuring Heroku Datasource");
 

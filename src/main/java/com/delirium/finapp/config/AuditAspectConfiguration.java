@@ -3,9 +3,6 @@ package com.delirium.finapp.config;
 import com.delirium.finapp.auditing.AuditAspect;
 import com.delirium.finapp.auditing.handler.AuditTypesHandler;
 import com.delirium.finapp.auditing.handler.AuditTypesHandlerImpl;
-import com.delirium.finapp.exceptions.FinappLoadingException;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +25,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 @Configuration
 @EnableTransactionManagement
@@ -61,26 +56,26 @@ public class AuditAspectConfiguration implements EnvironmentAware {
         return new AuditTypesHandlerImpl();
     }
 
-    @Bean(name = "auditDatasource")
-    public DataSource dataSource() {
-        log.debug("Configuring Datasource");
-        if (propertyResolver.getProperty("url") == null
-            && propertyResolver.getProperty("databaseName") == null) {
-            log.error("Your database connection pool configuration is incorrect! The application"
-                    + "cannot start. Please check your Spring profile, current profiles are: {}",
-                Arrays.toString(env.getActiveProfiles()));
-
-            throw new ApplicationContextException(
-                "Database connection pool is not configured correctly");
-        }
-        HikariConfig config = DatabaseConfiguration.createHikariConfig(propertyResolver, env);
-        try {
-            return new HikariDataSource(config);
-        } catch (Exception e) {
-            log.error("Couldn't create audit datasource, exception: {}", e.getMessage());
-            throw new FinappLoadingException(e);
-        }
-    }
+//    @Bean(name = "auditDatasource")
+//    public DataSource dataSource() {
+//        log.debug("Configuring Datasource");
+//        if (propertyResolver.getProperty("url") == null
+//            && propertyResolver.getProperty("databaseName") == null) {
+//            log.error("Your database connection pool configuration is incorrect! The application"
+//                    + "cannot start. Please check your Spring profile, current profiles are: {}",
+//                Arrays.toString(env.getActiveProfiles()));
+//
+//            throw new ApplicationContextException(
+//                "Database connection pool is not configured correctly");
+//        }
+//        HikariConfig config = DatabaseConfiguration.createHikariConfig(propertyResolver, env);
+//        try {
+//            return new HikariDataSource(config);
+//        } catch (Exception e) {
+//            log.error("Couldn't create audit datasource, exception: {}", e.getMessage());
+//            throw new FinappLoadingException(e);
+//        }
+//    }
 
     @Bean(name = "emfb2")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder1() {
@@ -89,7 +84,8 @@ public class AuditAspectConfiguration implements EnvironmentAware {
 
     @Bean(name = "auditEmFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory1(
-        @Qualifier("auditDatasource") DataSource dataSource,
+        @Qualifier("datasource") DataSource dataSource,
+//        @Qualifier("auditDatasource") DataSource dataSource,
         @Qualifier("emfb2") EntityManagerFactoryBuilder factoryBuilder) {
         //        RelaxedPropertyResolver relaxedPropertyResolver = new RelaxedPropertyResolver(env,
         //        "spring.jpa.properties.");

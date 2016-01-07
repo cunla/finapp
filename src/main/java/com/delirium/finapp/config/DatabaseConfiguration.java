@@ -18,6 +18,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -112,8 +113,9 @@ public class DatabaseConfiguration
         this.propertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
     }
 
+    @Profile("!" + Constants.SPRING_PROFILE_HEROKU)
     @Bean(name = "datasource")
-    @Primary
+//    @Primary
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
         if (propertyResolver.getProperty("url") == null
