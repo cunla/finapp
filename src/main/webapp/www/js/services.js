@@ -1,5 +1,47 @@
 var basicUrl = '/finapp';
 app
+    .factory('DatePicker',function(){
+        function datePickerFunc(title, date) {
+            var d = {
+                titleLabel: title,  //Optional
+                todayLabel: 'Today',  //Optional
+                closeLabel: 'Close',  //Optional
+                setLabel: 'Set',  //Optional
+                setButtonType: 'button-assertive',  //Optional
+                todayButtonType: 'button-assertive',  //Optional
+                closeButtonType: 'button-assertive',  //Optional
+                inputDate: date,  //Optional
+                mondayFirst: false,  //Optional
+                //disabledDates: disabledDates, //Optional
+                //weekDaysList: weekDaysList, //Optional
+                //monthList: monthList, //Optional
+                templateType: 'popup', //Optional
+                showTodayButton: 'true', //Optional
+                modalHeaderColor: 'bar-positive', //Optional
+                modalFooterColor: 'bar-positive', //Optional
+                //from: new Date(2012, 8, 2), //Optional
+                //to: new Date(2018, 8, 25),  //Optional
+                callback: function (val) {  //Mandatory
+                    d.inputDate = (val);
+                },
+                dateFormat: 'dd-MM-yyyy', //Optional
+                closeOnSelect: false //Optional
+            };
+            return d;
+        }
+       return {
+           datePickerObject:datePickerFunc,
+           beginningOfMonth:function(){
+               var date = new Date();
+               return new Date(date.getFullYear(), date.getMonth(), 1);
+           },
+           endOfMonth:function(){
+               var date = new Date();
+               return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+           }
+       }
+    });
+app
     .factory('FinApp', ['$http', '$q', function ($http, $q) {
         return {
             login: function (email, password) {

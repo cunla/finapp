@@ -13,17 +13,57 @@
             refreshing-icon="ion-loading-c">
         </ion-refresher>
 
-        <label class="item item-input item-select">
-            <div class="input-label">
-                Period style
-            </div>
-            <select>
-                <option>Month</option>
-                <option selected>Year</option>
-                <option>Custom</option>
-            </select>
-        </label>
+        <div class="card">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Period style
+                </div>
+                <select ng-model="periodType">
+                    <option>Month</option>
+                    <option selected>Year</option>
+                    <option>Custom</option>
+                </select>
+            </label>
+            <ionic-datepicker input-obj="startDateObject">
+                <ion-item class="item item-button-right">
+                    Start date
+                    <button class="button button-clear">{{startDateObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
+                </ion-item>
+            </ionic-datepicker>
+            <ionic-datepicker input-obj="endDateObject">
+                <ion-item class="item item-button-right">
+                    Start date
+                    <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
+                </ion-item>
+            </ionic-datepicker>
+            <button class="button button-full button-calm">
+                Generate report
+            </button>
+        </div>
 
+        <ion-list>
+            <ion-item
+                class="item item-icon-left item-button-right"
+                ng-repeat="cat in categories">
 
+                <i class="icon {{item.id? 'ion-record':'ion-loop'}}"
+                   style="color:{{item.categoryColor}}"></i>
+
+                {{cat.name}}
+                <a class="button button-clear ">
+                        <span class=" {{cat.total >0 ? 'balanced' : 'assertive'}}">
+                        {{cat.total}}
+                        </span>
+                </a>
+            </ion-item>
+            <ion-item class="item item-dark item-button-right">
+                Total in period
+                <a class="button button-clear ">
+                        <span class=" {{sumAll >0 ? 'balanced' : 'assertive'}}">
+                        {{sumAll}}
+                        </span>
+                </a>
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>
