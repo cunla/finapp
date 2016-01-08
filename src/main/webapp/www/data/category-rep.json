@@ -7,6 +7,7 @@
         {
             "id": 1,
             "color": "calm",
+            "icon":"ion-ios-cart",
             "name": "Grocerries",
             "total":-200
         },
@@ -15,7 +16,28 @@
             "color": "royal",
             "name": "Rent",
             "icon":"ion-home",
-            "total":222
+            "total":-222
+        },
+        {
+            "id": 4,
+            "color": "royal",
+            "name": "Car",
+            "icon":"ion-model-s",
+            "total":-444
+        },
+        {
+            "id": 6,
+            "color": "dark",
+            "name": "Public Transportation",
+            "icon":"ion-android-bus",
+            "total":-444
+        },
+        {
+            "id": 5,
+            "color": "assertive",
+            "name": "Income",
+            "icon":"ion-social-bitcoin",
+            "total":14000
         },
         {
             "id": 3,
