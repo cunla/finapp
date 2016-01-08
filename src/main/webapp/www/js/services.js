@@ -101,6 +101,9 @@ app
                         reject('Unable to get location: ' + error.message);
                     });
                 });
+            },
+            getCategoryReport:function(group){
+                return $http.get('data/category-rep.json');
             }
         };
     }]);

@@ -88,6 +88,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('menu.report', {
+            url: '/report/:groupId',
+            views: {
+                'appContent': {
+                    templateUrl: 'partials/category/category.html',
+                    controller: 'catCtrl'
+                }
+            }
+        })
         .state('menu.transaction', {
             url: '/transaction/:transactionId',
             views: {

@@ -1,0 +1,27 @@
+{
+    "period": {
+        "start": "",
+        "end": ""
+    },
+    "category": [
+        {
+            "id": 1,
+            "color": "00ffff",
+            "name": "Grocerries",
+            "total":222
+        },
+        {
+            "id": 2,
+            "color": "002222",
+            "name": "Rent",
+            "total":222
+        },
+        {
+            "id": 3,
+            "color": "002222",
+            "name": "Bills",
+            "icon":"dddds.ds.fs",
+            "total":2421
+        }
+    ]
+}

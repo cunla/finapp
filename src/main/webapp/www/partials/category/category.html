@@ -1,0 +1,29 @@
+<ion-view>
+
+    <ion-nav-title class="bar bar-header bar-dark">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+        <h1 class="title">Category report {{groupName}}</h1>
+    </ion-nav-title>
+    <ion-content>
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()"
+            refreshing-text="Refreshing!"
+            refreshing-icon="ion-loading-c">
+        </ion-refresher>
+
+        <label class="item item-input item-select">
+            <div class="input-label">
+                Period style
+            </div>
+            <select>
+                <option>Month</option>
+                <option selected>Year</option>
+                <option>Custom</option>
+            </select>
+        </label>
+
+
+    </ion-content>
+</ion-view>
