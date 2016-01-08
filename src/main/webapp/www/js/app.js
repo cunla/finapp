@@ -88,7 +88,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('menu.report', {
+        .state('menu.reports', {
             url: '/report/:groupId',
             views: {
                 'appContent': {

@@ -1,34 +1,31 @@
 appCtrllers
-
-    .controller('menuCtrl', ['$scope', 'FinApp', '$state', '$stateParams', '$rootScope', '$http', '$ionicSideMenuDelegate',
-        function ($scope, FinApp, $state, $stateParams, $rootScope, $http, $ionicSideMenuDelegate) {
+    .controller('menuCtrl', ['$scope', 'FinApp', '$state', '$rootScope', '$http', '$ionicSideMenuDelegate',
+        function ($scope, FinApp, $state, $rootScope, $http, $ionicSideMenuDelegate) {
 
             $scope.currentState = $state.current.name;
             var refresh = function () {
                 $ionicSideMenuDelegate.toggleLeft();
-                $scope.groupId = $stateParams.groupId;
-            }
+                $scope.groupId = $state.params.groupId;
+            };
+
 
             function changeState(st) {
                 $state.go(st);
-                $scope.currentState = $state.current.name;
-            }
+                $scope.currentState = st;
+                refresh();
+            };
 
             $scope.goToProfile = function () {
                 changeState('menu.profile');
-                refresh();
             }
             $scope.goToReports = function () {
-                changeState('menu.reports');
-                refresh();
+                changeState('menu.reports', {"groupId": $scope.groupId});
             }
             $scope.goToSettings = function () {
                 changeState('menu.settings');
-                refresh();
             }
             $scope.goToGroup = function () {
                 changeState('menu.home', {"groupId": $scope.groupId});
-                refresh();
             }
             refresh();
         }])

@@ -1,26 +1,27 @@
 {
     "period": {
-        "start": "",
-        "end": ""
+        "start": "2016-01-01",
+        "end": "2016-01-31"
     },
     "category": [
         {
             "id": 1,
-            "color": "00ffff",
+            "color": "calm",
             "name": "Grocerries",
             "total":-200
         },
         {
             "id": 2,
-            "color": "002222",
+            "color": "royal",
             "name": "Rent",
+            "icon":"ion-home",
             "total":222
         },
         {
             "id": 3,
-            "color": "002222",
+            "color": "positive",
             "name": "Bills",
-            "icon":"dddds.ds.fs",
+            "icon":"ion-star",
             "total":-2421
         }
     ]

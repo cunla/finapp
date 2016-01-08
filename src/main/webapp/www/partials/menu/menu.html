@@ -19,7 +19,11 @@
                           ng-click="goToReports()">
                     Reports
                 </ion-item>
-                <ion-item class="item {{(currentState==='menu.reports') ? 'item-dark':''}}"
+                <ion-item class="item {{(currentState==='menu.accounts') ? 'item-dark':''}}"
+                          ng-click="goToAccounts()">
+                    Accounts
+                </ion-item>
+                <ion-item class="item {{(currentState==='menu.about') ? 'item-dark':''}}"
                           ng-click="goToAbout()">
                     About
                 </ion-item>

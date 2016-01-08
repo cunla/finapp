@@ -14,16 +14,16 @@
         </ion-refresher>
 
         <div class="card">
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Period style
-                </div>
-                <select ng-model="periodType">
-                    <option>Month</option>
-                    <option selected>Year</option>
-                    <option>Custom</option>
-                </select>
-            </label>
+            <!--<label class="item item-input item-select">-->
+            <!--<div class="input-label">-->
+            <!--Period style-->
+            <!--</div>-->
+            <!--<select ng-model="periodType">-->
+            <!--<option>Month</option>-->
+            <!--<option selected>Year</option>-->
+            <!--<option>Custom</option>-->
+            <!--</select>-->
+            <!--</label>-->
             <ionic-datepicker input-obj="startDateObject">
                 <ion-item class="item item-button-right">
                     Start date
@@ -36,29 +36,32 @@
                     <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
                 </ion-item>
             </ionic-datepicker>
-            <button class="button button-full button-calm">
+            <button class="button button button-block button-dark">
                 Generate report
             </button>
+
         </div>
 
         <ion-list>
+            <ion-item class="item item-dark item-divider">
+                Report for {{period.start | date:'dd-MMM-yyyy'}} - {{period.end | date:'dd-MMM-yyyy'}}
+            </ion-item>
             <ion-item
                 class="item item-icon-left item-button-right"
                 ng-repeat="cat in categories">
 
-                <i class="icon {{item.id? 'ion-record':'ion-loop'}}"
-                   style="color:{{item.categoryColor}}"></i>
+                <i class="icon {{cat.icon? cat.icon : 'ion-record'}} {{cat.color}}"></i>
 
                 {{cat.name}}
-                <a class="button button-clear ">
-                        <span class=" {{cat.total >0 ? 'balanced' : 'assertive'}}">
+                <a class="button button-clear">
+                        <span class="dark">
                         {{cat.total}}
                         </span>
                 </a>
             </ion-item>
             <ion-item class="item item-dark item-button-right">
                 Total in period
-                <a class="button button-clear ">
+                <a class="button button-clear">
                         <span class=" {{sumAll >0 ? 'balanced' : 'assertive'}}">
                         {{sumAll}}
                         </span>

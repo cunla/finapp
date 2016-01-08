@@ -2,12 +2,11 @@ appCtrllers
     .controller('catCtrl', ['$scope', 'FinApp', '$stateParams', '$rootScope', '$ionicPopup', 'DatePicker',
         function ($scope, FinApp, $stateParams, $rootScope, $ionicPopup, DatePicker) {
             var groupId = $stateParams.groupId;
-            $scope.periodType = "Custom";
+            //$scope.periodType = "Custom";
 
             $scope.startDateObject = DatePicker.datePickerObject("Start date", DatePicker.beginningOfMonth());
             $scope.endDateObject = DatePicker.datePickerObject("End date", DatePicker.endOfMonth());
             if ($rootScope.user) {
-                $scope.periodType = $rootScope.user.defaultPeriodType;
                 $scope.startDateObject.inputDate = $rootScope.user.defaultStart;
                 $scope.endDateObject.inputDate = $rootScope.user.defaultEnd;
             }
