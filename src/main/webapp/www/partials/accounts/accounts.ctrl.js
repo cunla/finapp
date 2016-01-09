@@ -7,20 +7,24 @@ appCtrllers
         function ($scope, $state, FinApp, $rootScope) {
             $scope.groupId = $state.params.groupId;
             $scope.doRefresh = function () {
-                FinApp.getAccountsReport($scope.groupId).then(function (res) {
-                    $scope.accounts = res.data;
-                    $scope.sumAll = 0;
-                    if (!$scope.accounts) {
-                        $scope.accounts = [];
-                    }
-                    var now = new Date();
-                    $scope.accounts.forEach(function (t) {
-                        t.lastValidated = new Date(t.lastValidated);
-                        t.notUpdated = dateDistanceLong(t.lastValidated, now);
-                        $scope.sumAll += t.balance;
-                    })
+                FinApp.getAccountsReport($scope.groupId)
+                    .then(function (res) {
+                        $scope.accounts = res.data;
+                        $scope.sumAll = 0;
+                        if (!$scope.accounts) {
+                            $scope.accounts = [];
+                        }
+                        var now = new Date();
+                        $scope.accounts.forEach(function (t) {
+                            t.lastValidated = new Date(t.lastValidated);
+                            t.notUpdated = dateDistanceLong(t.lastValidated, now);
+                            $scope.sumAll += t.balance;
+                        })
 
-                })
+                    })
+                    .finally(function () {
+                        $scope.$broadcast('scroll.refreshComplete');
+                    })
             };
             $scope.doRefresh();
 
