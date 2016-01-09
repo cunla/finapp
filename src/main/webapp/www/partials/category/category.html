@@ -48,7 +48,7 @@
             </ion-item>
             <ion-item
                 class="item item-icon-left item-button-right"
-                ng-repeat="cat in categories">
+                ng-repeat="cat in categories | orderBy:'id'">
 
                 <i class="icon {{cat.icon? cat.icon : 'ion-record'}} {{cat.color}}"></i>
 

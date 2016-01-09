@@ -1,0 +1,49 @@
+<ion-view>
+    <ion-nav-title class="bar bar-header bar-dark">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+        <h1 class="title">Accounts balance {{groupName}}</h1>
+    </ion-nav-title>
+    <ion-content>
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()"
+            refreshing-text="Refreshing!"
+            refreshing-icon="ion-loading-c">
+        </ion-refresher>
+
+        <ion-list can-swipe="true">
+            <ion-item
+                class="item "
+                ng-repeat="item in accounts | orderBy:'id'">
+                <div class="item-avatar-left item-text-wrap item-button-right">
+                    <img src="{{item.avatar ? item.avatar : '100x100.png'}}"/>
+                    <h2>{{item.name}}</h2>
+                    <p>
+                        validated on: <br/>
+                        <span class="{{item.notUpdated?'assertive':''}}">
+                            {{item.lastValidated |date:'dd-MMM-yyyy HH:mm'}}
+                        </span>
+                    </p>
+
+                    <span class="button button-clear">
+                            <span class="dark">
+                            {{item.balance| number:2}}
+                            </span>
+                    </span>
+                </div>
+                <ion-option-button class="button button-dark icon ion-checkmark"
+                                   ng-click="validateNow(item.id)">
+                    Validate
+                </ion-option-button>
+            </ion-item>
+            <ion-item class="item item-dark item-avatar-left item-button-right">
+                Total balance
+                   <span class="button button-clear">
+                       {{sumAll| number:2}}
+                   </span>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+</ion-view>

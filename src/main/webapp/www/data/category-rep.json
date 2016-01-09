@@ -33,6 +33,10 @@
             "total":-444
         },
         {
+            "name": "No category",
+            "total":-4322
+        },
+        {
             "id": 5,
             "color": "assertive",
             "name": "Income",

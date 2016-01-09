@@ -70,12 +70,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('menu.account', {
-            url: "/account/:account",
+        .state('menu.accounts', {
+            url: "/accounts/:groupId",
             views: {
                 'appContent': {
-                    templateUrl: "partials/account/account.html",
-                    controller: "accountCtrl"
+                    templateUrl: "partials/accounts/accounts.html",
+                    controller: "accountsCtrl"
                 }
             }
         })

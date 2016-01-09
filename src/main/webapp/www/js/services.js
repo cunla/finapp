@@ -144,8 +144,11 @@ app
                     });
                 });
             },
-            getCategoryReport:function(group){
+            getCategoryReport:function(group,start,end){
                 return $http.get('data/category-rep.json');
+            },
+            getAccountsReport:function(group){
+                return $http.get('data/accounts.json');
             }
         };
     }]);

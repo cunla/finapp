@@ -1,0 +1,29 @@
+[
+    {
+        "id":1,
+        "name": "VISA CAL - Natalia",
+        "balance": -17227.3,
+        "currency": "ils",
+        "currencySymbol": "?",
+        "avatar": "https://placehold.it/100x100",
+        "lastValidated": "2014-07-08 12:30"
+    },
+    {
+        "id":2,
+        "name": "Cash",
+        "balance": 324,
+        "currency": "ils",
+        "currencySymbol": "?",
+        "avatar": "https://placehold.it/100x100",
+        "lastValidated": "2014-07-08 12:30"
+    },
+    {
+        "id":3,
+        "name": "Bank",
+        "balance": -147,
+        "currency": "ils",
+        "currencySymbol": "?",
+        "avatar": "https://placehold.it/100x100",
+        "lastValidated": "2014-07-08 12:30"
+    }
+]
