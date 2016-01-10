@@ -7,12 +7,17 @@
         $scope.currentState = $state.current.name;
         var refresh = function () {
             $ionicSideMenuDelegate.toggleLeft();
-            $scope.groupId = $state.params.groupId;
+            if($state.params.groupId && $state.params.groupId!=""){
+                $scope.groupId = $state.params.groupId;
+            }else{
+                $scope.groupId=$rootScope.groupId;
+            }
+             
         };
 
 
-        function changeState(st) {
-            $state.go(st);
+        function changeState(st,params) {
+            $state.go(st,params);
             $scope.currentState = st;
             refresh();
         };
