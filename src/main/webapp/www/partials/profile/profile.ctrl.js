@@ -1,5 +1,7 @@
-appCtrllers.controller('profileCtrl',
-    function ($rootScope, $scope, $window, $state, $location, FinApp, $ionicPopup) {
+(function () {
+    angular.module('app.controllers')
+        .controller('profileCtrl', ['$rootScope', '$scope', '$window', '$state', 'FinApp', '$ionicPopup', profileCtrl]);
+    function profileCtrl($rootScope, $scope, $window, $state, FinApp, $ionicPopup) {
         //$scope.user = $cookies.getObject('userInfo');
 
         $scope.refresh = function () {
@@ -53,4 +55,5 @@ appCtrllers.controller('profileCtrl',
         };
 
         $scope.refresh();
-    });
+    }
+})();

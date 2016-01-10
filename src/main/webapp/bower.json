@@ -2,10 +2,11 @@
   "name": "HelloIonic",
   "private": "true",
   "dependencies": {
-    "ionic": "driftyco/ionic-bower#1.1.2",
+    "ionic": "driftyco/ionic-bower#1.1.1",
     "Ionicons": "ionicons#~2.0.1",
     "ng-map": "*",
     "ion-md-input": "~1.0.4",
-    "robotodraft": "~1.1.0"
+    "robotodraft": "~1.1.0",
+    "ionic-datepicker": "~0.9.0"
   }
 }

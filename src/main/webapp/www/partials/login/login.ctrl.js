@@ -1,5 +1,7 @@
-appCtrllers.controller('loginCtrl', ['$scope', '$state', 'FinApp',
-    function ($scope, $state, FinApp) {
+(function () {
+    angular.module('app.controllers')
+        .controller('loginCtrl', ['$scope', '$state', 'FinApp', loginCtrl]);
+    function loginCtrl($scope, $state, FinApp) {
         function nextState(user) {
             if (user.lastGroupId) {
                 $state.go('menu.home', {"groupId": user.lastGroupId});
@@ -25,4 +27,5 @@ appCtrllers.controller('loginCtrl', ['$scope', '$state', 'FinApp',
             );
         }
 
-    }]);
+    }
+})();
