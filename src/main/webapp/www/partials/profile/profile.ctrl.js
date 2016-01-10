@@ -1,11 +1,11 @@
 (function () {
     angular.module('app.controllers')
-        .controller('profileCtrl', ['$rootScope', '$scope', '$window', '$state', 'FinApp', '$ionicPopup', profileCtrl]);
-    function profileCtrl($rootScope, $scope, $window, $state, FinApp, $ionicPopup) {
+        .controller('profileCtrl', ['$rootScope', '$scope', '$window', '$state', 'fin', '$ionicPopup', profileCtrl]);
+    function profileCtrl($rootScope, $scope, $window, $state, fin, $ionicPopup) {
         //$scope.user = $cookies.getObject('userInfo');
 
         $scope.refresh = function () {
-            FinApp.getGroups().then(function (res) {
+            fin.getGroups().then(function (res) {
                 $scope.groups = res.data;
                 for (group in $scope.groups) {
                     $scope.groups[group].isAdmin = ($scope.groups[group].admin.id == $rootScope.user.id);
@@ -19,7 +19,7 @@
         $scope.createGroup = function (groupName) {
             if (groupName && groupName != "") {
                 var group = {"name": groupName, "label": groupName};
-                FinApp.createGroup(group).then(function (res) {
+                fin.createGroup(group).then(function (res) {
                     $scope.newGroupForm = false;
                     $scope.refresh();
                 });
@@ -38,7 +38,7 @@
         }
 
         $scope.updateUser = function (user) {
-            FinApp.updateUser(user).then(function () {
+            fin.updateUser(user).then(function () {
             });
         };
 
@@ -49,7 +49,7 @@
 
         $scope.logout = function () {
             //$cookies.remove("userInfo");
-            FinApp.logout();
+            fin.logout();
             $state.go('login');
             $window.location.reload();
         };

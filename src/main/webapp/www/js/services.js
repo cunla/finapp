@@ -2,14 +2,14 @@
     var basicUrl = '/finapp';
 
     angular.module('app')
-        .factory('DatePicker', function () {
+        .factory('datePicker', function () {
             return {
                 datePickerObject: datePickerFunc,
                 beginningOfMonth: beginningOfMonth,
                 endOfMonth: endOfMonth
             }
         })
-        .factory('FinApp', ['$http', '$q', function ($http, $q) {
+        .factory('fin', ['$http', '$q', function ($http, $q) {
             return {
                 login: function (email, password) {
                     var data = 'username=' + email + '&password=' + password;

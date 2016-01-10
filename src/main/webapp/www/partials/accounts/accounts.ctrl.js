@@ -1,11 +1,11 @@
 (function () {
 
     angular.module('app.controllers')
-        .controller('accountsCtrl', ['$scope', '$state', 'FinApp', '$rootScope', accountsCtrl]);
-    function accountsCtrl($scope, $state, FinApp, $rootScope) {
+        .controller('accountsCtrl', ['$scope', '$state', 'fin', '$rootScope', accountsCtrl]);
+    function accountsCtrl($scope, $state, fin, $rootScope) {
         $scope.groupId = $state.params.groupId;
         $scope.doRefresh = function () {
-            FinApp.getAccountsReport($scope.groupId)
+            fin.getAccountsReport($scope.groupId)
                 .then(function (res) {
                     $scope.accounts = res.data;
                     $scope.sumAll = 0;

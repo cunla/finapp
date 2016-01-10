@@ -1,11 +1,11 @@
 (function () {
     angular.module('app.controllers')
-        .controller('homeCtrl', ['$scope', 'FinApp', '$state', '$stateParams', '$rootScope', '$ionicPopup', homeCtrl])
-    function homeCtrl($scope, FinApp, $state, $stateParams, $rootScope, $ionicPopup) {
+        .controller('homeCtrl', ['$scope', 'fin', '$state', '$stateParams', '$rootScope', '$ionicPopup', homeCtrl])
+    function homeCtrl($scope, fin, $state, $stateParams, $rootScope, $ionicPopup) {
         var groupId = $stateParams.groupId;
         $scope.t = {};
         $scope.doRefresh = function () {
-            FinApp.getTransactions(groupId).then(function (results) {
+            fin.getTransactions(groupId).then(function (results) {
                 $scope.transactions = results.data.content;
                 $scope.sumAll = 0;
                 if ($scope.transactions) {
@@ -26,7 +26,7 @@
             t.amount = (t.plusSign ? t.amount : -t.amount);
             $scope.sumAll = $scope.sumAll + t.amount;
             $scope.transactions.unshift(t);
-            FinApp.newTransaction(groupId, t.amount).then(function (res) {
+            fin.newTransaction(groupId, t.amount).then(function (res) {
                 res.date = new Date(res.date);
                 $scope.transactions[0] = res;
                 //$scope.doRefresh();
@@ -44,7 +44,7 @@
             confirmPopup.then(function (res) {
                 if (res) {
                     //console.log('Deleting transaction ' + JSON.stringify(t));
-                    FinApp.deleteTransaction(t.id).then(function () {
+                    fin.deleteTransaction(t.id).then(function () {
                         var i = $scope.transactions.indexOf(t);
                         $scope.transactions.splice(i, 1);
                     });

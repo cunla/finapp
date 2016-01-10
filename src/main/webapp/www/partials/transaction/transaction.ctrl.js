@@ -1,11 +1,11 @@
 (function () {
     angular.module('app.controllers')
-        .controller('transactionCtrl', ['$scope', 'FinApp', '$state', '$stateParams',transactionCtrl]);
+        .controller('transactionCtrl', ['$scope', 'fin', '$state', '$stateParams',transactionCtrl]);
 
-    function transactionCtrl($scope, FinApp, $state, $stateParams) {
+    function transactionCtrl($scope, fin, $state, $stateParams) {
         $scope.transactionId = $stateParams.transactionId;
 
-        FinApp.getTransaction($scope.transactionId).then(function (res) {
+        fin.getTransaction($scope.transactionId).then(function (res) {
             $scope.transaction = res.data;
             $scope.transaction.date = new Date($scope.transaction.date);
             var pos = {
@@ -18,14 +18,14 @@
             });
             $scope.places = $scope.transaction.places;
         });
-        //FinApp.getGroups().then(function (data) {
+        //fin.getGroups().then(function (data) {
         //    $scope.accounts = data[0].accounts;
         //});
-        //FinApp.getTargets().then(function (data) {
+        //fin.getTargets().then(function (data) {
         //    $scope.targets = data;
         //});
         $scope.saveTransaction = function () {
-            FinApp.updateTransaction($scope.transaction.id, $scope.transaction).then(function (d) {
+            fin.updateTransaction($scope.transaction.id, $scope.transaction).then(function (d) {
                 //console.log("Saving " + JSON.stringify(d));
                 window.history.back();
             })

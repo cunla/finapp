@@ -1,8 +1,8 @@
 (function () {
     angular.module('app.controllers')
-        .controller('menuCtrl', ['$scope', 'FinApp', '$state', '$rootScope', '$http', '$ionicSideMenuDelegate', menuCtrl]);
+        .controller('menuCtrl', ['$scope', 'fin', '$state', '$rootScope', '$http', '$ionicSideMenuDelegate', menuCtrl]);
 
-    function menuCtrl($scope, FinApp, $state, $rootScope, $http, $ionicSideMenuDelegate) {
+    function menuCtrl($scope, fin, $state, $rootScope, $http, $ionicSideMenuDelegate) {
 
         $scope.currentState = $state.current.name;
         var refresh = function () {
