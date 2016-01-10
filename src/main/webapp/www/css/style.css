@@ -11,11 +11,11 @@ body {
 }
 
 .logo-welcome {
-    width: 120px;
-    height: 120px;
-    margin: 100px auto 60px auto;
+    width: 150px;
+    height: 150px;
+    margin: 20px auto 20px auto;
     background: url(../img/logo.png) no-repeat;
-    opacity: 0.5;
+    opacity: 1;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

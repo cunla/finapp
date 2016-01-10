@@ -62,6 +62,15 @@
                     templateUrl: "partials/menu/menu.html",
                     controller: "menuCtrl"
                 })
+                .state('menu.about', {
+                    url: "/about",
+                    views: {
+                        'appContent': {
+                            templateUrl: "partials/about/about.html",
+                            controller: "About"
+                        }
+                    }
+                })
                 .state('menu.profile', {
                     url: "/profile",
                     views: {

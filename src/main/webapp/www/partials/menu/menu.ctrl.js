@@ -37,6 +37,9 @@
         $scope.goToAccounts = function () {
             changeState('menu.accounts', {"groupId": $scope.groupId});
         }
+        $scope.goToAbout = function () {
+            changeState('menu.about');
+        }
         refresh();
     }
 })();
