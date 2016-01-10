@@ -7,17 +7,17 @@
         $scope.currentState = $state.current.name;
         var refresh = function () {
             $ionicSideMenuDelegate.toggleLeft();
-            if($state.params.groupId && $state.params.groupId!=""){
+            if ($state.params.groupId && $state.params.groupId != "") {
                 $scope.groupId = $state.params.groupId;
-            }else{
-                $scope.groupId=$rootScope.groupId;
+            } else {
+                $scope.groupId = $rootScope.groupId;
             }
-             
+
         };
 
 
-        function changeState(st,params) {
-            $state.go(st,params);
+        function changeState(st, params) {
+            $state.go(st, params);
             $scope.currentState = st;
             refresh();
         };
@@ -33,6 +33,9 @@
         }
         $scope.goToGroup = function () {
             changeState('menu.home', {"groupId": $scope.groupId});
+        }
+        $scope.goToAccounts = function () {
+            changeState('menu.accounts', {"groupId": $scope.groupId});
         }
         refresh();
     }
