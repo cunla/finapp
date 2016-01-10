@@ -54,7 +54,7 @@ public class Transaction {
     @Column
     private String comment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn
     private Location location;
 
