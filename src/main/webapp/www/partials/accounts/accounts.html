@@ -2,7 +2,7 @@
     <ion-nav-title class="bar bar-header bar-dark">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
         <h1 class="title">Accounts balance {{groupName}}</h1>
-        <button class="button button-clear">New account</button>
+        <button class="button button-clear" ng-click="toggleAddForm()">Add</button>
     </ion-nav-title>
     <ion-content>
         <ion-refresher
@@ -11,16 +11,55 @@
             refreshing-text="Refreshing!"
             refreshing-icon="ion-loading-c">
         </ion-refresher>
+        <!-- Add new account form -->
+        <div class="card" ng-show="showAddForm">
+            <ion-item class="item item-dark item-divider">
+                Add new account
+            </ion-item>
+            <label class="item item-input">
+                <span class="input-label">Account Name</span>
+                <input ng-model="nacc.name" type="text" placeholder="Cash">
+            </label>
+            <ion-item class="item-text-wrap">
+                <h2>Color</h2>
+                <!--<div class="item-body">-->
+                <a ng-repeat="c in colors"
+                   class="button {{nacc.color==c ? 'activated':'button-clear'}}"
+                   ng-click="nacc.color=c"
+                >
+                    <i class="icon ion-record {{c}}"></i>
+                </a>
+                <!--</div>-->
+            </ion-item>
+            <ion-item class="item-text-wrap">
+                <h2>Icon</h2>
+                <a ng-repeat="i in icons"
+                   class="button {{nacc.icon==i? 'activated':'button-clear'}}"
+                   ng-click="nacc.icon=i"
+                >
+                    <i class="icon {{i}} {{nacc.color}}"></i>
+                </a>
+
+            </ion-item>
+            <div class="button-bar">
+                <button class="button button-block button-assertive" ng-click="toggleAddForm()">
+                    Cancel
+                </button>
+                <button class="button button-block button-dark" ng-click="createAccount(nacc)">
+                    Add account
+                </button>
+            </div>
+        </div>
 
         <ion-list can-swipe="true">
             <ion-item
                 class="item "
                 ng-repeat="item in accounts | orderBy:'id'">
-                <div class="item-avatar-left item-text-wrap item-button-right">
-                    <img src="{{item.avatar ? item.avatar : '100x100.png'}}"/>
+                <div class="item-icon-left item-text-wrap item-button-right">
+                    <i class="icon {{item.icon ? item.icon : 'ion-record'}} {{item.color}}"></i>
                     <h2>{{item.name}}</h2>
                     <p>
-                        validated on: <br/>
+                        Last verified on: <br/>
                         <span class="{{item.notUpdated?'assertive':''}}">
                             {{item.lastValidated |date:'dd-MMM-yyyy HH:mm'}}
                         </span>

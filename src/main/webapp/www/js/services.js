@@ -2,11 +2,14 @@
     var basicUrl = '/finapp';
 
     angular.module('app')
-        .factory('datePicker', function () {
+        .factory('commons', function () {
             return {
                 datePickerObject: datePickerFunc,
                 beginningOfMonth: beginningOfMonth,
-                endOfMonth: endOfMonth
+                endOfMonth: endOfMonth,
+                colors:colors,
+                icons:icons,
+                accountIcons:accountIcons
             }
         })
         .factory('fin', ['$http', '$q', function ($http, $q) {
@@ -82,48 +85,53 @@
                 createCategory: function (cat) {
                     console.log("Creating " + cat);
                     return;
+                },
+                createAccount:function (acc) {
+                    console.log("Creating " + acc);
+                    return;
                 }
             };
-        }]);
-    function fbLogin() {
-        return $q(function (resolve, reject) {
-            FB.login(function (response) {
-                if (response.authResponse) {
-                    getUserInfo();
-                } else {
-                    console.log('User cancelled login or did not fully authorize.');
-                    reject('User cancelled login or did not fully authorize.');
-                }
-            }, {scope: 'email'});
+            function fbLogin() {
+                return $q(function (resolve, reject) {
+                    FB.login(function (response) {
+                        if (response.authResponse) {
+                            getUserInfo();
+                        } else {
+                            console.log('User cancelled login or did not fully authorize.');
+                            reject('User cancelled login or did not fully authorize.');
+                        }
+                    }, {scope: 'email'});
 
-            function getUserInfo() {
-                // get basic info
-                FB.api('/me',
-                    {fields: "id,about,age_range,picture,bio,birthday,context,email,first_name,gender,hometown,link,location,middle_name,name,timezone,website,work"},
-                    function (response) {
-                        // get profile picture
-                        FB.api('/me/picture?type=normal', function (picResponse) {
-                            console.log('Facebook Login RESPONSE: ' + picResponse.data.url);
-                            response.imageUrl = picResponse.data.url;
-                            // After posting user data to server successfully store user data locally
-                            var user = {};
-                            user.name = response.name;
-                            user.email = response.email;
-                            if (response.gender) {
-                                response.gender.toString().toLowerCase() === 'male' ? user.gender = 'M' : user.gender = 'F';
-                            } else {
-                                user.gender = '';
-                            }
-                            user.avatar = picResponse.data.url;
-                            $http.post(basicUrl + '/facebookuser?accountId=' + response.id, user, {headers: {"Content-Type": "application/json"}})
-                                .then(function (data) {
-                                    resolve(data.data);
-                                })
-                        });
-                    });
+                    function getUserInfo() {
+                        // get basic info
+                        FB.api('/me',
+                            {fields: "id,about,age_range,picture,bio,birthday,context,email,first_name,gender,hometown,link,location,middle_name,name,timezone,website,work"},
+                            function (response) {
+                                // get profile picture
+                                FB.api('/me/picture?type=normal', function (picResponse) {
+                                    console.log('Facebook Login RESPONSE: ' + picResponse.data.url);
+                                    response.imageUrl = picResponse.data.url;
+                                    // After posting user data to server successfully store user data locally
+                                    var user = {};
+                                    user.name = response.name;
+                                    user.email = response.email;
+                                    if (response.gender) {
+                                        response.gender.toString().toLowerCase() === 'male' ? user.gender = 'M' : user.gender = 'F';
+                                    } else {
+                                        user.gender = '';
+                                    }
+                                    user.avatar = picResponse.data.url;
+                                    $http.post(basicUrl + '/facebookuser?accountId=' + response.id, user, {headers: {"Content-Type": "application/json"}})
+                                        .then(function (data) {
+                                            resolve(data.data);
+                                        })
+                                });
+                            });
+                    }
+                });
             }
-        });
-    }
+        }]);
+
     function datePickerFunc(title, date) {
         var d = {
             titleLabel: title,  //Optional
@@ -161,6 +169,37 @@
     function endOfMonth() {
         var date = new Date();
         return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+
+    function colors() {
+        return ['stable', 'positive', 'calm', 'balanced', 'energized', 'assertive', 'royal', 'dark'];
+    };
+    function icons() {
+        return ['ion-bag',
+            'ion-ios-cart',
+            'ion-home',
+            'ion-earth',
+            'ion-model-s',
+            'ion-card',
+            'ion-social-bitcoin-outline',
+            'ion-cash',
+            'ion-social-usd',
+            'ion-social-facebook',
+            'ion-social-euro',
+            'ion-social-tux',
+            'ion-social-apple',
+            'ion-social-android',
+            'ion-record'
+        ];
+    };
+    function accountIcons(){
+        return ['ion-bag',
+            'ion-home',
+            'ion-card',
+            'ion-cash',
+            'ion-social-usd',
+            'ion-social-euro'
+        ];
     }
 })();
 

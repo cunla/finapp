@@ -1,10 +1,26 @@
 (function () {
 
     angular.module('app.controllers')
-        .controller('accountsCtrl', ['$scope', '$state', 'fin', '$rootScope', accountsCtrl]);
-    function accountsCtrl($scope, $state, fin, $rootScope) {
+        .controller('accountsCtrl', ['$scope', '$state', 'fin', '$rootScope', 'commons', accountsCtrl]);
+    function accountsCtrl($scope, $state, fin, $rootScope, commons) {
         $scope.groupId = $state.params.groupId;
-        $scope.doRefresh = function () {
+        $scope.colors = commons.colors();
+        $scope.icons = commons.accountIcons();
+        $scope.doRefresh = refresh;
+        $scope.toggleAddForm = function () {
+            $scope.showAddForm = !$scope.showAddForm;
+        }
+
+        $scope.createAccount = function (acc) {
+            $scope.showAddForm = false;
+            fin.createAccount(acc).then(function (res) {
+
+            });
+        }
+        $scope.doRefresh();
+
+
+        function refresh() {
             fin.getAccountsReport($scope.groupId)
                 .then(function (res) {
                     $scope.accounts = res.data;
@@ -24,9 +40,8 @@
                     $scope.$broadcast('scroll.refreshComplete');
                 })
         };
-        $scope.doRefresh();
-
     }
+
 
     function dateDistanceLong(d1, d2) {
         return Math.abs(d1.getTime() - d2.getTime()) > 1000 * 60 * 60 * 24;

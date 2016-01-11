@@ -5,7 +5,8 @@
         "balance": -17227.3,
         "currency": "ils",
         "currencySymbol": "?",
-        "avatar": "https://placehold.it/100x100",
+        "icon": "ion-card",
+        "color":"balanced",
         "lastValidated": "2014-07-08 12:30"
     },
     {
@@ -14,8 +15,8 @@
         "balance": 324,
         "currency": "ils",
         "currencySymbol": "?",
-        "avatar": "https://placehold.it/100x100",
-        "lastValidated": "2014-07-08 12:30"
+        "icon": "ion-cash",
+        "lastValidated": "2016-01-08 12:30"
     },
     {
         "id":3,
@@ -23,7 +24,7 @@
         "balance": -147,
         "currency": "ils",
         "currencySymbol": "?",
-        "avatar": "https://placehold.it/100x100",
+        "icon": "ion-card",
         "lastValidated": "2014-07-08 12:30"
     }
 ]
