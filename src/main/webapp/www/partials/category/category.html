@@ -3,7 +3,7 @@
     <ion-nav-title class="bar bar-header bar-dark">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
         <h1 class="title">Category report {{groupName}}</h1>
-        <button class="button button-clear">Add</button>
+        <button class="button button-clear" ng-click="toggleAddForm()">Add</button>
     </ion-nav-title>
     <ion-content>
         <ion-refresher
@@ -12,28 +12,59 @@
             refreshing-text="Refreshing!"
             refreshing-icon="ion-loading-c">
         </ion-refresher>
+        <!-- Add new category form -->
+        <div class="card" ng-show="showAddForm">
+            <ion-item class="item item-dark item-divider">
+                Add new category
+            </ion-item>
+            <label class="item item-input">
+                <span class="input-label">Category Name</span>
+                <input ng-model="ncat.name" type="text" placeholder="Groceries">
+            </label>
+            <ion-item class="item-text-wrap">
+                <h2>Color</h2>
+                <!--<div class="item-body">-->
+                <a ng-repeat="c in colors"
+                   class="button {{ncat.color==c ? 'activated':'button-clear'}}"
+                   ng-click="ncat.color=c"
+                >
+                    <i class="icon ion-record {{c}}"></i>
+                </a>
+                <!--</div>-->
+            </ion-item>
+            <ion-item class="item-text-wrap">
+                <h2>Icon</h2>
+                <a ng-repeat="i in icons"
+                   class="button {{ncat.icon==i? 'activated':'button-clear'}}"
+                   ng-click="ncat.icon=i"
+                >
+                    <i class="icon {{i}} {{ncat.color}}"></i>
+                </a>
 
+            </ion-item>
+            <div class="button-bar">
+                <button class="button button-block button-assertive" ng-click="toggleAddForm()">
+                    Cancel
+                </button>
+                <button class="button button-block button-dark" ng-click="createCategory(ncat)">
+                    Add category
+                </button>
+            </div>
+        </div>
+        <!-- Period selector -->
         <div class="card">
-            <!--<label class="item item-input item-select">-->
-            <!--<div class="input-label">-->
-            <!--Period style-->
-            <!--</div>-->
-            <!--<select ng-model="periodType">-->
-            <!--<option>Month</option>-->
-            <!--<option selected>Year</option>-->
-            <!--<option>Custom</option>-->
-            <!--</select>-->
-            <!--</label>-->
             <ionic-datepicker input-obj="startDateObject">
                 <ion-item class="item item-button-right">
                     Start date
-                    <button class="button button-clear">{{startDateObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
+                    <button class="button button-clear">{{startDateObject.inputDate | date:'dd - MMMM - yyyy'}}
+                    </button>
                 </ion-item>
             </ionic-datepicker>
             <ionic-datepicker input-obj="endDateObject">
                 <ion-item class="item item-button-right">
                     Start date
-                    <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
+                    <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}
+                    </button>
                 </ion-item>
             </ionic-datepicker>
             <button class="button button button-block button-dark">
@@ -48,7 +79,7 @@
             </ion-item>
             <ion-item
                 class="item item-icon-left item-button-right"
-                ng-repeat="cat in categories | orderBy:'id'">
+                ng-repeat="cat in categories | orderBy:'total'">
 
                 <i class="icon {{cat.icon? cat.icon : 'ion-record'}} {{cat.color}}"></i>
 
