@@ -54,7 +54,7 @@ public class Transaction {
     @Column
     private String comment;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn
     private Location location;
 
@@ -201,7 +201,7 @@ public class Transaction {
     }
 
     public Location getLocation() {
-        return location;
+        return (null != placesService) ? location : null;
     }
 
     public void setLocation(Location location) {
@@ -212,8 +212,8 @@ public class Transaction {
         return (null == account) ? null : account.getId();
     }
 
-    public void setAccount(Long account) {
-//        this.account = findAccount;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public FinImage getImage() {

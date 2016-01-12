@@ -1,6 +1,7 @@
 package com.delirium.finapp.finance;
 
 import com.delirium.finapp.finance.domain.*;
+import com.delirium.finapp.finance.protocol.Period;
 import com.delirium.finapp.finance.protocol.TransPojo;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
@@ -134,7 +135,9 @@ public class Finance {
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/groups/{group}/categories", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/groups/{group}/categories",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Category> newCategory(@PathVariable("group") Long groupId,
@@ -147,7 +150,7 @@ public class Finance {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         }
-        Category category = new Category(group, c.getColor(), c.getName());
+        Category category = new Category(group, c.getColor(), c.getIcon(), c.getName());
         categoryRepository.save(category);
         categoryRepository.flush();
         return new ResponseEntity<>(category, HttpStatus.OK);
@@ -169,4 +172,67 @@ public class Finance {
         return new ResponseEntity<>(settings, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/groups/{group}/accounts",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Account> newAccount(@PathVariable("group") Long groupId,
+                                              @RequestBody Account acc) {
+        if (null == acc || null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+        Account account = new Account(group, acc.getColor(), acc.getIcon(), acc.getName(), acc.getStartingBalance());
+        accountRepository.save(account);
+        accountRepository.flush();
+        return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/groups/{group}/accounts",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<Account>> getAccounts(@PathVariable("group") Long groupId) {
+        if (null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+        List<Account> accounts = accountRepository.accountsForGroup(group);
+        for (Account acc : accounts) {
+            acc.setTransactionsRepo(transactionRepo);
+        }
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/groups/{group}/categories",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<Category>> getCategories(@PathVariable("group") Long groupId,
+                                                        @RequestBody Period period) {
+        if (null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+        List<Category> categories = categoryRepository.categoryForGroup(group);
+        for (Category category : categories) {
+            category.setCategoryReport(transactionRepo, period.getStart(), period.getEnd());
+        }
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
 }
