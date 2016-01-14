@@ -9,7 +9,7 @@ server:
 
 spring:
     profiles:
-        active: dev
+        active: prod
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
