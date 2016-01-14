@@ -67,7 +67,7 @@
                     </button>
                 </ion-item>
             </ionic-datepicker>
-            <button class="button button button-block button-dark">
+            <button class="button button button-block button-dark" ng-click="doRefresh()">
                 Generate report
             </button>
 
@@ -86,7 +86,7 @@
                 {{cat.name}}
                 <a class="button button-clear">
                         <span class="dark">
-                        {{cat.total}}
+                        {{cat.total| number:2}}
                         </span>
                 </a>
             </ion-item>
@@ -94,7 +94,7 @@
                 Total in period
                 <a class="button button-clear">
                         <span class=" {{sumAll >0 ? 'balanced' : 'assertive'}}">
-                        {{sumAll}}
+                        {{sumAll | number:2}}
                         </span>
                 </a>
             </ion-item>
