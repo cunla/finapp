@@ -4,24 +4,14 @@
     function homeCtrl($scope, fin, $state, $stateParams, $rootScope, $ionicPopup) {
         var groupId = $stateParams.groupId;
         $scope.t = {};
-        $scope.doRefresh = function () {
-            fin.getTransactions(groupId).then(function (results) {
-                $scope.transactions = results.data.content;
-                $scope.sumAll = 0;
-                if ($scope.transactions) {
-                    $scope.transactions.forEach(function (t) {
-                        t.date = new Date(t.date);
-                        $scope.sumAll += t.amount;
-                    })
-                } else {
-                    $scope.transactions = [];
-                }
-            }).finally(function () {
-                $scope.$broadcast('scroll.refreshComplete');
-            })
-        }
+        $scope.doRefresh = refresh;
+        $scope.createTransaction = createTransaction;
+        $scope.toggleDefaultFilter = toggleDefaultFilter;
+        $scope.deleteTransaction = deleteTransaction;
+
         $scope.doRefresh();
-        $scope.createTransaction = function (t) {
+
+        function createTransaction(t) {
             t.date = new Date();
             t.amount = (t.plusSign ? t.amount : -t.amount);
             $scope.sumAll = $scope.sumAll + t.amount;
@@ -33,7 +23,8 @@
             })
             $scope.t = {};
         }
-        $scope.deleteTransaction = function (t) {
+
+        function deleteTransaction(t) {
             var confirmPopup = $ionicPopup.confirm({
                 title: 'Delete transaction',
                 template: 'Are you sure you delete this transaction?',
@@ -50,6 +41,35 @@
                     });
                 }
             });
+        }
+
+        function refresh() {
+            fin.getTransactions(groupId).then(function (results) {
+                $scope.transactions = results.data.content;
+                $scope.sumAll = 0;
+                $scope.noData = 0;
+                if ($scope.transactions) {
+                    $scope.transactions.forEach(function (t) {
+                        t.date = new Date(t.date);
+                        $scope.sumAll += t.amount;
+                        if (!t.categoryId) {
+                            ++$scope.noData;
+                        }
+                    })
+                } else {
+                    $scope.transactions = [];
+                }
+            }).finally(function () {
+                $scope.$broadcast('scroll.refreshComplete');
+            })
+        }
+
+        function toggleDefaultFilter() {
+            if (!$scope.filterT) {
+                $scope.filterT = {categoryId: null};
+            } else {
+                $scope.filterT = null;
+            }
         }
     }
 

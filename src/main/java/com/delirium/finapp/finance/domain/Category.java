@@ -3,7 +3,6 @@ package com.delirium.finapp.finance.domain;
 import com.delirium.finapp.groups.domain.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;

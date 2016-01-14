@@ -32,6 +32,7 @@
                 .then(function (res) {
                     $scope.period = res.data.period;
                     $scope.categories = res.data.categories;
+                    $scope.withoutCategory = res.data.transactionsWithoutCategory;
                     $scope.sumAll = 0;
                     if ($scope.categories) {
                         $scope.categories.forEach(function (t) {

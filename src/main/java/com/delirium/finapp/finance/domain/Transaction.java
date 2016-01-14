@@ -100,6 +100,10 @@ public class Transaction {
     public void setCategoryColor(String color) {
     }
 
+    public String getCategoryIcon() {
+        return (null == category) ? "ion-record" : category.getIcon();
+    }
+
     public Long getCategoryId() {
         return (null == category) ? this.categoryId : category.getId();
     }

@@ -220,7 +220,7 @@ public class Finance {
         }
         Account noAcc = new Account();
         noAcc.setName("No account");
-        noAcc.setBalance(transactionRepo.balanceWithoutAccount(group));
+        noAcc.setBalance(transactionRepo.balanceWithoutAccount(group), transactionRepo.transactionsWithoutAcount(group));
         accounts.add(noAcc);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
@@ -253,7 +253,8 @@ public class Finance {
         noCat.setName("No category");
         noCat.setTotal(transactionRepo.totalWithoutCategory(group, start, end));
         categories.add(noCat);
-        CategoryReport res=new CategoryReport(period,categories);
+        CategoryReport res = new CategoryReport(period, categories);
+        res.setTransactionsWithoutCategory(transactionRepo.transactionsWithoutCategory(group, start, end));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

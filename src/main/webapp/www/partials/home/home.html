@@ -4,6 +4,7 @@
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
         <h1 class="title">Transactions {{groupName}}</h1>
+        <button class="button button-icon button-clear ion-funnel" ng-click="toggleFilter()"></button>
     </ion-nav-title>
 
     <ion-content>
@@ -34,11 +35,10 @@
                 <h2 class="title text-center {{sumAll >0 ? 'balanced' : 'assertive'}}">{{sumAll}}</h2>
             </ion-item>
             <ion-item item="item" class="item  center-content" can-swipe="true"
-                      ng-repeat="item in transactions | orderBy: '-date'"
+                      ng-repeat="item in transactions | filter: filterT | orderBy: '-date'"
                       href="#/f/transaction/{{item.id}}">
                 <div class="item-icon-left item-button-right">
-                    <i class="icon {{item.id? 'ion-record':'ion-loop'}}"
-                       style="color:{{item.categoryColor}}"></i>
+                    <i class="icon {{item.id? item.categoryIcon : 'ion-loop'}} {{item.categoryColor}}"></i>
 
                     <h2>
                         <b>{{item.title? item.title : 'No info yet'}}</b>
@@ -69,6 +69,8 @@
         </ion-infinite-scroll>
     </ion-content>
     <div class="bar bar-footer bar-dark">
-        <div class="title">X transactions without category</div>
+        <div class="title">{{noData}} transactions without category</div>
+        <button class="button button-icon button-clear {{filterT? 'ion-eye-disabled':'ion-eye'}}"
+                ng-click="toggleDefaultFilter()"></button>
     </div>
 </ion-view>

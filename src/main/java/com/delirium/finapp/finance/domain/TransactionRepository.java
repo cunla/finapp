@@ -1,7 +1,6 @@
 package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
-import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,4 +35,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Double totalWithoutCategory(@Param("groupi") Group group,
                                 @Param("start") Date start,
                                 @Param("end") Date end);
+
+    @Query("SELECT count(t.amount) from Transaction t where t.group=:groupi and t.account=null")
+    Integer transactionsWithoutAcount(@Param("groupi") Group group);
+
+    @Query("SELECT count(t.amount) from Transaction t " +
+        "where t.group=:groupi and t.category=null " +
+        "and t.date >= :start and t.date <=:end")
+    Integer transactionsWithoutCategory(@Param("groupi") Group group, @Param("start") Date start, @Param("end") Date end);
 }

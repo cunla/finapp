@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
 /**
@@ -43,6 +44,10 @@ public class Account {
     @JsonProperty
     @Transient
     private Double balance;
+
+    @JsonProperty
+    @Transient
+    private Integer count;
 
     public Account() {
     }
@@ -92,8 +97,13 @@ public class Account {
         return (null != this.transactionsRepo) ? this.transactionsRepo.balanceForAccount(this) : balance;
     }
 
-    public void setBalance(Double balance) {
+    public Integer getCount() {
+        return this.count;
+    }
+
+    public void setBalance(Double balance, Integer count) {
         this.balance = balance;
+        this.count = count;
     }
 
     public Date getLastValidated() {

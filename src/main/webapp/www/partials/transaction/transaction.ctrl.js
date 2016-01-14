@@ -16,11 +16,12 @@
                     'lng': $scope.transaction.location.longitude
                 };
             };
-            $scope.$on('mapInitialized', function (event, map) {
-                $scope.map = map;
-                $scope.map.setCenter(pos);
-            });
+
             $scope.places = $scope.transaction.places;
+        });
+        $scope.$on('mapInitialized', function (event, map) {
+            $scope.map = map;
+            //$scope.map.setCenter(pos);
         });
         //fin.getGroups().then(function (data) {
         //    $scope.accounts = data[0].accounts;
