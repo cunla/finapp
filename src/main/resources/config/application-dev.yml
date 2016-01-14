@@ -1,8 +1,8 @@
 server:
     port: 9999
     contextPath: /finapp
-logging:
-    level.org:
+#logging:
+#    level.org:
 #        hibernate: error
 #        hibernate.SQL: debug
 #        hibernate.type: trace
@@ -69,7 +69,7 @@ spring:
 
 finapp:
   places:
-#    key: AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE
+    key: AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE
   admin:
     login: admin@system
     password: 123

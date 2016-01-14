@@ -3,6 +3,7 @@ package com.delirium.finapp.finance.domain;
 import com.delirium.finapp.groups.domain.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,11 +38,11 @@ public class Category {
 
     @JsonProperty
     @Transient
-    private java.sql.Date startDate;
+    private Date startDate;
 
     @JsonProperty
     @Transient
-    private java.sql.Date endDate;
+    private Date endDate;
 
     @JsonProperty
     @Transient
@@ -82,7 +83,7 @@ public class Category {
         this.name = name;
     }
 
-    public void setCategoryReport(TransactionRepository t, java.sql.Date startDate, java.sql.Date endDate) {
+    public void setCategoryReport(TransactionRepository t, Date startDate, Date endDate) {
         this.transactionsRepo = t;
         this.startDate = startDate;
         this.endDate = endDate;

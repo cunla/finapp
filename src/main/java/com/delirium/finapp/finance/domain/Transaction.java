@@ -44,6 +44,7 @@ public class Transaction {
     private Double amount;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     @ManyToOne(cascade = CascadeType.MERGE)

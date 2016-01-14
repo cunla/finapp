@@ -1,13 +1,14 @@
 package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by morand3 on 12/27/2015.
@@ -31,7 +32,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT sum(t.amount) from Transaction t " +
         "where t.group=:groupi and t.category=null " +
-        "and t.date between :start and :end")
+        "and t.date >= :start and t.date <=:end")
     Double totalWithoutCategory(@Param("groupi") Group group,
                                 @Param("start") Date start,
                                 @Param("end") Date end);

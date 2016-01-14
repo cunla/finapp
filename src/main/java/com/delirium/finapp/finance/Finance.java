@@ -218,6 +218,7 @@ public class Finance {
             acc.setTransactionsRepo(transactionRepo);
         }
         Account noAcc = new Account();
+        noAcc.setName("No account");
         noAcc.setTotal(transactionRepo.totalWithoutAccount(group));
         accounts.add(noAcc);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
@@ -240,12 +241,15 @@ public class Finance {
 
         }
         List<Category> categories = categoryRepository.categoryForGroup(group);
-        java.sql.Date start = (null != period.getStart()) ? new java.sql.Date(period.getStart().getTime()) : new java.sql.Date(Long.MIN_VALUE);
-        java.sql.Date end = (null != period.getEnd()) ? new java.sql.Date(period.getEnd().getTime()) : new java.sql.Date(Long.MAX_VALUE);
+//        DateTime start = (null != period.getStart()) ? new DateTime(period.getStart()) : new DateTime(0);
+//        DateTime end = (null != period.getEnd()) ? new DateTime(period.getEnd()) : new DateTime(new Date(Long.MAX_VALUE));
+        Date start = (null != period.getStart()) ? period.getStart() : new Date(0);
+        Date end = (null != period.getEnd()) ? period.getEnd() : new Date(Long.MAX_VALUE);
         for (Category category : categories) {
             category.setCategoryReport(transactionRepo, start, end);
         }
         Category noCat = new Category();
+        noCat.setName("No category");
         noCat.setTotal(transactionRepo.totalWithoutCategory(group, start, end));
         categories.add(noCat);
         return new ResponseEntity<>(categories, HttpStatus.OK);
