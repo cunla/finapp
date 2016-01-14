@@ -7,9 +7,9 @@
                 datePickerObject: datePickerFunc,
                 beginningOfMonth: beginningOfMonth,
                 endOfMonth: endOfMonth,
-                colors:colors,
-                icons:icons,
-                accountIcons:accountIcons
+                colors: colors,
+                icons: icons,
+                accountIcons: accountIcons
             }
         })
         .factory('fin', ['$http', '$q', function ($http, $q) {
@@ -82,13 +82,11 @@
                 getAccountsReport: function (group) {
                     return $http.get('data/accounts.json');
                 },
-                createCategory: function (cat) {
-                    console.log("Creating " + cat);
-                    return;
+                createCategory: function (group, cat) {
+                    return $http.post(basicUrl + "/groups/" + group + "/categories", cat);
                 },
-                createAccount:function (acc) {
-                    console.log("Creating " + acc);
-                    return;
+                createAccount: function (group, acc) {
+                    return $http.post(basicUrl + "/groups/" + group + "/accounts", acc);
                 }
             };
             function fbLogin() {
@@ -192,7 +190,7 @@
             'ion-record'
         ];
     };
-    function accountIcons(){
+    function accountIcons() {
         return ['ion-bag',
             'ion-home',
             'ion-card',

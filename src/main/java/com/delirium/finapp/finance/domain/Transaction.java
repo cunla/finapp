@@ -68,6 +68,14 @@ public class Transaction {
     @JsonIgnore
     private FinImage image;
 
+    @JsonProperty("categoryId")
+    @Transient
+    private Long categoryId;
+
+    @JsonProperty("accountId")
+    @Transient
+    private Long accountId;
+
 
     public Transaction() {
     }
@@ -92,10 +100,11 @@ public class Transaction {
     }
 
     public Long getCategoryId() {
-        return (null == category) ? null : category.getId();
+        return (null == category) ? this.categoryId : category.getId();
     }
 
     public void setCategoryId(Long id) {
+        this.categoryId = id;
     }
 
     public String getCategoryName() {
@@ -106,10 +115,11 @@ public class Transaction {
     }
 
     public Long getAccountId() {
-        return (null == account) ? null : account.getId();
+        return (null == account) ? this.accountId : account.getId();
     }
 
     public void setAccountId(Long id) {
+        this.accountId = id;
     }
 
     public Long getGroupId() {

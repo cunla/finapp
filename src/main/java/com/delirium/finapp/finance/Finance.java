@@ -114,6 +114,12 @@ public class Finance {
         if (null == authorized(exisitingTransaction.getGroupId())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        if (null != t.getAccountId() && exisitingTransaction.getAccountId() != t.getAccountId()) {
+            t.setAccount(accountRepository.findOne(t.getAccountId()));
+        }
+        if (null != t.getCategoryId() && exisitingTransaction.getCategoryId() != t.getCategoryId()) {
+            t.setCategory(categoryRepository.findOne(t.getCategoryId()));
+        }
         exisitingTransaction.updateTransation(t);
         transactionRepo.save(exisitingTransaction);
         return new ResponseEntity<>(exisitingTransaction, HttpStatus.OK);

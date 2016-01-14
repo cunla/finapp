@@ -13,7 +13,7 @@
 
         $scope.createAccount = function (acc) {
             $scope.showAddForm = false;
-            fin.createAccount(acc).then(function (res) {
+            fin.createAccount($scope.groupId,acc).then(function (res) {
 
             });
         }

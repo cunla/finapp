@@ -17,7 +17,7 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn
     @JsonIgnore
     private Group group;
@@ -39,6 +39,9 @@ public class Account {
 
     @Transient
     private TransactionRepository transactionsRepo;
+
+    public Account() {
+    }
 
     public Account(Group group, String color, String icon, String name, Double startingBalance) {
         this.group = group;

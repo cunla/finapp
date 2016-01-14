@@ -20,7 +20,7 @@
         $scope.ncat = {};
         $scope.createCategory = function (cat) {
             $scope.showAddForm = false;
-            fin.createCategory(cat).then(function (res) {
+            fin.createCategory(groupId,cat).then(function (res) {
 
             });
         }

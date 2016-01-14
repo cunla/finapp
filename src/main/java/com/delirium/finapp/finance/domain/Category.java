@@ -26,7 +26,7 @@ public class Category {
     @Column
     private String icon;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn
     @JsonIgnore
     private Group group;
