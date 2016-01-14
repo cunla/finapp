@@ -31,7 +31,7 @@
             fin.getCategoryReport(groupId, $scope.startDateObject.inputDate, $scope.endDateObject.inputDate)
                 .then(function (res) {
                     $scope.period = res.data.period;
-                    $scope.categories = res.data.category;
+                    $scope.categories = res.data.categories;
                     $scope.sumAll = 0;
                     if ($scope.categories) {
                         $scope.categories.forEach(function (t) {

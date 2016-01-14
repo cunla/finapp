@@ -25,10 +25,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                                     @Param("end") Date end);
 
     @Query("SELECT sum(t.amount) from Transaction t where t.account=:account")
-    Double totalForAcount(@Param("account") Account acc);
+    Double balanceForAccount(@Param("account") Account acc);
 
     @Query("SELECT sum(t.amount) from Transaction t where t.group=:groupi and t.account=null")
-    Double totalWithoutAccount(@Param("groupi") Group group);
+    Double balanceWithoutAccount(@Param("groupi") Group group);
 
     @Query("SELECT sum(t.amount) from Transaction t " +
         "where t.group=:groupi and t.category=null " +

@@ -42,7 +42,7 @@ public class Account {
     private TransactionRepository transactionsRepo;
     @JsonProperty
     @Transient
-    private Double total;
+    private Double balance;
 
     public Account() {
     }
@@ -88,12 +88,12 @@ public class Account {
         this.transactionsRepo = transactionsRepo;
     }
 
-    public Double getTotal() {
-        return (null != this.transactionsRepo) ? this.transactionsRepo.totalForAcount(this) : total;
+    public Double getBalance() {
+        return (null != this.transactionsRepo) ? this.transactionsRepo.balanceForAccount(this) : balance;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public Date getLastValidated() {

@@ -77,10 +77,11 @@
                     });
                 },
                 getCategoryReport: function (group, start, end) {
-                    return $http.get('data/category-rep.json');
+                    var period={"start":start,"end":end};
+                    return $http.put(basicUrl + "/groups/" + group + "/categories",period);
                 },
                 getAccountsReport: function (group) {
-                    return $http.get('data/accounts.json');
+                    return $http.get(basicUrl + "/groups/" + group + "/accounts");
                 },
                 createCategory: function (group, cat) {
                     return $http.post(basicUrl + "/groups/" + group + "/categories", cat);

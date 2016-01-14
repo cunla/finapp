@@ -1,6 +1,7 @@
 package com.delirium.finapp.finance;
 
 import com.delirium.finapp.finance.domain.*;
+import com.delirium.finapp.finance.protocol.CategoryReport;
 import com.delirium.finapp.finance.protocol.Period;
 import com.delirium.finapp.finance.protocol.TransPojo;
 import com.delirium.finapp.groups.domain.Group;
@@ -219,7 +220,7 @@ public class Finance {
         }
         Account noAcc = new Account();
         noAcc.setName("No account");
-        noAcc.setTotal(transactionRepo.totalWithoutAccount(group));
+        noAcc.setBalance(transactionRepo.balanceWithoutAccount(group));
         accounts.add(noAcc);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
@@ -230,7 +231,7 @@ public class Finance {
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Category>> getCategories(@PathVariable("group") Long groupId,
+    public ResponseEntity<CategoryReport> getCategories(@PathVariable("group") Long groupId,
                                                         @RequestBody Period period) {
         if (null == groupId) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -252,6 +253,7 @@ public class Finance {
         noCat.setName("No category");
         noCat.setTotal(transactionRepo.totalWithoutCategory(group, start, end));
         categories.add(noCat);
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+        CategoryReport res=new CategoryReport(period,categories);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
