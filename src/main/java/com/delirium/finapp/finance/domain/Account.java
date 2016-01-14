@@ -2,6 +2,7 @@ package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -39,6 +40,9 @@ public class Account {
 
     @Transient
     private TransactionRepository transactionsRepo;
+    @JsonProperty
+    @Transient
+    private Double total;
 
     public Account() {
     }
@@ -85,7 +89,11 @@ public class Account {
     }
 
     public Double getTotal() {
-        return (null != this.transactionsRepo) ? this.transactionsRepo.totalForAcount(this) : null;
+        return (null != this.transactionsRepo) ? this.transactionsRepo.totalForAcount(this) : total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public Date getLastValidated() {

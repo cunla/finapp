@@ -1,6 +1,11 @@
 server:
     port: 9999
     contextPath: /finapp
+logging:
+    level.org:
+#        hibernate: error
+#        hibernate.SQL: debug
+#        hibernate.type: trace
 
 spring:
     profiles:
@@ -28,7 +33,7 @@ spring:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         database: MYSQL
         openInView: false
-        show_sql: true
+#        show_sql: true
         generate-ddl: true
         hibernate:
             ddl-auto: update
@@ -64,7 +69,7 @@ spring:
 
 finapp:
   places:
-    key: AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE
+#    key: AIzaSyBcJ63yGXQar1AKavg7gVwKhKLabdf8HCE
   admin:
     login: admin@system
     password: 123

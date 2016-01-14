@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -216,6 +217,9 @@ public class Finance {
         for (Account acc : accounts) {
             acc.setTransactionsRepo(transactionRepo);
         }
+        Account noAcc = new Account();
+        noAcc.setTotal(transactionRepo.totalWithoutAccount(group));
+        accounts.add(noAcc);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
@@ -236,9 +240,14 @@ public class Finance {
 
         }
         List<Category> categories = categoryRepository.categoryForGroup(group);
+        java.sql.Date start = (null != period.getStart()) ? new java.sql.Date(period.getStart().getTime()) : new java.sql.Date(Long.MIN_VALUE);
+        java.sql.Date end = (null != period.getEnd()) ? new java.sql.Date(period.getEnd().getTime()) : new java.sql.Date(Long.MAX_VALUE);
         for (Category category : categories) {
-            category.setCategoryReport(transactionRepo, period.getStart(), period.getEnd());
+            category.setCategoryReport(transactionRepo, start, end);
         }
+        Category noCat = new Category();
+        noCat.setTotal(transactionRepo.totalWithoutCategory(group, start, end));
+        categories.add(noCat);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 }

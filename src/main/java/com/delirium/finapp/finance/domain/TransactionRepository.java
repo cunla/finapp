@@ -7,22 +7,32 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by morand3 on 12/27/2015.
  */
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query("SELECT t FROM Transaction t WHERE t.group=:group")
+    @Query("SELECT t FROM com.delirium.finapp.finance.domain.Transaction t WHERE t.group=:group")
     Page<Transaction> findAllForGroup(@Param("group") Group group, Pageable pageable);
 
-    @Query("SELECT t.amount from Transaction t where t.category=:category " +
+    @Query("SELECT sum(t.amount) from Transaction t where t.category=:category " +
         "and t.date >= :start and t.date <=:end")
-    double totalForCategoryInPeriod(@Param("category") Category category,
+    Double totalForCategoryInPeriod(@Param("category") Category category,
                                     @Param("start") Date start,
                                     @Param("end") Date end);
 
-    @Query("SELECT t.amount from Transaction t where t.account=:account")
-    double totalForAcount(@Param("account") Account acc);
+    @Query("SELECT sum(t.amount) from Transaction t where t.account=:account")
+    Double totalForAcount(@Param("account") Account acc);
+
+    @Query("SELECT sum(t.amount) from Transaction t where t.group=:groupi and t.account=null")
+    Double totalWithoutAccount(@Param("groupi") Group group);
+
+    @Query("SELECT sum(t.amount) from Transaction t " +
+        "where t.group=:groupi and t.category=null " +
+        "and t.date between :start and :end")
+    Double totalWithoutCategory(@Param("groupi") Group group,
+                                @Param("start") Date start,
+                                @Param("end") Date end);
 }

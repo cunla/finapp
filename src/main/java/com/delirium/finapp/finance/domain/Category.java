@@ -2,6 +2,7 @@ package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,10 +34,18 @@ public class Category {
 
     @Transient
     private TransactionRepository transactionsRepo;
+
+    @JsonProperty
     @Transient
-    private Date startDate;
+    private java.sql.Date startDate;
+
+    @JsonProperty
     @Transient
-    private Date endDate;
+    private java.sql.Date endDate;
+
+    @JsonProperty
+    @Transient
+    private Double total;
 
     public Category() {
 
@@ -73,7 +82,7 @@ public class Category {
         this.name = name;
     }
 
-    public void setCategoryReport(TransactionRepository t, Date startDate, Date endDate) {
+    public void setCategoryReport(TransactionRepository t, java.sql.Date startDate, java.sql.Date endDate) {
         this.transactionsRepo = t;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -83,7 +92,11 @@ public class Category {
         if (null != this.transactionsRepo) {
             return transactionsRepo.totalForCategoryInPeriod(this, startDate, endDate);
         }
-        return null;
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public String getIcon() {
