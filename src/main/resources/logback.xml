@@ -4,6 +4,7 @@
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="com.delirium.finapp.finance.domain" level="WARN"/>
 
     <logger name="com.delirium.finapp" level="DEBUG"/>
 
