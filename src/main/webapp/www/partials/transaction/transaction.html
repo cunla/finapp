@@ -30,20 +30,21 @@
                 </label>
                 <label class="item item-input item-select">
                     <span class="input-label">Category</span>
-                    <select ng-model="transaction.categoryId">
-                        <!--ng-options="item.id as item.name for item in groupCategories">-->
-                        <option ng-repeat="item in groupCategories" value="item.id"><i class="icon {{item.icon}}"></i>
-                            {{item.name}}
-                        </option>
+                    <select ng-model="transaction.categoryId"
+                            ng-options="item.id as item.name for item in groupCategories">
+                        <!--<option ng-repeat="item in groupCategories" value="item.id"><i class="icon {{item.icon}}"></i>-->
+                        <!--{{item.name}}-->
+                        <!--</option>-->
                     </select>
                 </label>
                 <label class="item item-input item-select">
                     <span class="input-label">Account</span>
-                    <select ng-model="transaction.accountId">
-                        <!--ng-options="item.id as item.name for item in groupAccounts">-->
-                        <option ng-repeat="item in groupAccounts" value="item.id"><i class="icon {{item.icon}}"></i>
-                            {{item.name}}
-                        </option>
+                    <select ng-model="transaction.accountId"
+                            ng-options="item.id as item.name for item in groupAccounts">
+                        <!--<option ng-repeat="item in groupAccounts" value="item.id">-->
+                        <!--<span class="icon {{item.icon}}"></span>-->
+                        <!--{{item.name}}-->
+                        <!--</option>-->
                     </select>
                 </label>
             </div>
@@ -73,8 +74,10 @@
             </div>
             <div class="card">
                 <map center="{{transaction.location.latitude}},{{transaction.location.longitude}}" zoom="17">
-                    <marker position="{{transaction.location.latitude}},{{transaction.location.longitude}}"></marker>
-                    <marker ng-repeat="item in places" position="{{item.latitude}},{{item.longitude}}"></marker>
+                    <marker position="{{transaction.location.latitude}},{{transaction.location.longitude}}"
+                            title="{{transaction.location.title}}"></marker>
+                    <marker ng-repeat="item in places" position="{{item.latitude}},{{item.longitude}}"
+                            title="{{item.title}}"></marker>
                 </map>
             </div>
         </ion-list>

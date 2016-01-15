@@ -91,10 +91,11 @@ public class Account {
 
     public void setTransactionsRepo(TransactionRepository transactionsRepo) {
         this.transactionsRepo = transactionsRepo;
+        this.balance = this.transactionsRepo.balanceForAccount(this);
     }
 
     public Double getBalance() {
-        return (null != this.transactionsRepo) ? this.transactionsRepo.balanceForAccount(this) : balance;
+        return (null != this.balance) ? balance : 0;
     }
 
     public Integer getCount() {

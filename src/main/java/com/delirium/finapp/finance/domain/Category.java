@@ -86,13 +86,11 @@ public class Category {
         this.transactionsRepo = t;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.total = this.transactionsRepo.totalForCategoryInPeriod(this, startDate, endDate);
     }
 
     public Double getTotal() {
-        if (null != this.transactionsRepo) {
-            return transactionsRepo.totalForCategoryInPeriod(this, startDate, endDate);
-        }
-        return total;
+        return (null == total) ? 0 : total;
     }
 
     public void setTotal(Double total) {

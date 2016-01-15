@@ -5,6 +5,8 @@ import com.delirium.finapp.images.FinImage;
 import com.delirium.finapp.tools.PlacesService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "F_TRANSACTIONS")
 public class Transaction {
+    private static final Logger log = LoggerFactory.getLogger(Transaction.class);
 
     @Transient
     private AccountRepository accountRepository;
@@ -216,7 +219,11 @@ public class Transaction {
     }
 
     public Location getLocation() {
-        return (null != placesService) ? location : null;
+        if (null != placesService){
+            log.debug("Returning location {}",this.location);
+            return this.location;
+        }
+        return null;
     }
 
     public void setLocation(Location location) {
