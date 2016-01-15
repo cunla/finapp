@@ -99,7 +99,7 @@ public class Finance {
         if (null == authorized(t.getGroupId())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        t.setServices(categoryRepository, accountRepository, null);
+        t.setServices(categoryRepository, accountRepository, placesService);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
 
