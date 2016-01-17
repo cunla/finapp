@@ -72,8 +72,13 @@
         </div>
 
         <ion-list>
-            <ion-item class="item item-dark item-divider">
-                Report for {{period.start | date:'dd-MMM-yyyy'}} - {{period.end | date:'dd-MMM-yyyy'}}
+            <ion-item class="item item-dark item-divider text-center item-icon-left item-icon-right">
+                <i class="icon ion-chevron-left" ng-click="previousPeriod()"></i>
+                Report {{period.start | date:'dd-MMM-yyyy'}} - {{period.end | date:'dd-MMM-yyyy'}}
+                <i class="icon ion-chevron-right" ng-click="nextPeriod()"></i>
+            </ion-item>
+            <ion-item ng-show="refreshPeriod" class="text-center">
+                <ion-spinner icon="spiral"></ion-spinner>
             </ion-item>
             <ion-item
                 class="item"

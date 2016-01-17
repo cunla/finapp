@@ -160,13 +160,19 @@
         return d;
     }
 
-    function beginningOfMonth() {
+    function beginningOfMonth(month) {
         var date = new Date();
+        if (month) {
+            date.setMonth(month);
+        }
         return new Date(date.getFullYear(), date.getMonth(), 1);
     }
 
-    function endOfMonth() {
+    function endOfMonth(month) {
         var date = new Date();
+        if (month) {
+            date.setMonth(month);
+        }
         return new Date(date.getFullYear(), date.getMonth() + 1, 0);
     }
 
@@ -188,7 +194,11 @@
             'ion-social-tux',
             'ion-social-apple',
             'ion-social-android',
-            'ion-record'
+            'ion-record',
+            'ion-umbrella',
+            'ion-plane', 'ion-pie-graph', 'ion-beer', 'ion-coffee', 'ion-tshirt-outline', 'ion-icecream',
+            'ion-wineglass', 'ion-woman', 'ion-man', 'ion-ios-briefcase-outline', 'ion-ios-medkit-outline'
+
         ];
     };
     function accountIcons() {
@@ -197,7 +207,8 @@
             'ion-card',
             'ion-cash',
             'ion-social-usd',
-            'ion-social-euro'
+            'ion-social-euro',
+            'ion-briefcase'
         ];
     }
 })();
