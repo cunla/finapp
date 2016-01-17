@@ -156,9 +156,17 @@ public class Finance {
         Group group = authorized(groupId);
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         }
-        Category category = new Category(group, c.getColor(), c.getIcon(), c.getName());
+        Category category = null;
+        if (null == c.getId()) {
+            category = new Category(group, c.getColor(), c.getIcon(), c.getName());
+        } else {
+            category = categoryRepository.findOne(c.getId());
+            if (null == category) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            category.updateCategory(c);
+        }
         categoryRepository.save(category);
         categoryRepository.flush();
         return new ResponseEntity<>(category, HttpStatus.OK);
@@ -193,9 +201,17 @@ public class Finance {
         Group group = authorized(groupId);
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         }
-        Account account = new Account(group, acc.getColor(), acc.getIcon(), acc.getName(), acc.getStartingBalance());
+        Account account = null;
+        if (null == acc.getId()) {
+            account = new Account(group, acc.getColor(), acc.getIcon(), acc.getName(), acc.getStartingBalance());
+        } else {
+            account = accountRepository.findOne(acc.getId());
+            if (null == account) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            account.updateAccount(acc);
+        }
         accountRepository.save(account);
         accountRepository.flush();
         return new ResponseEntity<>(account, HttpStatus.OK);

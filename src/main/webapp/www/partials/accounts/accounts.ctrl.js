@@ -7,18 +7,28 @@
         $scope.colors = commons.colors();
         $scope.icons = commons.accountIcons();
         $scope.doRefresh = refresh;
-        $scope.toggleAddForm = function () {
-            $scope.showAddForm = !$scope.showAddForm;
-        }
+        $scope.toggleAddForm = toggleAddForm;
+        $scope.createAccount = createAccount;
+        $scope.edit = edit;
+        $scope.doRefresh();
 
-        $scope.createAccount = function (acc) {
+        function createAccount(acc) {
             $scope.showAddForm = false;
-            fin.createAccount($scope.groupId,acc).then(function (res) {
+            $scope.editMode = false;
+            fin.createAccount($scope.groupId, acc).then(function (res) {
 
             });
         }
-        $scope.doRefresh();
 
+        function edit(acc) {
+            $scope.nacc = acc;
+            $scope.showAddForm = true;
+            $scope.editMode = true;
+        }
+
+        function toggleAddForm() {
+            $scope.showAddForm = !$scope.showAddForm;
+        }
 
         function refresh() {
             fin.getAccountsReport($scope.groupId)

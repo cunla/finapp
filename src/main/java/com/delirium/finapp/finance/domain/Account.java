@@ -61,6 +61,10 @@ public class Account {
         this.lastValidated = new Date();
     }
 
+    public Account(Group group, String accountName) {
+        this(group, "dark", "ion-record", accountName, 0.0);
+    }
+
     public Long getId() {
         return id;
     }

@@ -10,4 +10,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c from Category c where c.group=:group")
     public List<Category> categoryForGroup(@Param("group") Group group);
+
+    @Query("select c from Category c where c.name=:name and c.group=:group")
+    List<Category> findByName(@Param("group") Group group, @Param("name") String name);
 }

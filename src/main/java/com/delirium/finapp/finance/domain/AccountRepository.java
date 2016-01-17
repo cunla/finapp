@@ -12,4 +12,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT c from Account c where c.group=:group")
     public List<Account> accountsForGroup(@Param("group") Group group);
+
+    @Query("SELECT c from Account c where c.group=:group and c.name=:name")
+    List<Account> findByName(@Param("group") Group group, @Param("name") String accountName);
 }

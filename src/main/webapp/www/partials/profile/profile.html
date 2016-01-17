@@ -100,7 +100,7 @@
                 <img src="{{item.avatar ? item.avatar : '100x100.png'}}"/>
                 <h2>{{item.name}}</h2>
                 <p>{{item.currency}} Total balance:
-                    <b class="{{item.balance>0 ? 'balanced':'assertive'}}"> {{item.currencySymbol}} {{item.balance}} </b>
+                    <b class="{{item.balance>0 ? 'balanced':'assertive'}}"> {{item.currencySymbol}} {{item.balance | number:2}} </b>
                 </p>
 
                 <ion-option-button class="button button-calm icon ion-edit dark"

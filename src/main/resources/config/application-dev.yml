@@ -13,7 +13,7 @@ spring:
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://localhost:3306/fapp
+        url: jdbc:mysql://localhost:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
         databaseName:
         serverName:
         username: fapp
@@ -22,7 +22,7 @@ spring:
 
     auditing:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://localhost:3306/fapp
+        url: jdbc:mysql://localhost:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
         databaseName:
         serverName:
         username: fapp

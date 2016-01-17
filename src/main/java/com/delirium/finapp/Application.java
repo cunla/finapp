@@ -31,7 +31,7 @@ import java.util.Arrays;
 //
 public class Application {
 
-    private final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     @Inject
     private Environment env;

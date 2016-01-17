@@ -1,5 +1,6 @@
 package com.delirium.finapp.finance.domain;
 
+import com.delirium.finapp.groups.domain.Group;
 import org.apache.commons.lang3.StringUtils;
 import se.walkercrou.places.Place;
 
@@ -46,6 +47,10 @@ public class Location {
         this.latitude = place.getLatitude();
         this.googleId = place.getPlaceId();
         this.types = StringUtils.join(place.getTypes(), ",");
+    }
+
+    public Location(String name) {
+        this(name, 0,0);
     }
 
     public String getGoogleId() {

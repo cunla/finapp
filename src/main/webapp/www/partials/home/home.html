@@ -32,7 +32,7 @@
         </form>
         <ion-list can-swipe="true">
             <ion-item class="item-divider">
-                <h2 class="title text-center {{sumAll >0 ? 'balanced' : 'assertive'}}">{{sumAll}}</h2>
+                <h2 class="title text-center {{sumAll >0 ? 'balanced' : 'assertive'}}">{{sumAll | number:2}}</h2>
             </ion-item>
             <ion-item item="item" class="item  center-content" can-swipe="true"
                       ng-repeat="item in transactions | filter: filterT | orderBy: '-date'"
@@ -41,7 +41,7 @@
                     <i class="icon {{item.id? item.categoryIcon : 'ion-loop'}} {{item.categoryColor}}"></i>
 
                     <h2>
-                        <b>{{item.title? item.title : 'No info yet'}}</b>
+                        <b>{{item.title? item.title : item.locationTitle}}</b>
                     </h2>
 
                     <p>{{item.date | date: 'yyyy-MM-dd HH:mm'}} {{item.target? item.target : ''}}</p>

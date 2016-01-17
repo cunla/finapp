@@ -58,6 +58,10 @@ public class Category {
         this.name = name;
     }
 
+    public Category(Group group, String name) {
+        this(group, "dark", "ion-record", name);
+    }
+
     public String getColor() {
         return color;
     }

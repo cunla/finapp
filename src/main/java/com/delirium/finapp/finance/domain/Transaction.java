@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class Transaction {
     @Column
     private String comment;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn
     private Location location;
 
@@ -90,6 +91,16 @@ public class Transaction {
         this.date = date;
         this.title = "TBD";
         this.location = new Location("TBD", latitude, longitude);
+    }
+
+    public Transaction(Group group, Account account, Category category, Location location, Date date, String title, Double amount) {
+        this.group = group;
+        this.account = account;
+        this.category = category;
+        this.location = location;
+        this.date = date;
+        this.title = title;
+        this.amount = amount;
     }
 
     public Long getId() {
@@ -218,9 +229,13 @@ public class Transaction {
         this.comment = comment;
     }
 
+    public String getLocationTitle() {
+        return (null == this.location) ? "" : this.location.getName();
+    }
+
     public Location getLocation() {
-        if (null != placesService){
-            log.debug("Returning location {}",this.location);
+        if (null != placesService) {
+//            log.debug("Returning location {}", this.location);
             return this.location;
         }
         return null;
