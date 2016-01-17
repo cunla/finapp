@@ -14,18 +14,30 @@
                 $scope.endDateObject.inputDate = $rootScope.user.defaultEnd;
         }
         $scope.doRefresh = refresh;
-        $scope.toggleAddForm = function () {
-            $scope.showAddForm = !$scope.showAddForm;
-        }
+        $scope.toggleAddForm = toggleAddForm;
+        $scope.createCategory = createCategory;
+        $scope.edit = edit;
         $scope.ncat = {};
-        $scope.createCategory = function (cat) {
+        $scope.doRefresh();
+
+        function createCategory(cat) {
             $scope.showAddForm = false;
-            fin.createCategory(groupId,cat).then(function (res) {
+            $scope.editMode = false;
+            fin.createCategory(groupId, cat).then(function (res) {
 
             });
         }
 
-        $scope.doRefresh();
+        function edit(cat) {
+            $scope.ncat = cat;
+            $scope.showAddForm = true;
+            $scope.editMode = true;
+        }
+
+        function toggleAddForm() {
+            $scope.showAddForm = !$scope.showAddForm;
+            $scope.editMode = false;
+        }
 
         function refresh() {
             fin.getCategoryReport(groupId, $scope.startDateObject.inputDate, $scope.endDateObject.inputDate)

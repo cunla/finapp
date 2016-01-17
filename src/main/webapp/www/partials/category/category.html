@@ -15,7 +15,7 @@
         <!-- Add new category form -->
         <div class="card" ng-show="showAddForm">
             <ion-item class="item item-dark item-divider">
-                Add new category
+                {{editMode? 'Edit category details': 'Add new category'}}
             </ion-item>
             <label class="item item-input">
                 <span class="input-label">Category Name</span>
@@ -26,8 +26,7 @@
                 <!--<div class="item-body">-->
                 <a ng-repeat="c in colors"
                    class="button {{ncat.color==c ? 'activated':'button-clear'}}"
-                   ng-click="ncat.color=c"
-                >
+                   ng-click="ncat.color=c">
                     <i class="icon ion-record {{c}}"></i>
                 </a>
                 <!--</div>-->
@@ -36,8 +35,7 @@
                 <h2>Icon</h2>
                 <a ng-repeat="i in icons"
                    class="button {{ncat.icon==i? 'activated':'button-clear'}}"
-                   ng-click="ncat.icon=i"
-                >
+                   ng-click="ncat.icon=i">
                     <i class="icon {{i}} {{ncat.color}}"></i>
                 </a>
 
@@ -47,7 +45,7 @@
                     Cancel
                 </button>
                 <button class="button button-block button-dark" ng-click="createCategory(ncat)">
-                    Add category
+                    {{editMode? 'Save details': 'Add category'}}
                 </button>
             </div>
         </div>
@@ -78,17 +76,23 @@
                 Report for {{period.start | date:'dd-MMM-yyyy'}} - {{period.end | date:'dd-MMM-yyyy'}}
             </ion-item>
             <ion-item
-                class="item item-icon-left item-button-right"
+                class="item"
                 ng-repeat="cat in categories | orderBy:'total'">
+                <div class="item-icon-left item-text-wrap item-button-right">
 
-                <i class="icon {{cat.icon? cat.icon : 'ion-record'}} {{cat.color}}"></i>
+                    <i class="icon {{cat.icon? cat.icon : 'ion-record'}} {{cat.color}}"></i>
 
-                {{cat.name}}
-                <a class="button button-clear">
+                    {{cat.name}}
+                    <a class="button button-clear">
                         <span class="dark">
                         {{cat.total| number:2}}
                         </span>
-                </a>
+                    </a>
+                </div>
+                <ion-option-button class="button button-calm icon ion-edit"
+                                   ng-click="edit(cat)">
+                    Edit
+                </ion-option-button>
             </ion-item>
             <ion-item class="item item-dark item-button-right">
                 Total in period

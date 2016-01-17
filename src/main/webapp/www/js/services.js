@@ -77,8 +77,8 @@
                     });
                 },
                 getCategoryReport: function (group, start, end) {
-                    var period={"start":start,"end":end};
-                    return $http.put(basicUrl + "/groups/" + group + "/categories",period);
+                    var period = {"start": start, "end": end};
+                    return $http.put(basicUrl + "/groups/" + group + "/categories", period);
                 },
                 getAccountsReport: function (group) {
                     return $http.get(basicUrl + "/groups/" + group + "/accounts");

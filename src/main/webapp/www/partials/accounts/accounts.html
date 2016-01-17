@@ -25,8 +25,7 @@
                 <!--<div class="item-body">-->
                 <a ng-repeat="c in colors"
                    class="button {{nacc.color==c ? 'activated':'button-clear'}}"
-                   ng-click="nacc.color=c"
-                >
+                   ng-click="nacc.color=c">
                     <i class="icon ion-record {{c}}"></i>
                 </a>
                 <!--</div>-->
@@ -35,8 +34,7 @@
                 <h2>Icon</h2>
                 <a ng-repeat="i in icons"
                    class="button {{nacc.icon==i? 'activated':'button-clear'}}"
-                   ng-click="nacc.icon=i"
-                >
+                   ng-click="nacc.icon=i">
                     <i class="icon {{i}} {{nacc.color}}"></i>
                 </a>
 
@@ -46,7 +44,7 @@
                     Cancel
                 </button>
                 <button class="button button-block button-dark" ng-click="createAccount(nacc)">
-                    Add account
+                    {{editMode? 'Save details': 'Add account'}}
                 </button>
             </div>
         </div>
