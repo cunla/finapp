@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app")
 public class AuditResource {
-    private final Logger log = LoggerFactory.getLogger(AuditResource.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditResource.class);
 
     @Inject
     AuditRepository auditRepository;

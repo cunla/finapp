@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 @Configuration
 public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
-    private final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
 
     private RelaxedPropertyResolver propertyResolver;
 

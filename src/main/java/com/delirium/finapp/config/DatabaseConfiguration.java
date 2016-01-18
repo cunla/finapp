@@ -51,7 +51,7 @@ public class DatabaseConfiguration
     private static final String DB_URL = "DB_URL";
     private static final String DB_USER = "DB_USER";
     private static final String DB_PASSWORD = "DB_PASSWORD";
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
     private RelaxedPropertyResolver propertyResolver;
     private Environment env;
     @Autowired(required = false)

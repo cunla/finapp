@@ -20,7 +20,7 @@ import java.util.Date;
 
 @Aspect
 public class AuditAspect {
-    private final Logger log = LoggerFactory.getLogger(AuditAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditAspect.class);
 
     //    @Autowired
 //    private AuditRepository auditRepository;

@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by Daniel Moran on 11/23/2015.
  */
 public class AuditedMethodDescriptor {
-    private final Logger log = LoggerFactory.getLogger(AuditedMethodDescriptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditedMethodDescriptor.class);
     private String name;
     //Map param index -> paramType
     private Map<Integer, String> objects;

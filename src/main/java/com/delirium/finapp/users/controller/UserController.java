@@ -23,7 +23,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;

@@ -33,7 +33,7 @@ import javax.sql.DataSource;
     transactionManagerRef = "auditTransactionManager")
 @EnableAspectJAutoProxy
 public class AuditAspectConfiguration implements EnvironmentAware {
-    private final Logger log = LoggerFactory.getLogger(AuditAspectConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditAspectConfiguration.class);
     private RelaxedPropertyResolver propertyResolver;
     private Environment env;
 

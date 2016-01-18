@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequestMapping("/app")
 public class UserResource {
 
-    private final Logger log = LoggerFactory.getLogger(UserResource.class);
+    private static final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Autowired
     private UserRepository userRepository;
