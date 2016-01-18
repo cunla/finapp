@@ -7,7 +7,7 @@
         <button class="button button-icon button-clear ion-funnel" ng-click="toggleFilter()"></button>
     </ion-nav-title>
 
-    <ion-content>
+    <ion-content overflow-scroll="true">
 
         <ion-refresher
             pulling-text="Pull to refresh..."
@@ -61,10 +61,14 @@
                 </ion-option-button>
             </ion-item>
 
-
+            <ion-infinite-scroll
+                on-infinite="loadMore()"
+                distance="1%">
+            </ion-infinite-scroll>
         </ion-list>
         <ion-infinite-scroll ng-show="false"
                              on-infinite="loadMore()"
+                             icon="ion-loading-c"
                              distance="10%">
         </ion-infinite-scroll>
     </ion-content>

@@ -3,9 +3,9 @@
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
         <h1 class="title">{{user.name}} Profile</h1>
-        <button class="button button-clear icon ion-log-out" ng-click="logout()">Logout</button>
+        <button class="button button-clear icon ion-log-out" ng-click="logout()"></button>
     </ion-nav-title>
-    <ion-content>
+    <ion-content overflow-scroll="true">
         <ion-refresher
             pulling-text="Pull to refresh..."
             on-refresh="refresh()"

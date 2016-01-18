@@ -4,12 +4,15 @@
     function homeCtrl($scope, fin, $state, $stateParams, $rootScope, $ionicPopup) {
         var groupId = $stateParams.groupId;
         $scope.t = {};
+        $scope.transactions = [];
+        $scope.page = 0;
+        $scope.size = 20;
         $scope.doRefresh = refresh;
         $scope.createTransaction = createTransaction;
         $scope.toggleDefaultFilter = toggleDefaultFilter;
         $scope.deleteTransaction = deleteTransaction;
-
-        $scope.doRefresh();
+        $scope.loadMore = loadMore;
+        //$scope.doRefresh();
 
         function createTransaction(t) {
             t.date = new Date();
@@ -19,7 +22,7 @@
             fin.newTransaction(groupId, t.amount).then(function (res) {
                 res.date = new Date(res.date);
                 $scope.transactions[0] = res;
-                //$scope.doRefresh();
+                $scope.doRefresh();
             })
             $scope.t = {};
         }
@@ -43,22 +46,21 @@
             });
         }
 
-        function refresh() {
-            fin.getTransactions(groupId).then(function (results) {
-                $scope.transactions = results.data.content;
-                $scope.sumAll = 0;
-                $scope.noData = 0;
-                if ($scope.transactions) {
-                    $scope.transactions.forEach(function (t) {
-                        t.date = new Date(t.date);
-                        $scope.sumAll += t.amount;
-                        if (!t.categoryId) {
-                            ++$scope.noData;
-                        }
-                    })
-                } else {
-                    $scope.transactions = [];
-                }
+        function loadMore() {
+            $scope.page = $scope.page + 1;
+            refresh($scope.page, $scope.size);
+        }
+
+        function refresh(page, size) {
+            fin.getTransactions(groupId, page, size).then(function (results) {
+                $scope.transactions = $scope.transactions.concat(results.data.content);
+                $scope.page = results.data.number;
+                $scope.size = results.data.size;
+                $scope.sumAll = results.data.sumAll;
+                $scope.noData = results.data.missingData;
+                $scope.transactions.forEach(function (t) {
+                    t.date = new Date(t.date);
+                })
             }).finally(function () {
                 $scope.$broadcast('scroll.refreshComplete');
             })

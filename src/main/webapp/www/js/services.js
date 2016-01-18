@@ -47,9 +47,7 @@
                 updateUser: function (user) {
                     return $http.post(basicUrl + '/users/' + user.id, user);
                 },
-                getTransactions: function (group) {
-                    return $http.get(basicUrl + '/groups/' + group + '/transactions');
-                },
+                getTransactions: getTransactions,
                 getTransaction: function (tId) {
                     return $http.get(basicUrl + '/transactions/' + tId);
                 },
@@ -90,6 +88,14 @@
                     return $http.post(basicUrl + "/groups/" + group + "/accounts", acc);
                 }
             };
+            function getTransactions(group, page, size) {
+                var url = basicUrl + '/groups/' + group + '/transactions';
+                if (page && size) {
+                    url = url + "?page=" + page + "&pageSize=" + size;
+                }
+                return $http.get(url);
+            }
+
             function fbLogin() {
                 return $q(function (resolve, reject) {
                     FB.login(function (response) {

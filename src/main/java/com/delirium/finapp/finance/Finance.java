@@ -4,6 +4,7 @@ import com.delirium.finapp.finance.domain.*;
 import com.delirium.finapp.finance.protocol.CategoryReport;
 import com.delirium.finapp.finance.protocol.Period;
 import com.delirium.finapp.finance.protocol.TransPojo;
+import com.delirium.finapp.finance.protocol.TransactionsPage;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
 import com.delirium.finapp.tools.PlacesService;
@@ -11,6 +12,9 @@ import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,12 +54,22 @@ public class Finance {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/groups/{group}/transactions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/groups/{group}/transactions",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Page<Transaction>> findGroupTransactions(@PathVariable("group") Long groupId) {
+    public ResponseEntity<Page<Transaction>> findGroupTransactions(
+        @PathVariable("group") Long groupId,
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
+        @RequestParam(value = "pageSize", defaultValue = "30") Integer pageSize
+    ) {
         Group group = authorized(groupId);
         if (null != group) {
-            Page<Transaction> res = transactionRepo.findAllForGroup(group, null);
+            Pageable pageable = new PageRequest(page, pageSize);
+            Page<Transaction> pageRes = transactionRepo.findAllForGroup(group, pageable);
+            TransactionsPage res = new TransactionsPage(pageRes, pageable);
+            res.setSumAll(transactionRepo.sumAllForGroup(group));
+            res.setMissingData(transactionRepo.countTransactionsWithMissingData(group));
             return new ResponseEntity<>(res, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -63,7 +77,9 @@ public class Finance {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/groups/{group}/transactions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/groups/{group}/transactions",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Transaction> newTransation(@PathVariable("group") Long groupId,

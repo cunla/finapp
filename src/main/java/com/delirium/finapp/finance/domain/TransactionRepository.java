@@ -1,5 +1,6 @@
 package com.delirium.finapp.finance.domain;
 
+import com.delirium.finapp.finance.protocol.TransactionsPage;
 import com.delirium.finapp.groups.domain.Group;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,9 @@ import java.util.Date;
  */
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query("SELECT t FROM com.delirium.finapp.finance.domain.Transaction t WHERE t.group=:group")
+    @Query("SELECT t FROM com.delirium.finapp.finance.domain.Transaction t " +
+        " WHERE t.group=:group " +
+        " ORDER BY t.date DESC ")
     Page<Transaction> findAllForGroup(@Param("group") Group group, Pageable pageable);
 
     @Query("SELECT sum(t.amount) from Transaction t where t.category=:category " +
@@ -43,4 +46,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
         "where t.group=:groupi and t.category=null " +
         "and t.date >= :start and t.date <=:end")
     Integer transactionsWithoutCategory(@Param("groupi") Group group, @Param("start") Date start, @Param("end") Date end);
+
+    @Query("SELECT sum(t.amount) FROM Transaction t WHERE t.group=:group ")
+    Double sumAllForGroup(@Param("group") Group group);
+
+    @Query("SELECT count(t) FROM Transaction t " +
+        " WHERE t.group=:group AND (t.category=null OR t.account=null)")
+    Integer countTransactionsWithMissingData(@Param("group") Group group);
 }
