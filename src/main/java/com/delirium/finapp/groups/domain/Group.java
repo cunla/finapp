@@ -87,6 +87,9 @@ public class Group implements Serializable {
     @JsonProperty("balance")
     public Double getBalance() {
         Double sum = 0.0;
+        if (null == transactions) {
+            return sum;
+        }
         for (Transaction t : transactions) {
             sum += t.getAmount();
         }
