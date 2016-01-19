@@ -92,14 +92,15 @@
         </form>
         <ion-list class="list" can-swipe="true">
             <ion-item
-                class="item item-thumbnail-left item-button-right"
+                class="item item-thumbnail-left"
                 ng-repeat='item in groups'
                 item="item" can-swipe="true"
                 href="#/f/home/{{item.id}}"
             >
-                <img src="{{item.avatar ? item.avatar : '100x100.png'}}"/>
+                <img src="100x100.png"/>
+                <!--<img src="{{item.avatar ? item.avatar : '100x100.png'}}"/>-->
                 <h2>{{item.name}}</h2>
-                <p>{{item.currency}} Total balance:
+                <p> Balance: {{item.currency}}
                     <b class="{{item.balance>0 ? 'balanced':'assertive'}}"> {{item.currencySymbol}} {{item.balance | number:2}} </b>
                 </p>
 
