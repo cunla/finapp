@@ -90,7 +90,6 @@ public class Finance {
         Group group = authorized(groupId);
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         }
         Transaction transaction = new Transaction(group, t.getAmount(), t.getLocation().longitude,
             t.getLocation().latitude, t.getDate());
