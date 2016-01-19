@@ -1,30 +1,52 @@
-<div class="card" ng-show="item.editMode">
-    <ion-item class="item item-divider item-button-right">
+<ion-view>
 
-        {{item.members.length}} Members
-        <!--<span class="badge badge-calm"></span>-->
-        <button class="button button-clear ion-plus-circled button-positive">Invite</button>
+    <ion-nav-title class="bar bar-header bar-dark">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+        <h1 class="title">Edit group {{groupName}}</h1>
+        <!--<button class="button button-clear" ng-click="toggleAddForm()">Add</button>-->
+    </ion-nav-title>
+    <ion-content>
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()"
+            refreshing-text="Refreshing!"
+            refreshing-icon="ion-loading-c">
+        </ion-refresher>
+        <ion-list class="list list-inset">
+            <ion-item class="item item-dark item-button-right">
 
-    </ion-item>
-    <ion-item item="member" class="item-accordion item-avatar-left"
-              ng-repeat="member in item.members">
-        <img src="{{member.avatar}}" title="{{member.name}}">
+                {{item.members.length}} Members
+                <!--<span class="badge badge-calm"></span>-->
+                <button class="button button-clear icon ion-plus button-light"></button>
 
-        <h2>{{member.name}}</h2>
+            </ion-item>
 
-        <p>email: {{member.email}}</p>
+            <ion-item item="member" class="item-accordion item-avatar-left"
+                      ng-repeat="member in item.members">
+                <img src="{{member.avatar}}" title="{{member.name}}">
 
-        <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged
-            in'}}</p>
-        <ion-option-button class="button button-assertive icon ion-log-out"
-                           ng-click="removeUser(item,member)">
-            <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-            Remove
-        </ion-option-button>
-        <ion-option-button class="button button-dark icon ion-trophy"
-                           ng-click="makeAdmin(item,member)">
-            <!--ng-hide="!item.isAdmin || member.isAdmin"-->
-            Admin
-        </ion-option-button>
-    </ion-item>
-</div>
+                <h2>{{member.name}}</h2>
+
+                <p>email: {{member.email}}</p>
+
+                <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged
+                    in'}}</p>
+                <ion-option-button class="button button-assertive icon ion-log-out"
+                                   ng-click="removeUser(item,member)">
+                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                    Remove
+                </ion-option-button>
+                <ion-option-button class="button button-dark icon ion-trophy"
+                                   ng-click="makeAdmin(item,member)">
+                    <!--ng-hide="!item.isAdmin || member.isAdmin"-->
+                    Admin
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+    <div class="bar bar-footer bar-dark">
+        <div class="title"> Footer</div>
+        <button class="button button-icon button-clear"></button>
+    </div>
+</ion-view>

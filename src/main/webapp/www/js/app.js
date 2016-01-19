@@ -80,6 +80,15 @@
                         }
                     }
                 })
+                .state('menu.group', {
+                    url: "/group/:groupId",
+                    views: {
+                        'appContent': {
+                            templateUrl: "partials/group/group.html",
+                            controller: "Group"
+                        }
+                    }
+                })
                 .state('menu.accounts', {
                     url: "/accounts/:groupId",
                     views: {
