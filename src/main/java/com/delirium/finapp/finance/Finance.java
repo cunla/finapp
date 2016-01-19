@@ -60,7 +60,7 @@ public class Finance {
     @ResponseBody
     public ResponseEntity<Page<Transaction>> findGroupTransactions(
         @PathVariable("group") Long groupId,
-        @RequestParam(value = "page", defaultValue = "1") Integer page,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
         @RequestParam(value = "pageSize", defaultValue = "30") Integer pageSize
     ) {
         Group group = authorized(groupId);
