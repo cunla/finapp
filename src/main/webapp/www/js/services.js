@@ -57,23 +57,7 @@
                 updateTransaction: function (tId, transaction) {
                     return $http.put(basicUrl + '/transactions/' + tId, transaction);
                 },
-                newTransaction: function (group, amount) {
-                    return $q(function (resolve, reject) {
-                        var transaction = {};
-                        transaction.group = group;
-                        transaction.amount = amount;
-                        transaction.date = new Date();
-                        navigator.geolocation.getCurrentPosition(function (pos) {
-                            var point = {latitude: pos.coords.latitude, longitude: pos.coords.longitude};
-                            transaction.location = point;
-                            $http.post(basicUrl + "/groups/" + group + "/transactions", transaction).then(function (res) {
-                                resolve(res.data);
-                            })
-                        }, function (error) {
-                            reject('Unable to get location: ' + error.message);
-                        });
-                    });
-                },
+                newTransaction: newTransaction,
                 getCategoryReport: function (group, start, end) {
                     var period = {"start": start, "end": end};
                     return $http.put(basicUrl + "/groups/" + group + "/categories", period);
@@ -94,6 +78,24 @@
                     url = url + "?page=" + page + "&pageSize=" + size;
                 }
                 return $http.get(url);
+            }
+
+            function newTransaction(group, amount) {
+                return $q(function (resolve, reject) {
+                    var transaction = {};
+                    transaction.group = group;
+                    transaction.amount = amount;
+                    transaction.date = new Date();
+                    navigator.geolocation.getCurrentPosition(function (pos) {
+                        var point = {latitude: pos.coords.latitude, longitude: pos.coords.longitude};
+                        transaction.location = point;
+                        $http.post(basicUrl + "/groups/" + group + "/transactions", transaction).then(function (res) {
+                            resolve(res.data);
+                        })
+                    }, function (error) {
+                        reject('Unable to get location: ' + error.message);
+                    });
+                });
             }
 
             function fbLogin() {

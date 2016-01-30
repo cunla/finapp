@@ -13,7 +13,7 @@
         $scope.toggleDefaultFilter = toggleDefaultFilter;
         $scope.deleteTransaction = deleteTransaction;
         $scope.loadMore = loadMore;
-        //$scope.doRefresh();
+        $scope.loadMore();
 
         function createTransaction(t) {
             t.date = new Date();
@@ -23,7 +23,7 @@
             fin.newTransaction(groupId, t.amount).then(function (res) {
                 res.date = new Date(res.date);
                 $scope.transactions[0] = res;
-                $scope.doRefresh();
+//                 $scope.doRefresh();
             })
             $scope.t = {};
         }
