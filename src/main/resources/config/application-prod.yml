@@ -14,6 +14,8 @@ spring:
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
         url: jdbc:mysql://104.155.92.249:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
+        validationQuery: SELECT 1
+        testWhileIdle: true
         databaseName:
         serverName:
         username: fapp
