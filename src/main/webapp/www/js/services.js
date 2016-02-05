@@ -48,6 +48,7 @@
                     return $http.post(basicUrl + '/users/' + user.id, user);
                 },
                 getTransactions: getTransactions,
+                validateAccount: validateAccount,
                 getTransaction: function (tId) {
                     return $http.get(basicUrl + '/transactions/' + tId);
                 },
@@ -72,6 +73,12 @@
                     return $http.post(basicUrl + "/groups/" + group + "/accounts", acc);
                 }
             };
+
+            function validateAccount(group, accountId) {
+                var url = basicUrl + "/groups/" + group + "/accounts/" + accountId+"/validate";
+                return $http.get(url);
+            }
+
             function getTransactions(group, page, size) {
                 var url = basicUrl + '/groups/' + group + '/transactions';
                 if (page && size) {
