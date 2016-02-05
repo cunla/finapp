@@ -232,6 +232,31 @@ public class Finance {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/groups/{group}/accounts/{accountId}/validate",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Account> validateAccount(@PathVariable("group") Long groupId,
+                                                   @PathVariable("accountId") Long accountId) {
+        if (null == accountId || null == groupId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Group group = authorized(groupId);
+        if (null == group) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Account account = null;
+        if (null == accountId) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            account = accountRepository.findOne(accountId);
+            account.setLastValidated(new Date());
+        }
+        accountRepository.save(account);
+        accountRepository.flush();
+        return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/groups/{group}/accounts",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
