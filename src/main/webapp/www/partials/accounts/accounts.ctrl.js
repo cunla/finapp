@@ -1,16 +1,26 @@
 (function () {
 
     angular.module('app.controllers')
-        .controller('accountsCtrl', ['$scope', '$state', 'fin', '$rootScope', 'commons', accountsCtrl]);
-    function accountsCtrl($scope, $state, fin, $rootScope, commons) {
+        .controller('accountsCtrl', ['$scope', '$state', 'fin', '$ionicListDelegate', 'commons', accountsCtrl]);
+    function accountsCtrl($scope, $state, fin, $ionicListDelegate, commons) {
         $scope.groupId = $state.params.groupId;
         $scope.colors = commons.colors();
         $scope.icons = commons.accountIcons();
         $scope.doRefresh = refresh;
         $scope.toggleAddForm = toggleAddForm;
         $scope.createAccount = createAccount;
+        $scope.validateNow = validateNow;
         $scope.edit = edit;
         $scope.doRefresh();
+
+        function validateNow(acc) {
+            acc.updating = true;
+            $ionicListDelegate.closeOptionButtons();
+            fin.validateAccount($scope.groupId, acc.id).then(function (res) {
+                acc.updating = false;
+                acc = res.data;
+            });
+        }
 
         function createAccount(acc) {
             $scope.showAddForm = false;
@@ -24,6 +34,7 @@
             $scope.nacc = acc;
             $scope.showAddForm = true;
             $scope.editMode = true;
+            $ionicListDelegate.closeOptionButtons();
         }
 
         function toggleAddForm() {
