@@ -54,6 +54,27 @@ public class Finance {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/groups/{group}/export",
+        method = RequestMethod.GET,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> exportCsv(
+        @PathVariable("group") Long groupId
+    ) {
+        Group group = authorized(groupId);
+        if (null != group) {
+            List<Transaction> transactions = transactionRepo.findAllForGroup(group);
+            StringBuffer res = new StringBuffer(Transaction.csvTitle());
+            for (Transaction t : transactions) {
+                res.append(t.asCsv());
+            }
+            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/groups/{group}/transactions",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)

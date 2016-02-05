@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by morand3 on 12/27/2015.
@@ -53,4 +54,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT count(t) FROM Transaction t " +
         " WHERE t.group=:group AND (t.category=null OR t.account=null)")
     Integer countTransactionsWithMissingData(@Param("group") Group group);
+
+    @Query("SELECT t FROM com.delirium.finapp.finance.domain.Transaction t " +
+        " WHERE t.group=:group " +
+        " ORDER BY t.date DESC ")
+    List<Transaction> findAllForGroup(@Param("group") Group group);
 }

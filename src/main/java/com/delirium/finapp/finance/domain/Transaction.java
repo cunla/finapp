@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -20,45 +22,36 @@ import java.util.List;
 @Table(name = "F_TRANSACTIONS")
 public class Transaction {
     private static final Logger log = LoggerFactory.getLogger(Transaction.class);
-
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Transient
     private AccountRepository accountRepository;
     @Transient
     private CategoryRepository categoryRepository;
     @Transient
     private PlacesService placesService;
-
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue
     private Long id;
-
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn
     @JsonIgnore
     private Group group;
-
     @Column
     private String title;
-
     @Column
     private String target;
-
     @Column
     private Double amount;
-
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
     @JsonIgnore
     private Category category;
-
     @Column
     private String comment;
-
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn
     private Location location;
@@ -67,20 +60,16 @@ public class Transaction {
     @JoinColumn
     @JsonIgnore
     private Account account;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
     @JsonIgnore
     private FinImage image;
-
     @JsonProperty("categoryId")
     @Transient
     private Long categoryId;
-
     @JsonProperty("accountId")
     @Transient
     private Long accountId;
-
 
     public Transaction() {
     }
@@ -101,6 +90,10 @@ public class Transaction {
         this.date = date;
         this.title = title;
         this.amount = amount;
+    }
+
+    public static String csvTitle() {
+        return "group,amount,date,title,target,category,account,location\n";
     }
 
     public Long getId() {
@@ -131,6 +124,10 @@ public class Transaction {
     }
 
     public void setCategoryName(String name) {
+    }
+
+    public String getAccountName() {
+        return (null == account) ? null : account.getName();
     }
 
     public Long getAccountId() {
@@ -293,4 +290,17 @@ public class Transaction {
         }
     }
 
+    public String asCsv() {
+        StringBuffer buf = new StringBuffer();
+        buf.append(this.getGroupId());
+        buf.append(",").append(this.amount);
+        buf.append(",").append(dateFormat.format(this.date));
+        buf.append(",").append(this.title);
+        buf.append(",").append(this.target);
+        buf.append(",").append(this.getCategoryName());
+        buf.append(",").append(this.getAccountName());
+        buf.append(",").append(this.location.getName());
+        buf.append("\n");
+        return buf.toString();
+    }
 }
