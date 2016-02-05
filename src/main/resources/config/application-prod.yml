@@ -1,5 +1,5 @@
 server:
-    port: 8080
+    port: 80
     contextPath: /finapp
 #logging:
 #    level.org:
@@ -13,7 +13,7 @@ spring:
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://104.155.92.249:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
         validationQuery: SELECT 1
         testWhileIdle: true
         databaseName:
@@ -48,7 +48,7 @@ spring:
              hibernate.enable_lazy_load_no_trans: true
 
     mail:
-        baseUrl: http://localhost:8080
+        baseUrl: http://localhost:80
 
 #    thymeleaf:
 #        mode: XHTML
