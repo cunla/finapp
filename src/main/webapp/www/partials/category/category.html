@@ -80,6 +80,14 @@
             <ion-item ng-show="refreshPeriod" class="text-center">
                 <ion-spinner icon="spiral"></ion-spinner>
             </ion-item>
+            <ion-item class="item item-dark item-button-right">
+                Total in period
+                <a class="button button-clear">
+                        <span class=" {{sumAll >0 ? 'balanced' : 'assertive'}}">
+                        {{sumAll | number:2}}
+                        </span>
+                </a>
+            </ion-item>
             <ion-item
                 class="item"
                 ng-repeat="cat in categories | orderBy:'total'">
@@ -99,14 +107,7 @@
                     Edit
                 </ion-option-button>
             </ion-item>
-            <ion-item class="item item-dark item-button-right">
-                Total in period
-                <a class="button button-clear">
-                        <span class=" {{sumAll >0 ? 'balanced' : 'assertive'}}">
-                        {{sumAll | number:2}}
-                        </span>
-                </a>
-            </ion-item>
+
         </ion-list>
     </ion-content>
     <div class="bar bar-footer bar-dark">
