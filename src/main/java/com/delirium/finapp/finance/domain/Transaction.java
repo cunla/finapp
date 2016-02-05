@@ -198,7 +198,7 @@ public class Transaction {
     }
 
     public Double getAmount() {
-        return amount;
+        return (amount == null) ? 0 : amount;
     }
 
     public void setAmount(Double amount) {
