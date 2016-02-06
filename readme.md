@@ -10,6 +10,7 @@ Use `mvn package` to compile the server.
 Run `java -jar target/finapp.war --spring.profiles.active={profile}`
 
 waffle
+------
 If you want to contribute to this project write to style.daniel@gmail.com
 
 [![Stories in Ready](https://badge.waffle.io/cunla/finapp.png?label=ready&title=Ready)](http://waffle.io/cunla/finapp)
