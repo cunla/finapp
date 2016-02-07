@@ -13,7 +13,7 @@
             refreshing-icon="ion-loading-c">
         </ion-refresher>
         <div class="list">
-            <div class="profile-container">
+            <div class="profile-container" ng-click="showProfileDetails=!showProfileDetails">
                 <!--<div id="em-profile" class="item">-->
                 <!-- <img src="img/logo.png"> -->
                 <div ng-if="user.avatar" class="profile-pic"
@@ -28,7 +28,8 @@
                 </div>
                 <div class="profile-background" ng-style="{'background-image': 'url(' + user.profilePic + ')'}"></div>
             </div>
-            <div class="list list-inset">
+            <div class="list list-inset"
+                 ng-show="showProfileDetails">
                 <label class="item item-input field-disabled">
                     <span class="input-label">Email</span>
                     <input ng-model="user.email" type="text"
