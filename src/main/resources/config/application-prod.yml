@@ -1,6 +1,6 @@
 server:
-    port: 80
-    contextPath: /finapp
+    port: 9090
+    contextPath: /
 #logging:
 #    level.org:
 #        hibernate: error
@@ -13,7 +13,7 @@ spring:
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://46.101.193.12:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
         validationQuery: SELECT 1
         testWhileIdle: true
         databaseName:
@@ -24,7 +24,7 @@ spring:
 
     auditing:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://46.101.193.12:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/fapp?useUnicode=yes&characterEncoding=UTF-8
         validationQuery: SELECT 1
         testWhileIdle: true
         databaseName:
