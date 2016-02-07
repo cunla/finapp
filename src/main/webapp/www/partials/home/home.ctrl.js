@@ -3,18 +3,25 @@
         .controller('homeCtrl', ['$scope', 'fin', '$state', '$stateParams', '$rootScope', '$ionicPopup', homeCtrl])
     function homeCtrl($scope, fin, $state, $stateParams, $rootScope, $ionicPopup) {
         var groupId = $stateParams.groupId;
-        $scope.t = {};
-        $scope.transactions = [];
-        $scope.page = -1;
-        $scope.totalPages = 1;
-        $scope.size = 20;
-        $scope.moreData = false;
+
+        //$scope.moreData = false;
+        $scope.resetPage = resetPage;
         $scope.doRefresh = refresh;
         $scope.createTransaction = createTransaction;
         $scope.toggleDefaultFilter = toggleDefaultFilter;
         $scope.deleteTransaction = deleteTransaction;
         $scope.loadMore = loadMore;
-        $scope.loadMore();
+        $scope.resetPage();
+        //$scope.loadMore();
+
+        function resetPage() {
+            $scope.t = {};
+            $scope.transactions = [];
+            $scope.page = 0;
+            $scope.totalPages = 1;
+            $scope.size = 20;
+            refresh($scope.page, $scope.size);
+        }
 
         function createTransaction(t) {
             t.date = new Date();
