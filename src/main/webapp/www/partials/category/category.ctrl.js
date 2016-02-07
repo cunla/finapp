@@ -14,6 +14,7 @@
             if ($rootScope.user.defaultEnd)
                 $scope.endDateObject.inputDate = $rootScope.user.defaultEnd;
         }
+        $scope.togglePeriodSelector = togglePeriodSelector;
         $scope.doRefresh = refresh;
         $scope.toggleAddForm = toggleAddForm;
         $scope.createCategory = createCategory;
@@ -56,6 +57,10 @@
             $scope.ncat = cat;
             $scope.showAddForm = true;
             $scope.editMode = true;
+        }
+
+        function togglePeriodSelector() {
+            $scope.showPeriodSelector = !$scope.showPeriodSelector;
         }
 
         function toggleAddForm() {
