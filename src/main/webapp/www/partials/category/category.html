@@ -49,36 +49,38 @@
                 </button>
             </div>
         </div>
-        <div class="item-divider"></div>
+        <div class="item-divider text-center"
+             ng-click="togglePeriodSelector()">
+            Edit period
+        </div>
+        <!-- Period selector -->
+        <div class="card" ng-show="showPeriodSelector">
+            <ionic-datepicker input-obj="startDateObject">
+                <ion-item class="item item-button-right">
+                    Start date
+                    <button class="button button-clear">{{startDateObject.inputDate | date:'dd - MMMM - yyyy'}}
+                    </button>
+                </ion-item>
+            </ionic-datepicker>
+            <ionic-datepicker input-obj="endDateObject">
+                <ion-item class="item item-button-right">
+                    Start date
+                    <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}
+                    </button>
+                </ion-item>
+            </ionic-datepicker>
+            <button class="button button button-block button-dark" ng-click="doRefresh()">
+                Generate report
+            </button>
+
+        </div>
         <ion-list>
             <ion-item
-                ng-click="togglePeriodSelector()"
                 class="item item-dark item-divider text-center item-icon-left item-icon-right">
                 <i class="icon ion-chevron-left" ng-click="previousPeriod()"></i>
                 Report {{period.start | date:'dd-MMM-yyyy'}} - {{period.end | date:'dd-MMM-yyyy'}}
                 <i class="icon ion-chevron-right" ng-click="nextPeriod()"></i>
             </ion-item>
-            <!-- Period selector -->
-            <div class="card" ng-show="showPeriodSelector">
-                <ionic-datepicker input-obj="startDateObject">
-                    <ion-item class="item item-button-right">
-                        Start date
-                        <button class="button button-clear">{{startDateObject.inputDate | date:'dd - MMMM - yyyy'}}
-                        </button>
-                    </ion-item>
-                </ionic-datepicker>
-                <ionic-datepicker input-obj="endDateObject">
-                    <ion-item class="item item-button-right">
-                        Start date
-                        <button class="button button-clear">{{endDateObject.inputDate | date:'dd - MMMM - yyyy'}}
-                        </button>
-                    </ion-item>
-                </ionic-datepicker>
-                <button class="button button button-block button-dark" ng-click="doRefresh()">
-                    Generate report
-                </button>
-
-            </div>
             <ion-item ng-show="refreshPeriod" class="text-center">
                 <ion-spinner icon="spiral"></ion-spinner>
             </ion-item>
@@ -105,6 +107,7 @@
                     </a>
                 </div>
                 <ion-option-button class="button button-calm icon ion-edit"
+                                   ng-hide="cat.name=='No category'"
                                    ng-click="edit(cat)">
                     Edit
                 </ion-option-button>

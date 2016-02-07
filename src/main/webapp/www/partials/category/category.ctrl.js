@@ -69,10 +69,12 @@
         }
 
         function refresh() {
+            $scope.showPeriodSelector = false;
             getData($scope.startDateObject.inputDate, $scope.endDateObject.inputDate);
         }
 
         function getData(start, end) {
+            $scope.refreshPeriod = true;
             fin.getCategoryReport(groupId, start, end)
                 .then(function (res) {
                     afterRefresh(res);
