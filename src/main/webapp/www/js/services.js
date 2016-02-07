@@ -75,13 +75,13 @@
             };
 
             function validateAccount(group, accountId) {
-                var url = basicUrl + "/groups/" + group + "/accounts/" + accountId+"/validate";
+                var url = basicUrl + "/groups/" + group + "/accounts/" + accountId + "/validate";
                 return $http.get(url);
             }
 
             function getTransactions(group, page, size) {
                 var url = basicUrl + '/groups/' + group + '/transactions';
-                if (page && size) {
+                if (page !== undefined && size) {
                     url = url + "?page=" + page + "&pageSize=" + size;
                 }
                 return $http.get(url);

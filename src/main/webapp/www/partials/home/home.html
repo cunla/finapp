@@ -52,23 +52,17 @@
                     </a>
                 </div>
 
-
-                <!--<ion-option-button class="button button-dark icon ion-map"-->
-                <!--ng-click="item.showMap=!item.showMap">-->
-                <!--</ion-option-button>-->
                 <ion-option-button class="button button-assertive icon ion-trash-b"
                                    ng-click="deleteTransaction(item)">
                 </ion-option-button>
             </ion-item>
-
-            <!--<ion-infinite-scroll-->
-                <!--on-infinite="loadMore()"-->
-                <!--distance="1%">-->
-            <!--</ion-infinite-scroll>-->
+            <ion-item class="item">
+                <button class="button button-block"
+                        ng-show="page+1<totalPages"
+                        ng-click="loadMore()">Load more</button>
+            </ion-item>
         </ion-list>
-        <div class="bar button-bar">
-            <button class="button button-block" ng-click="loadMore()">Load more</button>
-        </div>
+
     </ion-content>
     <div class="bar bar-footer bar-dark">
         <div class="title">{{noData}} transactions without category</div>

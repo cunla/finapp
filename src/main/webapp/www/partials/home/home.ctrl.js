@@ -5,9 +5,10 @@
         var groupId = $stateParams.groupId;
         $scope.t = {};
         $scope.transactions = [];
-        $scope.page = 0;
+        $scope.page = -1;
+        $scope.totalPages = 1;
         $scope.size = 20;
-        $scope.moreData=false;
+        $scope.moreData = false;
         $scope.doRefresh = refresh;
         $scope.createTransaction = createTransaction;
         $scope.toggleDefaultFilter = toggleDefaultFilter;
@@ -48,15 +49,18 @@
         }
 
         function loadMore() {
-            //$scope.page = $scope.page + 1;
-            refresh($scope.page++, $scope.size);
+            if ($scope.page < $scope.totalPages) {
+                $scope.page = $scope.page + 1;
+                refresh($scope.page, $scope.size);
+            }
         }
 
         function refresh(page, size) {
             fin.getTransactions(groupId, page, size).then(function (results) {
                 $scope.transactions = $scope.transactions.concat(results.data.content);
                 $scope.page = results.data.number;
-                $scope.moreData=(results.data.totalPages> $scope.page+1);
+                $scope.totalPages = results.data.totalPages;
+                $scope.moreData = (results.data.totalPages > $scope.page + 1);
                 $scope.size = results.data.size;
                 $scope.sumAll = results.data.sumAll;
                 $scope.noData = results.data.missingData;
