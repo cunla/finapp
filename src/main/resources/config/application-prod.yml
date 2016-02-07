@@ -1,6 +1,6 @@
 server:
-    port: 9090
-    contextPath: /
+    port: 80
+    contextPath: /finapp # if you are changing this, change services.js as well!
 #logging:
 #    level.org:
 #        hibernate: error
