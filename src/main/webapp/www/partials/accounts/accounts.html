@@ -48,7 +48,7 @@
                 </button>
             </div>
         </div>
-
+        <div class="item-divider"></div>
         <ion-list can-swipe="true">
             <ion-item class="item item-dark item-avatar-left item-button-right">
                 Total balance
@@ -57,14 +57,14 @@
                    </span>
             </ion-item>
             <ion-item
-                class="item "
+                class="item"
                 ng-repeat="item in accounts | orderBy:'id'">
                 <div class="item-icon-left item-text-wrap item-button-right">
                     <i class="icon {{item.icon ? item.icon : 'ion-record'}} {{item.color}}"></i>
                     <h2>{{item.name}}</h2>
-                    <p>
+                    <p ng-show="item.lastValidated">
                         <i ng-show="item.updating" class="icon ion-loading-c"></i>
-                        Last verified on: <br/>
+                        Verified:
                         <span class="{{item.notUpdated?'assertive':''}}">
                             {{item.lastValidated |date:'dd-MMM-yyyy HH:mm'}}
                         </span>
@@ -77,10 +77,12 @@
                     </span>
                 </div>
                 <ion-option-button class="button button-calm icon ion-edit"
+                                   ng-show="item.lastValidated"
                                    ng-click="edit(item)">
                     Edit
                 </ion-option-button>
                 <ion-option-button class="button button-dark icon ion-checkmark"
+                                   ng-show="item.lastValidated"
                                    ng-click="validateNow(item)">
                     Validate
                 </ion-option-button>

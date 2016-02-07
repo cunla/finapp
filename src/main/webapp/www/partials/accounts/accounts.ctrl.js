@@ -51,7 +51,9 @@
                     }
                     var now = new Date();
                     $scope.accounts.forEach(function (t) {
-                        t.lastValidated = new Date(t.lastValidated);
+                        if (t.lastValidated) {
+                            t.lastValidated = new Date(t.lastValidated);
+                        }
                         t.notUpdated = dateDistanceLong(t.lastValidated, now);
                         $scope.sumAll += t.balance;
                     })
