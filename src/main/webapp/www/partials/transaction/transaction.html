@@ -66,9 +66,9 @@
                 </label>
                 <label class="item item-input item-select"
                        ng-show="transaction.type=='internal'">
-                    <span class="input-label">Account</span>
+                    <span class="input-label">Target account</span>
                     <select ng-model="transaction.target"
-                            ng-options="item.id as item.name for item in accounts">
+                            ng-options="item.id as item.name for item in groupAccounts">
                     </select>
                 </label>
             </div>
