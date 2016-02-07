@@ -145,7 +145,7 @@ public class Finance {
     @ResponseBody
     public ResponseEntity<Transaction> updateTransation(@PathVariable("transactionId") Long tId,
                                                         @RequestBody Transaction t) {
-        if (null == t || t.getId() != tId) {
+        if (null == t || !tId.equals(t.getId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Transaction exisitingTransaction = transactionRepo.findOne(tId);
@@ -160,6 +160,7 @@ public class Finance {
         }
         exisitingTransaction.updateTransation(t);
         transactionRepo.save(exisitingTransaction);
+        exisitingTransaction.setServices(categoryRepository, accountRepository, placesService);
         return new ResponseEntity<>(exisitingTransaction, HttpStatus.OK);
     }
 

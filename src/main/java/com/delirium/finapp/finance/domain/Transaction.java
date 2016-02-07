@@ -173,6 +173,11 @@ public class Transaction {
     }
 
     @JsonProperty("places")
+    public void setPlaces(List<Location> places){
+        return;
+    }
+
+    @JsonProperty("places")
     public List<Location> getNearByPlaces() {
         return (null == placesService) ? null :
             placesService.getNearbyPlaces(location.getLatitude(), location.getLongitude());
