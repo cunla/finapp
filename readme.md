@@ -9,6 +9,11 @@ Use `mvn package` to compile the server.
 
 Run `java -jar target/finapp.war --spring.profiles.active={profile}`
 
+Troubleshooting
+---------------
+When running on Ubuntu machines, make sure to install the package haveged
+`apt-get install haveged -y`
+
 waffle
 ------
 If you want to contribute to this project write to style.daniel@gmail.com
