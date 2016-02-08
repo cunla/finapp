@@ -54,6 +54,13 @@
             $window.location.reload();
         };
 
+        $scope.goToGroupSettings = goToGroupSettings;
+
+        function goToGroupSettings(group) {
+            $rootScope.$broadcast('state:changed', 'menu.group');
+            $state.go('menu.group', {"groupId": $scope.groupId});
+        }
+
         $scope.refresh();
     }
 })();

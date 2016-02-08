@@ -38,9 +38,8 @@
                 createGroup: function (group) {
                     return $http.post(basicUrl + '/groups', group);
                 },
-                getGroups: function () {
-                    return $http.get(basicUrl + '/groups');
-                },
+                getGroups: getGroups,
+                getGroup: getGroup,
                 currentUser: function () {
                     return $http.get(basicUrl + '/users/current-user');
                 },
@@ -73,6 +72,14 @@
                     return $http.post(basicUrl + "/groups/" + group + "/accounts", acc);
                 }
             };
+
+            function getGroups() {
+                return $http.get(basicUrl + '/groups');
+            }
+
+            function getGroup(groupId) {
+                return $http.get(basicUrl + '/groups/' + groupId);
+            }
 
             function validateAccount(group, accountId) {
                 var url = basicUrl + "/groups/" + group + "/accounts/" + accountId + "/validate";

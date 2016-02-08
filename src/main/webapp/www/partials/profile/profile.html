@@ -105,21 +105,15 @@
                     <b class="{{item.balance>0 ? 'balanced':'assertive'}}"> {{item.currencySymbol}} {{item.balance | number:2}} </b>
                 </p>
 
-                <ion-option-button class="button button-calm icon ion-edit dark"
-                                   ng-click="item.editMode = !item.editMode"
-                                   title="Edit Members">
+                <ion-option-button class="button button-calm icon ion-settings dark"
+                                   ng-click="goToGroupSettings(item)"
+                                   title="Settings">
                     Edit
                 </ion-option-button>
 
                 <ion-option-button class="button button-dark icon ion-log-out"
                                    ng-click="removeUser(item,user)">
                     Leave
-                </ion-option-button>
-
-                <ion-option-button class="button button-assertive icon ion-ios-trash assertive"
-                                   ng-click="item.editMode = !item.editMode"
-                                   title="Delete Group">
-                    Delete
                 </ion-option-button>
 
             </ion-item>

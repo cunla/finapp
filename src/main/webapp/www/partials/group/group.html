@@ -2,27 +2,25 @@
 
     <ion-nav-title class="bar bar-header bar-dark">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
-        <h1 class="title">Edit group {{groupName}}</h1>
+        <h1 class="title">Edit group {{group.name}}</h1>
         <!--<button class="button button-clear" ng-click="toggleAddForm()">Add</button>-->
     </ion-nav-title>
     <ion-content>
         <ion-refresher
             pulling-text="Pull to refresh..."
-            on-refresh="doRefresh()"
+            on-refresh="refresh()"
             refreshing-text="Refreshing!"
             refreshing-icon="ion-loading-c">
         </ion-refresher>
         <ion-list class="list list-inset">
             <ion-item class="item item-dark item-button-right">
-
-                {{item.members.length}} Members
-                <!--<span class="badge badge-calm"></span>-->
+                {{group.members.length}} Members
                 <button class="button button-clear icon ion-plus button-light"></button>
 
             </ion-item>
 
             <ion-item item="member" class="item-accordion item-avatar-left"
-                      ng-repeat="member in item.members">
+                      ng-repeat="member in group.members">
                 <img src="{{member.avatar}}" title="{{member.name}}">
 
                 <h2>{{member.name}}</h2>

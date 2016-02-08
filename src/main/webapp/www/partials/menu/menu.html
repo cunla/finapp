@@ -23,6 +23,10 @@
                           ng-click="goToAccounts()">
                     Accounts
                 </ion-item>
+                <ion-item class="item {{(currentState==='menu.group') ? 'item-dark':''}}"
+                          ng-click="goToGroupSettings()">
+                    Group settings
+                </ion-item>
                 <ion-item class="item {{(currentState==='menu.about') ? 'item-dark':''}}"
                           ng-click="goToAbout()">
                     About
