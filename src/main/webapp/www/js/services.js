@@ -70,8 +70,14 @@
                 },
                 createAccount: function (group, acc) {
                     return $http.post(basicUrl + "/groups/" + group + "/accounts", acc);
-                }
+                },
+                findUsers: findUsers
             };
+
+            function findUsers(q) {
+                var url = basicUrl + "/users?query=" + q;
+                return $http.get(url);
+            }
 
             function getGroups() {
                 return $http.get(basicUrl + '/groups');

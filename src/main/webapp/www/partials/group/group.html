@@ -3,7 +3,8 @@
     <ion-nav-title class="bar bar-header bar-dark">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
         <h1 class="title">Edit group {{group.name}}</h1>
-        <!--<button class="button button-clear" ng-click="toggleAddForm()">Add</button>-->
+        <button class="button button-clear icon ion-plus button-light"
+                ng-click="toggleAddMemberForm()"></button>
     </ion-nav-title>
     <ion-content>
         <ion-refresher
@@ -12,31 +13,41 @@
             refreshing-text="Refreshing!"
             refreshing-icon="ion-loading-c">
         </ion-refresher>
+        <div ng-show="showAddMemberForm">
+        <ion-list>
+            <ion-item collection-repeat="item in items" >
+                <p>{{item.text}}</p>
+            </ion-item>
+        </ion-list>
+
+        <div ng-if="items !== undefined && !items.length" class="no-results">
+            <p>No Results</p>
+        </div>
+        </div>
         <ion-list class="list list-inset" can-swipe="true">
             <ion-item class="item item-dark item-button-right">
                 {{group.members.length}} Members
-                <button class="button button-clear icon ion-plus button-light"
-                        ng-click="toggleAddMemberForm()"></button>
+
             </ion-item>
-            <div class="card" ng-show="showAddMemberForm">
-                <ion-item class="item item-dark item-divider">
-                    Add new member
-                </ion-item>
-                <label class="item item-input">
-                    <span class="input-label">Member Name</span>
-                    <input ng-model="mem.name" type="text">
-                </label>
-                <div class="button-bar">
-                    <button class="button button-block button-assertive"
-                            ng-click="toggleAddMemberForm()">
-                        Cancel
-                    </button>
-                    <button class="button button-block button-dark"
-                            ng-click="addMember(mem)">
-                        Add
-                    </button>
-                </div>
-            </div>
+            <!--<div class="card" ng-show="showAddMemberForm">-->
+                <!--<ion-item class="item item-dark item-divider">-->
+                    <!--Add new member-->
+                <!--</ion-item>-->
+                <!--<label class="item item-input">-->
+                    <!--<span class="input-label">Member Name</span>-->
+                    <!--<input ng-model="mem.name" type="text">-->
+                <!--</label>-->
+                <!--<div class="button-bar">-->
+                    <!--<button class="button button-block button-assertive"-->
+                            <!--ng-click="toggleAddMemberForm()">-->
+                        <!--Cancel-->
+                    <!--</button>-->
+                    <!--<button class="button button-block button-dark"-->
+                            <!--ng-click="addMember(mem)">-->
+                        <!--Add-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</div>-->
 
             <ion-item item="member" class="item-accordion item-avatar-left" can-swipe="true"
                       ng-repeat="member in group.members">

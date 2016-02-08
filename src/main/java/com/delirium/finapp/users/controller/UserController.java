@@ -4,10 +4,10 @@ import com.delirium.finapp.config.JView;
 import com.delirium.finapp.exceptions.UserCreationException;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.groups.service.GroupService;
+import com.delirium.finapp.users.domain.SimpleUser;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -36,9 +37,13 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<User>> findUsers(@RequestParam("query") String query) {
+    public ResponseEntity<List<SimpleUser>> findUsers(@RequestParam("query") String query) {
         List<User> users = userService.findUsers(query);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<SimpleUser> res = new LinkedList<>();
+        for (User u : users) {
+            res.add(new SimpleUser(u));
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")

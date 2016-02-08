@@ -13,8 +13,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.activationKey = ?1")
-    User getUserByActivationKey(
-        String activationKey);
+    User getUserByActivationKey(String activationKey);
 
     @Query("select u from User u where u.activated = false and u.createdDate > ?1")
     List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);

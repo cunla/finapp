@@ -1,6 +1,6 @@
 (function () {
 //var appServices = angular.module('app.services', []);
-    angular.module('app.controllers', ['ngMap', 'ionic-datepicker']);
+    angular.module('app.controllers', ['ngMap', 'ionic-datepicker', 'jett.ionic.filter.bar']);
     var app = angular.module('app', ['ionic', 'app.controllers']);
 
     angular.module('app')
@@ -10,7 +10,7 @@
                 fin.currentUser().then(function (res) {
                     $rootScope.user = res.data;
                     $rootScope.user.birthday = new Date($rootScope.user.birthday);
-                    $rootScope.groupId =  $rootScope.user.lastGroupId;
+                    $rootScope.groupId = $rootScope.user.lastGroupId;
                     if (!$rootScope.user) {
                         // user not logged in | redirect to login
                         if (next.name !== "login") {
