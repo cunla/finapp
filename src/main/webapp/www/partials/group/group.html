@@ -12,23 +12,40 @@
             refreshing-text="Refreshing!"
             refreshing-icon="ion-loading-c">
         </ion-refresher>
-        <ion-list class="list list-inset">
+        <ion-list class="list list-inset" can-swipe="true">
             <ion-item class="item item-dark item-button-right">
                 {{group.members.length}} Members
-                <button class="button button-clear icon ion-plus button-light"></button>
-
+                <button class="button button-clear icon ion-plus button-light"
+                        ng-click="toggleAddMemberForm()"></button>
             </ion-item>
+            <div class="card" ng-show="showAddMemberForm">
+                <ion-item class="item item-dark item-divider">
+                    Add new member
+                </ion-item>
+                <label class="item item-input">
+                    <span class="input-label">Member Name</span>
+                    <input ng-model="mem.name" type="text">
+                </label>
+                <div class="button-bar">
+                    <button class="button button-block button-assertive"
+                            ng-click="toggleAddMemberForm()">
+                        Cancel
+                    </button>
+                    <button class="button button-block button-dark"
+                            ng-click="addMember(mem)">
+                        Add
+                    </button>
+                </div>
+            </div>
 
-            <ion-item item="member" class="item-accordion item-avatar-left"
+            <ion-item item="member" class="item-accordion item-avatar-left" can-swipe="true"
                       ng-repeat="member in group.members">
-                <img src="{{member.avatar}}" title="{{member.name}}">
+                <img ng-src="{{member.avatar}}" title="{{member.name}}">
 
                 <h2>{{member.name}}</h2>
-
                 <p>email: {{member.email}}</p>
-
-                <p>{{member.lastLogin? 'Last logged in on ' + member.lastLogin : 'Never logged
-                    in'}}</p>
+                <p ng-show="member.lastLogin">Last logged in on {{member.lastLogin | date: 'yyyy-MM-dd HH:mm'}}</p>
+                <p ng-hide="member.lastLogin">Never logged in</p>
                 <ion-option-button class="button button-assertive icon ion-log-out"
                                    ng-click="removeUser(item,member)">
                     <!--ng-hide="!item.isAdmin || member.isAdmin"-->
