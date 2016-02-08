@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -148,6 +149,7 @@ public class Group implements Serializable {
         public String name;
         public String email;
         public String avatar;
+        public DateTime lastLogin;
         public boolean isAdmin;
 
 
@@ -156,6 +158,7 @@ public class Group implements Serializable {
             this.id = user.getId();
             this.email = user.getEmail();
             this.avatar = user.getAvatar();
+            this.lastLogin = user.getLastLogin();
             this.isAdmin = (admin.getId() == this.id);
         }
 
@@ -197,6 +200,14 @@ public class Group implements Serializable {
 
         public void setAdmin(boolean admin) {
             isAdmin = admin;
+        }
+
+        public DateTime getLastLogin() {
+            return lastLogin;
+        }
+
+        public void setLastLogin(DateTime lastLogin) {
+            this.lastLogin = lastLogin;
         }
     }
 }

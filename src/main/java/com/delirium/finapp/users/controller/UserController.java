@@ -7,6 +7,7 @@ import com.delirium.finapp.groups.service.GroupService;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,16 +104,17 @@ public class UserController {
         consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> facebookUser(@RequestBody User user,
                                              @RequestParam("accountId") Long accountId) {
+        User loginUser = null;
         try {
-            User findUser = userService.findUserByEmail(user.getEmail());
-            userService.setCurrentUser(findUser);
-            return new ResponseEntity<>(findUser, new HttpHeaders(), HttpStatus.OK);
+            loginUser = userService.findUserByEmail(user.getEmail());
+            userService.setCurrentUser(loginUser);
+            return new ResponseEntity<>(loginUser, new HttpHeaders(), HttpStatus.OK);
         } catch (UsernameNotFoundException e) {
-            User createdUser = userService.createFacebookUser(user, accountId);
-            userService.setCurrentUser(user);
+            loginUser = userService.createFacebookUser(user, accountId);
+            userService.setCurrentUser(loginUser);
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.LOCATION, "users/" + createdUser.getId());
-            return new ResponseEntity<>(createdUser, httpHeaders, HttpStatus.CREATED);
+            httpHeaders.add(HttpHeaders.LOCATION, "users/" + loginUser.getId());
+            return new ResponseEntity<>(loginUser, httpHeaders, HttpStatus.CREATED);
         }
     }
 

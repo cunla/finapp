@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -97,6 +99,11 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
     private List<Group> groups;
     @Column
     private Long lastGroupId;
+
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime lastLogin;
+
     @Column(length = 255)
     @JsonView(JView.UserSummary.class)
     private String avatar;
@@ -142,6 +149,14 @@ public class User extends AbstractAuditingEntity implements Serializable, UserDe
             throw new UserCreationException("Password not valid");
         }
         this.password = new BCryptPasswordEncoder().encode(password);
+    }
+
+    public DateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(DateTime lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     private void encodePassword() {

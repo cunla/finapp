@@ -64,6 +64,8 @@ public class UserServiceImpl implements UserService {
     public void setCurrentUser(User user) {
         Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
+        user.setLastLogin(DateTime.now());
+        userRepository.save(user);
     }
 
     @Override
