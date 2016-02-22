@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class Transaction {
     private Category category;
     @Column
     private String comment;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn
     private Location location;
 
@@ -173,7 +172,7 @@ public class Transaction {
     }
 
     @JsonProperty("places")
-    public void setPlaces(List<Location> places){
+    public void setPlaces(List<Location> places) {
         return;
     }
 
