@@ -76,7 +76,7 @@
             <button class="button button-small button-icon icon ion-plus-circled dark"
                     ng-click="setNewGroupFormStatus(true)"></button>
         </div>
-        <form>
+        <form ng-submit="createGroup(gname)">
             <div class="item item-calm item-input-inset" ng-show="newGroupForm">
                 <button ng-click="setNewGroupFormStatus(false)"
                         class="button button-small button-icon icon ion-ios-undo">
@@ -85,7 +85,7 @@
                 <label class="item-input-wrapper">
                     <input type="text" placeholder="Group name" ng-model="gname">
                 </label>
-                <button ng-click="createGroup(gname)"
+                <button type="submit"
                         class="button button-small button-icon icon ion-arrow-right-c">
                 </button>
 

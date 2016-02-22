@@ -16,19 +16,18 @@
             refreshing-icon="ion-loading-c">
         </ion-refresher>
         <form ng-submit="createTransaction(t)">
-            <label class="item item-input-inset">
+            <div class="item item-input-inset">
                 <label class="button button-icon {{t.plusSign? 'balanced ion-plus':'assertive ion-minus'}}"
                        ng-click="t.plusSign=!t.plusSign">
                 </label>
                 <label class="item-input-wrapper">
-                    <input type="numbers" ng-model="t.amount"
+                    <input type="tel" ng-model="t.amount"
                            placeholder="{{t.plusSign?'Amount earned':'Amount spent'}}">
                 </label>
                 <button class="button button-icon ion-arrow-right-c"
-                        type="submit"
-                ></button>
+                        type="submit"></button>
 
-            </label>
+            </div>
         </form>
         <ion-list can-swipe="true">
             <ion-item class="item-divider">
@@ -59,7 +58,8 @@
             <ion-item class="item">
                 <button class="button button-block"
                         ng-show="page+1<totalPages"
-                        ng-click="loadMore()">Load more</button>
+                        ng-click="loadMore()">Load more
+                </button>
             </ion-item>
         </ion-list>
 
