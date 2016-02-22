@@ -10,7 +10,7 @@
                 fin.currentUser().then(function (res) {
                     $rootScope.user = res.data;
                     $rootScope.user.birthday = new Date($rootScope.user.birthday);
-                    $rootScope.groupId = $rootScope.user.lastGroupId;
+                    $rootScope.groupId = $state.params.groupId || $rootScope.user.lastGroupId;
                     if (!$rootScope.user) {
                         // user not logged in | redirect to login
                         if (next.name !== "login") {
