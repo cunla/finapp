@@ -42,6 +42,9 @@ public class Finance {
     private PlacesService placesService;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private LocationRepository locationRepository;
+
 
     public Group authorized(Long groupId) {
         User user = userService.findCurrentUser();
@@ -112,9 +115,11 @@ public class Finance {
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Transaction transaction = new Transaction(group, t.getAmount(), t.getLocation().longitude,
-            t.getLocation().latitude, t.getDate());
+        //TODO get nearby locations and add location confirmed
+        Location location = new Location("TBD", t.getLocation().longitude, t.getLocation().latitude);
+        Transaction transaction = new Transaction(group, t.getAmount(), location, t.getDate());
 //        placesService.saveNearByLocations(t.getLocation().latitude, t.getLocation().longitude);
+        locationRepository.save(location);
         transactionRepo.save(transaction);
         transactionRepo.flush();
         return new ResponseEntity<>(transaction, HttpStatus.OK);

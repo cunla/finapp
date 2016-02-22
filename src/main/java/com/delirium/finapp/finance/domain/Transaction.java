@@ -73,12 +73,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Group group, Double amount, Double longitude, Double latitude, Date date) {
+    public Transaction(Group group, Double amount, Location location, Date date) {
         this.group = group;
         this.amount = amount;
         this.date = date;
         this.title = "TBD";
-        this.location = new Location("TBD", latitude, longitude);
+        this.location = location;
     }
 
     public Transaction(Group group, Account account, Category category, Location location, Date date, String title, Double amount) {
