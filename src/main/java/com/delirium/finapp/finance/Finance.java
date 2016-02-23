@@ -42,12 +42,14 @@ public class Finance {
     private PlacesService placesService;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private LocationRepository locationRepository;
 
 
-    public Group authorized(Long groupId) {
-        User user = userService.findCurrentUser();
+    private Group authorized(Long groupId) {
+        return authorized(groupId, userService.findCurrentUser());
+    }
+
+    public Group authorized(Long groupId, User user) {
+//        User user = userService.findCurrentUser();
         Group group = groupService.findById(groupId);
         if (group.hasUser(user)) {
             userService.updateLastGroupId(user, groupId);
@@ -111,15 +113,14 @@ public class Finance {
         if (null == t || null == groupId) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Group group = authorized(groupId);
+        User currentUser = userService.findCurrentUser();
+        Group group = authorized(groupId, currentUser);
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO get nearby locations and add location confirmed
-        Location location = new Location("TBD", t.getLocation().longitude, t.getLocation().latitude);
-        Transaction transaction = new Transaction(group, t.getAmount(), location, t.getDate());
-//        placesService.saveNearByLocations(t.getLocation().latitude, t.getLocation().longitude);
-        locationRepository.save(location);
+        Location location = placesService.getOrCreateExactLocation(t.getLocation().latitude, t.getLocation().longitude);
+        Transaction transaction = new Transaction(group, currentUser, t.getAmount(), location, t.getDate());
+
         transactionRepo.save(transaction);
         transactionRepo.flush();
         return new ResponseEntity<>(transaction, HttpStatus.OK);
@@ -143,6 +144,7 @@ public class Finance {
         t.setServices(categoryRepository, accountRepository, placesService);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/transactions/{transactionId}", method = RequestMethod.PUT,

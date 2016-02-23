@@ -2,6 +2,7 @@ package com.delirium.finapp.tools;
 
 import com.delirium.finapp.finance.domain.Location;
 import com.delirium.finapp.finance.domain.LocationRepository;
+import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,29 +20,18 @@ import java.util.List;
 @Service
 public class PlacesService {
 
-    private static final double RADIUS = 50;
     @Autowired
     private LocationRepository locationRepository;
-    @Value("${finapp.places.key}")
-    private String key;
+    @Autowired
+    private UserService userService;
 
-//    private GooglePlaces client;
 
     public PlacesService() {
     }
 
-//    public PlacesService(String key) {
-//        this.key = key;
-//        init();
-//    }
-
-//    @PostConstruct
-//    public void init() {
-//        client = new GooglePlaces(key);
-//    }
 
     public List<Location> getNearbyPlaces(double lat, double lng) {
-        return locationRepository.findNearBy(lat,lng);
+        return locationRepository.findNearBy(lat, lng, 100);
 //        List<Place> places = client.getNearbyPlaces(lat, lng, RADIUS, GooglePlacesInterface.MAXIMUM_PAGE_RESULTS);
 //        List<Location> locations = new LinkedList<>();
 //        for (Place place : places) {
@@ -64,5 +54,16 @@ public class PlacesService {
             }
         }
         locationRepository.flush();
+    }
+
+    public Location getOrCreateExactLocation(double lat, double lng) {
+        Location res = null;
+        List<Location> locations = locationRepository.findNearBy(lat, lng, 5);
+        if (locations.isEmpty()) {
+            res = new Location("TBD", lat, lng, userService.findCurrentUser());
+            locationRepository.save(res);
+            return res;
+        }
+        return locations.get(0);
     }
 }

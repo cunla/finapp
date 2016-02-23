@@ -1,6 +1,8 @@
 package com.delirium.finapp.finance.domain;
 
 import com.delirium.finapp.groups.domain.Group;
+import com.delirium.finapp.users.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import se.walkercrou.places.Place;
 
@@ -26,13 +28,19 @@ public class Location {
     @Column
     private double latitude;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn
+    @JsonIgnore
+    private User createdBy;
+
     @Column(unique = true)
     private String googleId;
 
     @Column(length = 255)
     private String types;
 
-    public Location(String name, double latitude, double longitude) {
+    public Location(String name, double latitude, double longitude, User user) {
+        this.createdBy = user;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -49,8 +57,8 @@ public class Location {
         this.types = StringUtils.join(place.getTypes(), ",");
     }
 
-    public Location(String name) {
-        this(name, 0,0);
+    public Location(String name, User user) {
+        this(name, 0, 0, user);
     }
 
     public String getGoogleId() {

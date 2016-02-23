@@ -3,6 +3,8 @@ package com.delirium.finapp.finance;
 import com.delirium.finapp.exceptions.FinappException;
 import com.delirium.finapp.finance.domain.*;
 import com.delirium.finapp.groups.domain.Group;
+import com.delirium.finapp.users.domain.User;
+import com.delirium.finapp.users.service.UserService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,8 @@ public class FinanceTools {
     private TransactionRepository transactionRepository;
     @Autowired
     private LocationRepository locationRepository;
+    @Autowired
+    private UserService userService;
 
     /**
      * Import data to group using CSV
@@ -62,15 +66,16 @@ public class FinanceTools {
     @ResponseBody
     public ResponseEntity<Page<Transaction>> findGroupTransactions(@PathVariable("group") Long groupId,
                                                                    @RequestBody String csv) {
-        Group group = finance.authorized(groupId);
+        User user = userService.findCurrentUser();
+        Group group = finance.authorized(groupId, user);
         if (null == group) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        readData(group, csv);
+        readData(group, csv, user);
         return new ResponseEntity<Page<Transaction>>(HttpStatus.OK);
     }
 
-    private void readData(Group group, String csv) {
+    private void readData(Group group, String csv, User user) {
         String[] lines = csv.split("\n");
 
         Map<String, Integer> headers = getHeaders(lines[0]);
@@ -86,12 +91,12 @@ public class FinanceTools {
                 }
                 Account account = genAccount(group, accounts, fields[headers.get(HEADER_ACCOUNT)]);
                 Category category = genCategory(group, categories, fields[headers.get(HEADER_CATEGORY)]);
-                Location location = genLocation(locations, fields[headers.get(HEADER_LOCATION)]);
+                Location location = genLocation(locations, fields[headers.get(HEADER_LOCATION)], user);
                 LocalDate date = LocalDate.parse(fields[headers.get(HEADER_DATE)]);
                 Date date1 = Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                 String title = fields[headers.get(HEADER_TITLE)];
                 Double amount = Double.valueOf(fields[headers.get(HEADER_AMOUNT)]);
-                Transaction t = new Transaction(group, account, category, location, date1, title, amount);
+                Transaction t = new Transaction(group, user, account, category, location, date1, title, amount);
                 transactions.add(t);
             } catch (Exception e) {
                 log.warn("Couldn't parse line {} : {}", i, lines[i]);
@@ -105,10 +110,10 @@ public class FinanceTools {
             transactions.size(), accounts.size(), categories.size(), locations.size());
     }
 
-    private Location genLocation(Map<String, Location> locations, String name) {
+    private Location genLocation(Map<String, Location> locations, String name, User user) {
         Location res = locations.get(name);
         if (null == res) {
-            res = new Location(name);
+            res = new Location(name, user);
             locations.put(name, res);
         }
         return res;

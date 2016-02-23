@@ -3,11 +3,13 @@ package com.delirium.finapp.finance.domain;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.images.FinImage;
 import com.delirium.finapp.tools.PlacesService;
+import com.delirium.finapp.users.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,6 +47,12 @@ public class Transaction {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn
+    @JsonIgnore
+    private User createdBy;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn
     @JsonIgnore
@@ -73,16 +81,18 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Group group, Double amount, Location location, Date date) {
+    public Transaction(Group group, User user, Double amount, Location location, Date date) {
         this.group = group;
+        this.createdBy = user;
         this.amount = amount;
         this.date = date;
         this.title = "TBD";
         this.location = location;
     }
 
-    public Transaction(Group group, Account account, Category category, Location location, Date date, String title, Double amount) {
+    public Transaction(Group group, User user, Account account, Category category, Location location, Date date, String title, Double amount) {
         this.group = group;
+        this.createdBy = user;
         this.account = account;
         this.category = category;
         this.location = location;
@@ -169,6 +179,11 @@ public class Transaction {
     }
 
     public void setGroupAccounts(List<Account> accounts) {
+    }
+
+    @JsonProperty
+    public String getCreatedBy() {
+        return (null == createdBy) ? null : createdBy.getName();
     }
 
     @JsonProperty("places")
