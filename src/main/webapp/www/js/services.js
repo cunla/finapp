@@ -113,7 +113,12 @@
                             resolve(res.data);
                         })
                     }, function (error) {
-                        reject('Unable to get location: ' + error.message);
+                        console.log('Unable to get location: ' + error.message);
+                        var point = {latitude: 0.0, longitude: 0.0};
+                        transaction.location = point;
+                        $http.post(basicUrl + "/groups/" + group + "/transactions", transaction).then(function (res) {
+                            resolve(res.data);
+                        })
                     });
                 });
             }
