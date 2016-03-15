@@ -15,7 +15,7 @@ public class GroupSettings {
     private List<Account> accounts;
     private List<Category> categories;
 
-    public GroupSettings(Group group, AccountRepository accRepo, CategoryRepository catRepo){
+    public GroupSettings(Group group, AccountRepository accRepo, CategoryRepository catRepo) {
         this.accounts = accRepo.accountsForGroup(group);
         this.categories = catRepo.categoryForGroup(group);
     }

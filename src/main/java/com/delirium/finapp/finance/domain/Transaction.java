@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

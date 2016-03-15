@@ -1,12 +1,12 @@
 package com.delirium.finapp.finance.domain;
 
-import com.delirium.finapp.finance.protocol.TransactionsPage;
 import com.delirium.finapp.groups.domain.Group;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
  */
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
+    @RestResource(path = "groupTrans", rel = "groupTrans")
     @Query("SELECT t FROM com.delirium.finapp.finance.domain.Transaction t " +
         " WHERE t.group=:group " +
         " ORDER BY t.date DESC ")

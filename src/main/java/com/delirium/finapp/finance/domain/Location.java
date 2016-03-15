@@ -1,13 +1,11 @@
 package com.delirium.finapp.finance.domain;
 
-import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.users.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import se.walkercrou.places.Place;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by morand3 on 12/23/2015.

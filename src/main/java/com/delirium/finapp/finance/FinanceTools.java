@@ -5,7 +5,6 @@ import com.delirium.finapp.finance.domain.*;
 import com.delirium.finapp.groups.domain.Group;
 import com.delirium.finapp.users.domain.User;
 import com.delirium.finapp.users.service.UserService;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.StringReader;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;

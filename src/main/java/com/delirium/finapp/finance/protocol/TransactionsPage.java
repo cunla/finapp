@@ -31,11 +31,11 @@ public class TransactionsPage extends PageImpl<Transaction> {
         this.sumAll = sumAll;
     }
 
-    public void setMissingData(Integer missingData) {
-        this.missingData = missingData;
-    }
-
     public Integer getMissingData() {
         return missingData;
+    }
+
+    public void setMissingData(Integer missingData) {
+        this.missingData = missingData;
     }
 }

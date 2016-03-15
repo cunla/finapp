@@ -9,11 +9,11 @@ public class SimpleUser {
     private final String avatar;
     private final Long id;
 
-    public SimpleUser(User user){
-        this.id=user.getId();
-        this.name=user.getName();
-        this.email=user.getEmail();
-        this.avatar=user.getAvatar();
+    public SimpleUser(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.avatar = user.getAvatar();
     }
 
     public String getEmail() {

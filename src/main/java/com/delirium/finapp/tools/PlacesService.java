@@ -4,14 +4,8 @@ import com.delirium.finapp.finance.domain.Location;
 import com.delirium.finapp.finance.domain.LocationRepository;
 import com.delirium.finapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import se.walkercrou.places.GooglePlaces;
-import se.walkercrou.places.GooglePlacesInterface;
-import se.walkercrou.places.Place;
 
-import javax.annotation.PostConstruct;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
